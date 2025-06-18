@@ -852,6 +852,7 @@ public class ModBlocks {
 	public static Block barrel_tcalloy;
 	public static Block barrel_antimatter;
 
+
 	public static Block machine_transformer;
 	public static Block machine_transformer_dnt;
 
@@ -1013,6 +1014,7 @@ public class ModBlocks {
 
 	public static Block machine_fluidtank;
 	public static Block machine_bat9000;
+
 	public static Block machine_orbus;
 
 	public static Block launch_pad;
