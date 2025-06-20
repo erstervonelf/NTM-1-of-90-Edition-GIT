@@ -45,8 +45,7 @@ public abstract class EntityExplosionChunkloading extends Entity implements IChu
 	
 	public void clearChunkLoader() {
 		if(!worldObj.isRemote && loaderTicket != null && loadedChunk != null) {
-			ForgeChunkManager.releaseTicket(loaderTicket);
-			this.loaderTicket = null;
+			ForgeChunkManager.unforceChunk(loaderTicket, loadedChunk);
 		}
 	}
 }
