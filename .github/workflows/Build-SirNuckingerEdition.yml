@@ -117,6 +117,12 @@ jobs:
         java-version: '8'
         distribution: 'temurin'
 
+    - name: Download JAR artifact
+      uses: actions/download-artifact@v5.0.0
+      with:
+         name: jar-artifact
+         path: build/libs
+
     # Generates and submits a dependency graph, enabling Dependabot Alerts for all project dependencies.
     # See: https://github.com/gradle/actions/blob/main/dependency-submission/README.md
     - name: Generate and submit dependency graph
