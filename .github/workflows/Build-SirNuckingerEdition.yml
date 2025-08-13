@@ -84,7 +84,7 @@ jobs:
           body: "Automatisch generiertes Release für Version ${{ env.TAG_NAME }}"
           prerelease: ${{ env.IS_PRERELEASE }}
           files: |
-            build/libs/*.jar
+            build/libs/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
