@@ -65,7 +65,7 @@ jobs:
         uses: actions/download-artifact@v5.0.0
         with:
           name: jar-artifact
-          path: ./build/libs
+          path: build/libs
 
 
       - name: Checkout repository
