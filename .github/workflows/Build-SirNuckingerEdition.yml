@@ -48,26 +48,11 @@ jobs:
     # - name: Build with Gradle 8.9
     #   run: gradle build
 
-    - name: Upload JAR artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: jar-artifact
-        path: build/libs/*.jar
-
-        
-
   release: 
     needs: build
     runs-on: ubuntu-latest
     
     steps:
-      - name: Download JAR artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: jar-artifact
-          path: ./build/libs
-
-
       - name: Checkout repository
         uses: actions/checkout@v3
 
