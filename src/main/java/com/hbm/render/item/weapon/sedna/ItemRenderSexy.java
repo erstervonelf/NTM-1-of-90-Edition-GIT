@@ -11,16 +11,9 @@ import com.hbm.util.Vec3NT;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 @NotableComments
 public class ItemRenderSexy extends ItemRenderWeaponBase {
-	
-	protected ResourceLocation texture;
-	
-	public ItemRenderSexy(ResourceLocation texture) {
-		this.texture = texture;
-	}
 
 	@Override
 	protected float getTurnMagnitude(ItemStack stack) { return ItemGunBaseNT.getIsAiming(stack) ? 2.5F : -0.25F; }
@@ -83,7 +76,7 @@ public class ItemRenderSexy extends ItemRenderWeaponBase {
 			GL11.glPopMatrix();
 		}
 		
-		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
+		Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.sexy_tex);
 		
 		GL11.glTranslated(0, -1, -8);
 		GL11.glRotated(equip[0], 1, 0, 0);
@@ -216,7 +209,7 @@ public class ItemRenderSexy extends ItemRenderWeaponBase {
 		GL11.glEnable(GL11.GL_LIGHTING);
 		
 		GL11.glShadeModel(GL11.GL_SMOOTH);
-		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
+		Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.sexy_tex);
 		ResourceManager.sexy.renderPart("Gun");
 		ResourceManager.sexy.renderPart("Barrel");
 		ResourceManager.sexy.renderPart("RecoilSpring");

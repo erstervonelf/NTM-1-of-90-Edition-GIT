@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 
-@Deprecated
 public class ItemChemistryIcon extends Item {
 
 	@SideOnly(Side.CLIENT)

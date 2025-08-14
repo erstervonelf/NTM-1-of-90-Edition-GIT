@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.hbm.inventory.recipes.ChemplantRecipes;
 import com.hbm.inventory.recipes.ChemplantRecipes.ChemRecipe;
+import com.hbm.items.ModItems;
 import com.hbm.util.i18n.I18nUtil;
 
 import cpw.mods.fml.relauncher.Side;
@@ -15,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 
-@Deprecated
 public class ItemChemistryTemplate extends Item {
 
 	public ItemChemistryTemplate() {
@@ -51,7 +51,6 @@ public class ItemChemistryTemplate extends Item {
 	
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool) {
-		list.add(EnumChatFormatting.RED + "Deprecated");
 
 		if(!(stack.getItem() instanceof ItemChemistryTemplate))
 			return;
@@ -61,6 +60,9 @@ public class ItemChemistryTemplate extends Item {
 		if(recipe == null) {
 			return;
 		}
+
+		list.add(EnumChatFormatting.YELLOW + I18nUtil.resolveKey("info.templatefolder", I18nUtil.resolveKey(ModItems.template_folder.getUnlocalizedName() + ".name")));
+		list.add("");
 
 		try {
 			list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("info.template_out_p"));

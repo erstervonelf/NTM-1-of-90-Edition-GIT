@@ -154,7 +154,7 @@ public class TileEntityMachineElectricFurnace extends TileEntityMachineBase impl
 
 			for(int i = 1; i < 2; i++) {
 				if(slots[i].stackSize <= 0) {
-					slots[i] = new ItemStack(slots[i].getItem());
+					slots[i] = new ItemStack(slots[i].getItem().setFull3D());
 				} else {
 					slots[i].stackSize--;
 				}

@@ -2,10 +2,9 @@ package com.hbm.tileentity.network;
 
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
+import com.hbm.calc.Location;
 import com.hbm.tileentity.IConfigurableMachine;
 import com.hbm.tileentity.TileEntityLoadedBase;
-import com.hbm.util.Compat;
-import com.hbm.util.fauxpointtwelve.BlockPos;
 
 import api.hbm.energymk2.IEnergyReceiverMK2;
 import cofh.api.energy.EnergyStorage;
@@ -42,8 +41,8 @@ public class TileEntityConverterHeRf extends TileEntityLoadedBase implements IEn
 			for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
 				this.trySubscribe(worldObj, xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ, dir);
 				
-				BlockPos loc = new BlockPos(xCoord, yCoord, zCoord).offset(dir);
-				TileEntity entity = Compat.getTileStandard(worldObj, loc.getX(), loc.getY(), loc.getZ());
+				Location loc = new Location(worldObj, xCoord, yCoord, zCoord).add(dir);
+				TileEntity entity = loc.getTileEntity();
 			
 				if (entity != null && entity instanceof IEnergyReceiver) {
 					IEnergyReceiver receiver = (IEnergyReceiver) entity;

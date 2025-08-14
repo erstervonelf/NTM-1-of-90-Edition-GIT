@@ -1,7 +1,7 @@
 package com.hbm.blocks.machine;
 
 import com.hbm.main.MainRegistry;
-import com.hbm.world.gen.nbt.INBTBlockTransformable;
+import com.hbm.world.gen.INBTTransformable;
 
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import net.minecraft.block.Block;
@@ -17,7 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public abstract class BlockMachineBase extends BlockContainer implements INBTBlockTransformable {
+public abstract class BlockMachineBase extends BlockContainer implements INBTTransformable {
 
 	int guiID = -1;
 	protected boolean rotatable = false;
@@ -115,6 +115,6 @@ public abstract class BlockMachineBase extends BlockContainer implements INBTBlo
 	@Override
 	public int transformMeta(int meta, int coordBaseMode) {
 		if(!rotatable) return meta;
-		return INBTBlockTransformable.transformMetaDeco(meta, coordBaseMode);
+		return INBTTransformable.transformMetaDeco(meta, coordBaseMode);
 	}
 }

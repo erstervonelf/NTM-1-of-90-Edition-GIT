@@ -448,9 +448,6 @@ public class ItemGunBaseNT extends Item implements IKeybindReceiver, IItemHUD, I
 		Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
 	}
 	
-	/*@Override
-	public boolean getShareTag() { return false; }*/ // nbt sync dupe fix, didn't work
-	
 	public static class SmokeNode {
 		
 		public double forward = 0D;
