@@ -13,13 +13,11 @@ import com.hbm.tileentity.machine.TileEntityMachineAssemblyMachine;
 import com.hbm.util.BobMathUtil;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -109,10 +107,17 @@ public class RenderAssemblyMachine extends TileEntitySpecialRenderer implements 
 			GL11.glRotated(90, 0, 1, 0);
 			GL11.glTranslated(0, 1.0625, 0);
 			
-			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			ItemStack stack = recipe.getIcon();
+			stack.stackSize = 1;
 
-			if(!(stack.getItemSpriteNumber() == 0 && stack.getItem() instanceof ItemBlock && RenderBlocks.renderItemIn3d(Block.getBlockFromItem(stack.getItem()).getRenderType()))) {
+			if(stack.getItemSpriteNumber() == 0 && stack.getItem() instanceof ItemBlock) {
+				if(RenderBlocks.renderItemIn3d(Block.getBlockFromItem(stack.getItem()).getRenderType())) {
+					GL11.glTranslated(0, -0.0625, 0);
+				} else {
+					GL11.glTranslated(0, -0.125, 0);
+					GL11.glScaled(0.5, 0.5, 0.5);
+				}
+			} else {
 				GL11.glRotated(-90, 1, 0, 0);
 				GL11.glTranslated(0, -0.25, 0);
 			}

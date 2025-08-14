@@ -10,6 +10,8 @@ import com.hbm.inventory.container.ContainerMachineChemicalPlant;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.tank.FluidTank;
 import com.hbm.inventory.gui.GUIMachineChemicalPlant;
+import com.hbm.inventory.recipes.ChemicalPlantRecipes;
+import com.hbm.inventory.recipes.loader.GenericRecipe;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemMachineUpgrade;
 import com.hbm.items.machine.ItemMachineUpgrade.UpgradeType;
@@ -43,7 +45,7 @@ public class TileEntityMachineChemicalPlant extends TileEntityMachineBase implem
 	public FluidTank[] outputTanks;
 	
 	public long power;
-	public long maxPower = 1_000_000;
+	public long maxPower = 100_000;
 	public boolean didProcess = false;
 	
 	public boolean frame = false;
@@ -83,6 +85,12 @@ public class TileEntityMachineChemicalPlant extends TileEntityMachineBase implem
 		
 		if(!worldObj.isRemote) {
 			
+			GenericRecipe recipe = ChemicalPlantRecipes.INSTANCE.recipeNameMap.get(chemplantModule.recipe);
+			if(recipe != null) {
+				this.maxPower = recipe.power * 100;
+			}
+			this.maxPower = BobMathUtil.max(this.power, this.maxPower, 100_000);
+			
 			this.power = Library.chargeTEFromItems(slots, 0, power, maxPower);
 			upgradeManager.checkSlots(slots, 2, 3);
 
@@ -110,7 +118,7 @@ public class TileEntityMachineChemicalPlant extends TileEntityMachineBase implem
 			pow += Math.min(upgradeManager.getLevel(UpgradeType.SPEED), 3) * 1D;
 			pow += Math.min(upgradeManager.getLevel(UpgradeType.OVERDRIVE), 3) * 10D / 3D;
 			
-			this.chemplantModule.update(speed, pow, true);
+			this.chemplantModule.update(speed, pow, true, slots[1]);
 			this.didProcess = this.chemplantModule.didProcess;
 			if(this.chemplantModule.markDirty) this.markDirty();
 			
@@ -232,6 +240,7 @@ public class TileEntityMachineChemicalPlant extends TileEntityMachineBase implem
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		if(slot == 0) return true; // battery
+		if(slot == 1 && stack.getItem() == ModItems.blueprints) return true;
 		if(slot >= 2 && slot <= 3 && stack.getItem() instanceof ItemMachineUpgrade) return true; // upgrades
 		if(slot >= 10 && slot <= 12) return true; // input fluid
 		if(slot >= 16 && slot <= 18) return true; // output fluid

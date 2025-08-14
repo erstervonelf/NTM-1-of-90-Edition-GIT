@@ -85,6 +85,7 @@ public abstract class SerializableRecipe {
 		//GENERIC
 		recipeHandlers.add(AssemblyMachineRecipes.INSTANCE);
 		recipeHandlers.add(ChemicalPlantRecipes.INSTANCE);
+		recipeHandlers.add(PUREXRecipes.INSTANCE);
 
 		recipeHandlers.add(new MatDistribution());
 		recipeHandlers.add(new CustomMachineRecipes());
@@ -106,6 +107,8 @@ public abstract class SerializableRecipe {
 
 		MainRegistry.logger.info("Starting recipe init!");
 
+		GenericRecipes.clearPools();
+		
 		for(SerializableRecipe recipe : recipeHandlers) {
 
 			recipe.deleteRecipes();

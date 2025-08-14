@@ -11,6 +11,8 @@ import com.hbm.inventory.container.ContainerMachineAssemblyMachine;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.tank.FluidTank;
 import com.hbm.inventory.gui.GUIMachineAssemblyMachine;
+import com.hbm.inventory.recipes.AssemblyMachineRecipes;
+import com.hbm.inventory.recipes.loader.GenericRecipe;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemMachineUpgrade;
 import com.hbm.items.machine.ItemMachineUpgrade.UpgradeType;
@@ -44,7 +46,7 @@ public class TileEntityMachineAssemblyMachine extends TileEntityMachineBase impl
 	public FluidTank outputTank;
 	
 	public long power;
-	public long maxPower = 1_000_000;
+	public long maxPower = 100_000;
 	public boolean didProcess = false;
 	
 	public boolean frame = false;
@@ -63,8 +65,8 @@ public class TileEntityMachineAssemblyMachine extends TileEntityMachineBase impl
 	
 	public TileEntityMachineAssemblyMachine() {
 		super(17);
-		this.inputTank = new FluidTank(Fluids.NONE, 32_000);
-		this.outputTank = new FluidTank(Fluids.NONE, 32_000);
+		this.inputTank = new FluidTank(Fluids.NONE, 4_000);
+		this.outputTank = new FluidTank(Fluids.NONE, 4_000);
 		
 		for(int i = 0; i < this.arms.length; i++) this.arms[i] = new AssemblerArm();
 		
@@ -85,6 +87,12 @@ public class TileEntityMachineAssemblyMachine extends TileEntityMachineBase impl
 		
 		if(!worldObj.isRemote) {
 			
+			GenericRecipe recipe = AssemblyMachineRecipes.INSTANCE.recipeNameMap.get(assemblerModule.recipe);
+			if(recipe != null) {
+				this.maxPower = recipe.power * 100;
+			}
+			this.maxPower = BobMathUtil.max(this.power, this.maxPower, 100_000);
+			
 			this.power = Library.chargeTEFromItems(slots, 0, power, maxPower);
 			upgradeManager.checkSlots(slots, 2, 3);
 			
@@ -104,7 +112,7 @@ public class TileEntityMachineAssemblyMachine extends TileEntityMachineBase impl
 			pow += Math.min(upgradeManager.getLevel(UpgradeType.SPEED), 3) * 1D;
 			pow += Math.min(upgradeManager.getLevel(UpgradeType.OVERDRIVE), 3) * 10D / 3D;
 			
-			this.assemblerModule.update(speed, pow, true);
+			this.assemblerModule.update(speed, pow, true, slots[1]);
 			this.didProcess = this.assemblerModule.didProcess;
 			if(this.assemblerModule.markDirty) this.markDirty();
 			
@@ -129,7 +137,8 @@ public class TileEntityMachineAssemblyMachine extends TileEntityMachineBase impl
 					audio = rebootAudio(audio);
 				}
 				audio.keepAlive();
-				audio.updateVolume(this.getVolume(1F));
+				audio.updatePitch(0.75F);
+				audio.updateVolume(this.getVolume(0.5F));
 				
 			} else {
 				if(audio != null) {
@@ -144,6 +153,10 @@ public class TileEntityMachineAssemblyMachine extends TileEntityMachineBase impl
 					arm.updateArm();
 				} else{
 					arm.returnToNullPos();
+				}
+				
+				if(!this.muffled && arm.prevAngles[3] != arm.angles[3] && arm.angles[3] == -0.75) {
+					MainRegistry.proxy.playSoundClient(xCoord, yCoord, zCoord, "hbm:block.assemblerStrike", this.getVolume(0.5F), 1F);
 				}
 			}
 			
@@ -167,12 +180,14 @@ public class TileEntityMachineAssemblyMachine extends TileEntityMachineBase impl
 							this.prevRing += 360D;
 						}
 						this.ringDelay = 20 + worldObj.rand.nextInt(21);
+						//MainRegistry.proxy.playSoundClient(xCoord, yCoord, zCoord, "hbm:block.assemblerStop", this.getVolume(0.25F), 1.5F);
 					}
 				} else {
 					if(this.ringDelay > 0) this.ringDelay--;
 					if(this.ringDelay <= 0) {
 						this.ringTarget += (worldObj.rand.nextDouble() * 2 - 1) * 135;
 						this.ringSpeed = 10D + worldObj.rand.nextDouble() * 5D;
+						if(!this.muffled) MainRegistry.proxy.playSoundClient(xCoord, yCoord, zCoord, "hbm:block.assemblerStart", this.getVolume(0.25F), 1.25F + worldObj.rand.nextFloat() * 0.25F);
 					}
 				}
 			}
@@ -180,7 +195,7 @@ public class TileEntityMachineAssemblyMachine extends TileEntityMachineBase impl
 	}
 
 	@Override public AudioWrapper createAudioLoop() {
-		return MainRegistry.proxy.getLoopedSound("hbm:block.chemicalPlant", xCoord, yCoord, zCoord, 1F, 15F, 1.0F, 20);
+		return MainRegistry.proxy.getLoopedSound("hbm:block.motor", xCoord, yCoord, zCoord, 0.5F, 15F, 0.75F, 20);
 	}
 
 	@Override public void onChunkUnload() {
@@ -223,12 +238,17 @@ public class TileEntityMachineAssemblyMachine extends TileEntityMachineBase impl
 	@Override
 	public void deserialize(ByteBuf buf) {
 		super.deserialize(buf);
+		boolean wasProcessing = this.didProcess;
 		this.inputTank.deserialize(buf);
 		this.outputTank.deserialize(buf);
 		this.power = buf.readLong();
 		this.maxPower = buf.readLong();
 		this.didProcess = buf.readBoolean();
 		this.assemblerModule.deserialize(buf);
+		
+		if(wasProcessing && !didProcess) {
+			MainRegistry.proxy.playSoundClient(xCoord, yCoord, zCoord, "hbm:block.assemblerStop", this.getVolume(0.25F), 1.5F);
+		}
 	}
 	
 	@Override
@@ -254,6 +274,7 @@ public class TileEntityMachineAssemblyMachine extends TileEntityMachineBase impl
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		if(slot == 0) return true; // battery
+		if(slot == 1 && stack.getItem() == ModItems.blueprints) return true;
 		if(slot >= 2 && slot <= 3 && stack.getItem() instanceof ItemMachineUpgrade) return true; // upgrades
 		if(this.assemblerModule.isItemValid(slot, stack)) return true; // recipe input crap
 		return false;
