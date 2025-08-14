@@ -18,6 +18,7 @@ import com.hbm.handler.imc.IMCBlastFurnace;
 import com.hbm.handler.imc.IMCCentrifuge;
 import com.hbm.handler.imc.IMCCrystallizer;
 import com.hbm.handler.imc.IMCHandler;
+import com.hbm.handler.microblocks.MicroBlocksCompatHandler;
 import com.hbm.handler.neutron.NeutronHandler;
 import com.hbm.handler.pollution.PollutionHandler;
 import com.hbm.handler.radiation.ChunkRadiationManager;
@@ -39,6 +40,7 @@ import com.hbm.lib.HbmWorld;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.potion.HbmPotion;
+import com.hbm.qmaw.QMAWLoader;
 import com.hbm.saveddata.satellites.Satellite;
 import com.hbm.tileentity.TileMappings;
 import com.hbm.tileentity.bomb.TileEntityLaunchPadBase;
@@ -252,6 +254,8 @@ public class MainRegistry {
 	@EventHandler
 	public void PreLoad(FMLPreInitializationEvent PreEvent) {
 		CrashHelper.init();
+		
+		QMAWLoader.registerModFileURL(FMLCommonHandler.instance().findContainerFor(RefStrings.MODID).getSource());
 
 		startupTime = System.currentTimeMillis();
 		configDir = PreEvent.getModConfigurationDirectory();
@@ -278,19 +282,6 @@ public class MainRegistry {
 		 * This "fix" just makes sure that the material system is loaded first no matter what. */
 		Mats.MAT_STONE.getUnlocalizedName();
 		Fluids.init();
-		// Initialize the fluid mapping registry and texture/color systems
-		api.ntm1of90.compat.fluid.registry.FluidMappingRegistry.initialize();
-		api.ntm1of90.compat.fluid.render.NTMFluidTextureMapper.initialize();
-		api.ntm1of90.compat.fluid.render.NTMFluidColorApplier.initialize();
-		// Set the brightness factor for fluid colors (>1 = brighter, <1 = darker)
-		api.ntm1of90.compat.fluid.render.NTMFluidColorApplier.setBrightnessFactor(1.2f);
-		api.ntm1of90.compat.fluid.render.NTMForgeFluidRenderer.initialize();
-		// Initialize the Forge fluid compatibility system
-		api.ntm1of90.compat.fluid.ForgeFluidCompatManager.initialize();
-		// Initialize the adapter registry and capability hook
-		api.ntm1of90.compat.fluid.registry.ForgeFluidAdapterRegistry.initialize();
-		api.ntm1of90.compat.fluid.ForgeFluidCapabilityHook.initialize();
-		// Note: Flow rate setting is no longer used as the system now respects the tank capacities and transfer rates
 		proxy.registerPreRenderInfo();
 		ModBlocks.mainRegistry();
 		ModItems.mainRegistry();
@@ -674,6 +665,8 @@ public class MainRegistry {
 				}
 			}
 		});
+
+		MicroBlocksCompatHandler.preInit();
 	}
 
 	@EventHandler
@@ -728,7 +721,7 @@ public class MainRegistry {
 		//progression achieves
 		achBurnerPress = new Achievement("achievement.burnerPress", "burnerPress", 0, 0, new ItemStack(ModBlocks.machine_press), null).initIndependentStat().registerStat();
 		achBlastFurnace = new Achievement("achievement.blastFurnace", "blastFurnace", 1, 3, new ItemStack(ModBlocks.machine_difurnace_off), achBurnerPress).initIndependentStat().registerStat();
-		achAssembly = new Achievement("achievement.assembly", "assembly", 3, -1, new ItemStack(ModBlocks.machine_assembler), achBurnerPress).initIndependentStat().registerStat();
+		achAssembly = new Achievement("achievement.assembly", "assembly", 3, -1, new ItemStack(ModBlocks.machine_assembly_machine), achBurnerPress).initIndependentStat().registerStat();
 		achSelenium = new Achievement("achievement.selenium", "selenium", 3, 2, ModItems.ingot_starmetal, achBurnerPress).initIndependentStat().setSpecial().registerStat();
 		achChemplant = new Achievement("achievement.chemplant", "chemplant", 6, -1, new ItemStack(ModBlocks.machine_chemical_plant), achAssembly).initIndependentStat().registerStat();
 		achConcrete	= new Achievement("achievement.concrete", "concrete", 6, -4, new ItemStack(ModBlocks.concrete), achChemplant).initIndependentStat().registerStat();
@@ -890,6 +883,8 @@ public class MainRegistry {
 		BlockToolConversion.registerRecipes();
 		AchievementHandler.register();
 
+		MobUtil.intializeMobPools();
+
 		proxy.registerMissileItems();
 
 		// Load compatibility for OC.
@@ -975,6 +970,8 @@ public class MainRegistry {
 		event.registerServerCommand(new CommandRadiation());
 		event.registerServerCommand(new CommandPacketInfo());
 		event.registerServerCommand(new CommandReloadServer());
+		event.registerServerCommand(new CommandLocate());
+		ArcFurnaceRecipes.registerFurnaceSmeltables(); // because we have to wait for other mods to take their merry ass time to register recipes
 	}
 
 	@EventHandler
@@ -1714,6 +1711,28 @@ public class MainRegistry {
 		ignoreMappings.add("hbm:tile.hadron_cooler");
 		ignoreMappings.add("hbm:tile.machine_transformer_20");
 		ignoreMappings.add("hbm:tile.machine_transformer_dnt_20");
+		ignoreMappings.add("hbm:item.levitation_unit");
+		ignoreMappings.add("hbm:item.letter");
+		ignoreMappings.add("hbm:item.chopper_head");
+		ignoreMappings.add("hbm:item.chopper_gun");
+		ignoreMappings.add("hbm:item.chopper_torso");
+		ignoreMappings.add("hbm:item.chopper_tail");
+		ignoreMappings.add("hbm:item.chopper_wing");
+		ignoreMappings.add("hbm:item.chopper_blades");
+		ignoreMappings.add("hbm:item.component_emitter");
+		ignoreMappings.add("hbm:item.component_limiter");
+		ignoreMappings.add("hbm:item.bottle2_korl_special");
+		ignoreMappings.add("hbm:item.bottle2_fritz_special");
+		ignoreMappings.add("hbm:item.journal_pip");
+		ignoreMappings.add("hbm:item.journal_bj");
+		ignoreMappings.add("hbm:item.journal_silver");
+		ignoreMappings.add("hbm:tile.machine_arc_furnace_off");
+		ignoreMappings.add("hbm:tile.machine_arc_furnace_on");
+		ignoreMappings.add("hbm:item.heavy_component");
+		ignoreMappings.add("hbm:item.mp_w_20");
+		ignoreMappings.add("hbm:item.mp_f_20");
+		ignoreMappings.add("hbm:item.mp_thruster_10_kerosene_tec");
+		ignoreMappings.add("hbm:item.mp_thruster_15_kerosene_tec");
 
 		/// REMAP ///
 		remapItems.put("hbm:item.gadget_explosive8", ModItems.early_explosive_lenses);

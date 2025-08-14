@@ -1090,6 +1090,11 @@ public class ModEventHandler {
 				player.worldObj.spawnParticle("townaura", player.posX + vec.xCoord, player.posY + 1 + vec.yCoord, player.posZ + vec.zCoord, 0.0, 0.0, 0.0);
 			}
 		}
+
+		/*if(!player.worldObj.isRemote && event.phase == TickEvent.Phase.END && player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemGunBaseNT && player instanceof EntityPlayerMP) {
+			HeldItemNBTPacket packet = new HeldItemNBTPacket(player.getHeldItem());
+			PacketDispatcher.wrapper.sendTo(packet, (EntityPlayerMP) player);
+		}*/
 	}
 
 	@SubscribeEvent
