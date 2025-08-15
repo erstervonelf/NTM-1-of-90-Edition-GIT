@@ -349,6 +349,8 @@ public class ModItems {
 	public static Item crayon;
 
 	public static Item undefined;
+	public static Item fluid_display_item;
+	public static Item hbm_fluid_compat;
 
 	public static Item ball_resin;
 	public static Item ingot_dura_steel;
@@ -900,6 +902,15 @@ public class ModItems {
 	public static Item cbt_device;
 	public static Item cigarette;
 
+	// Hunter Chopper drops and letter
+	public static Item chopper_head;
+	public static Item chopper_torso;
+	public static Item chopper_wing;
+	public static Item chopper_tail;
+	public static Item chopper_gun;
+	public static Item chopper_blades;
+	public static Item letter;
+
 	public static Item can_empty;
 	public static Item can_smart;
 	public static Item can_creature;
@@ -920,6 +931,8 @@ public class ModItems {
 	public static Item bottle2_empty;
 	public static Item bottle2_korl;
 	public static Item bottle2_fritz;
+	public static Item bottle2_korl_special;
+	public static Item bottle2_fritz_special;
 	public static Item flask_empty;
 	public static Item flask_infusion;
 	public static Item chocolate_milk;
@@ -2781,6 +2794,15 @@ public class ModItems {
 
 		combine_scrap = new Item().setUnlocalizedName("combine_scrap").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":combine_scrap");
 
+		// Hunter Chopper drops
+		chopper_head = new Item().setUnlocalizedName("chopper_head").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":chopper_head");
+		chopper_torso = new Item().setUnlocalizedName("chopper_torso").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":chopper_torso");
+		chopper_wing = new Item().setUnlocalizedName("chopper_wing").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":chopper_wing");
+		chopper_tail = new Item().setUnlocalizedName("chopper_tail").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":chopper_tail");
+		chopper_gun = new Item().setUnlocalizedName("chopper_gun").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":chopper_gun");
+		chopper_blades = new Item().setUnlocalizedName("chopper_blades").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":chopper_blades");
+		letter = new Item().setUnlocalizedName("letter").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":letter");
+
 		shimmer_head = new Item().setUnlocalizedName("shimmer_head").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":shimmer_head_original");
 		shimmer_axe_head = new Item().setUnlocalizedName("shimmer_axe_head").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":shimmer_axe_head");
 		shimmer_handle = new Item().setUnlocalizedName("shimmer_handle").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":shimmer_handle");
@@ -3093,6 +3115,8 @@ public class ModItems {
 		bottle2_empty = new Item().setUnlocalizedName("bottle2_empty").setTextureName(RefStrings.MODID + ":bottle2_empty");
 		bottle2_korl = new ItemEnergy().makeBottle(bottle2_empty, cap_korl).setUnlocalizedName("bottle2_korl").setContainerItem(ModItems.bottle2_empty).setTextureName(RefStrings.MODID + ":bottle2_korl");
 		bottle2_fritz = new ItemEnergy().makeBottle(bottle2_empty, cap_fritz).setUnlocalizedName("bottle2_fritz").setContainerItem(ModItems.bottle2_empty).setTextureName(RefStrings.MODID + ":bottle2_fritz");
+		bottle2_korl_special = new ItemEnergy().makeBottle(bottle2_empty, cap_korl).setUnlocalizedName("bottle2_korl_special").setContainerItem(ModItems.bottle2_empty).setTextureName(RefStrings.MODID + ":bottle2_korl_special");
+		bottle2_fritz_special = new ItemEnergy().makeBottle(bottle2_empty, cap_fritz).setUnlocalizedName("bottle2_fritz_special").setContainerItem(ModItems.bottle2_empty).setTextureName(RefStrings.MODID + ":bottle2_fritz_special");
 		flask_infusion = new ItemFlask().setUnlocalizedName("flask_infusion").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":flask");
 		chocolate_milk = new ItemEnergy().setUnlocalizedName("chocolate_milk").setTextureName(RefStrings.MODID + ":chocolate_milk");
 		coffee = new ItemEnergy().setUnlocalizedName("coffee").setTextureName(RefStrings.MODID + ":coffee");
@@ -5568,6 +5592,13 @@ public class ModItems {
 
 		//Chopper parts
 		GameRegistry.registerItem(combine_scrap, combine_scrap.getUnlocalizedName());
+		GameRegistry.registerItem(chopper_head, chopper_head.getUnlocalizedName());
+		GameRegistry.registerItem(chopper_torso, chopper_torso.getUnlocalizedName());
+		GameRegistry.registerItem(chopper_wing, chopper_wing.getUnlocalizedName());
+		GameRegistry.registerItem(chopper_tail, chopper_tail.getUnlocalizedName());
+		GameRegistry.registerItem(chopper_gun, chopper_gun.getUnlocalizedName());
+		GameRegistry.registerItem(chopper_blades, chopper_blades.getUnlocalizedName());
+		GameRegistry.registerItem(letter, letter.getUnlocalizedName());
 
 		//Hammer Parts
 		GameRegistry.registerItem(shimmer_head, shimmer_head.getUnlocalizedName());
@@ -6701,6 +6732,8 @@ public class ModItems {
 		GameRegistry.registerItem(bottle2_empty, bottle2_empty.getUnlocalizedName());
 		GameRegistry.registerItem(bottle2_korl, bottle2_korl.getUnlocalizedName());
 		GameRegistry.registerItem(bottle2_fritz, bottle2_fritz.getUnlocalizedName());
+		GameRegistry.registerItem(bottle2_korl_special, bottle2_korl_special.getUnlocalizedName());
+		GameRegistry.registerItem(bottle2_fritz_special, bottle2_fritz_special.getUnlocalizedName());
 		GameRegistry.registerItem(bottle_opener, bottle_opener.getUnlocalizedName());
 
 		//Flasks

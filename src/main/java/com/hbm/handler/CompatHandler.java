@@ -127,7 +127,71 @@ public class CompatHandler {
         LIGHTBLUE, //0xAAAAFF
         MAGENTA, //0xC354CD
         ORANGE, //0xEB8844
-        WHITE //0xF0F0F0
+        WHITE; //0xF0F0F0
+
+        /**
+         * Returns the RGB color value for this OC color.
+         */
+        public int getColor() {
+            switch (this) {
+                case BLACK: return 0x444444;
+                case RED: return 0xB3312C;
+                case GREEN: return 0x339911;
+                case BROWN: return 0x51301A;
+                case BLUE: return 0x6666FF;
+                case PURPLE: return 0x7B2FBE;
+                case CYAN: return 0x66FFFF;
+                case LIGHTGRAY: return 0xABABAB;
+                case GRAY: return 0x666666;
+                case PINK: return 0xD88198;
+                case LIME: return 0x66FF66;
+                case YELLOW: return 0xFFFF66;
+                case LIGHTBLUE: return 0xAAAAFF;
+                case MAGENTA: return 0xC354CD;
+                case ORANGE: return 0xEB8844;
+                case WHITE: return 0xF0F0F0;
+                default: return 0xABABAB;
+            }
+        }
+
+        /**
+         * Maps a stored RGB integer back to an OCColors enum value.
+         */
+        public static OCColors fromInt(int color) {
+            for (OCColors c : values()) {
+                if (c.getColor() == color) return c;
+            }
+            return LIGHTGRAY;
+        }
+
+        /**
+         * Converts a dye ItemStack to an OC color.
+         * Accepts vanilla ItemDye damage values (0-15).
+         */
+        public static OCColors fromDye(net.minecraft.item.ItemStack stack) {
+            if (stack == null) return LIGHTGRAY;
+            if (stack.getItem() instanceof net.minecraft.item.ItemDye) {
+                switch (stack.getItemDamage() & 15) {
+                    case 0:  return BLACK;
+                    case 1:  return RED;
+                    case 2:  return GREEN;
+                    case 3:  return BROWN;
+                    case 4:  return BLUE;
+                    case 5:  return PURPLE;
+                    case 6:  return CYAN;
+                    case 7:  return LIGHTGRAY;
+                    case 8:  return GRAY;
+                    case 9:  return PINK;
+                    case 10: return LIME;
+                    case 11: return YELLOW;
+                    case 12: return LIGHTBLUE;
+                    case 13: return MAGENTA;
+                    case 14: return ORANGE;
+                    case 15: return WHITE;
+                }
+            }
+            return LIGHTGRAY;
+        }
     }
 
     // Where all disks are stored with their name and `FloppyDisk` class.

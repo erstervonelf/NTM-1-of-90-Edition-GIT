@@ -177,7 +177,7 @@ public class TileEntityMachineChemicalFactory extends TileEntityMachineBase impl
 			boolean markDirty = false;
 			
 			for(int i = 0; i < 4; i++) {
-				this.chemplantModule[i].update(speed * 2D, pow * 2D, canCool(), slots[4 + i * 7]);
+				this.chemplantModule[i].update(speed * 2D, pow * 2D, canCool());
 				this.didProcess[i] =  this.chemplantModule[i].didProcess;
 				markDirty |= this.chemplantModule[i].markDirty;
 				

@@ -5,7 +5,6 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.inventory.container.ContainerMachinePUREX;
 import com.hbm.inventory.recipes.PUREXRecipes;
 import com.hbm.inventory.recipes.loader.GenericRecipe;
-import com.hbm.items.machine.ItemBlueprints;
 import com.hbm.lib.RefStrings;
 import com.hbm.tileentity.machine.TileEntityMachinePUREX;
 
@@ -55,7 +54,7 @@ public class GUIMachinePUREX extends GuiInfoContainer {
 	protected void mouseClicked(int x, int y, int button) {
 		super.mouseClicked(x, y, button);
 		
-		if(this.checkClick(x, y, 7, 125, 18, 18)) GUIScreenRecipeSelector.openSelector(PUREXRecipes.INSTANCE, purex, purex.purexModule.recipe, 0, ItemBlueprints.grabPool(purex.slots[1]), this);
+		if(this.checkClick(x, y, 7, 125, 18, 18)) GUIScreenRecipeSelector.openSelector(PUREXRecipes.INSTANCE, purex, purex.purexModule.recipe, 0, this);
 	}
 
 	@Override

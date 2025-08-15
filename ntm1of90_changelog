@@ -1,13 +1,11 @@
-## NTM-1-of-90-Editon-r.9
+## NTM-1-of-90-Editon-r.9-alpha.1
 
-Up to date with HBM-NTM: X5383 (see changelog of HBM X5383 for additional information)
-
-## Added
-* NTM I-Steel Beam and I-Steel Beam Vertical
-
+Up to date with HBM-NTM: X5418 (see changelog of HBM X5418 for additional information)
 
 ## Fixes
-The hbm forgefluid compat (ntm1of90api) now uses the correct hbm fluid textures
+- MainRegistry potentially not registering ntm1of90api
+- The hbm forgefluid compat (ntm1of90api) now uses the correct hbm fluid textures
+
 
 
 
