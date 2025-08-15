@@ -7,13 +7,19 @@ import java.io.InputStreamReader;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map.Entry;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.hbm.interfaces.NotableComments;
+import com.hbm.inventory.RecipesCommon.ComparableStack;
+import com.hbm.inventory.recipes.loader.SerializableRecipe;
+import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.client.Minecraft;
@@ -23,6 +29,7 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.resources.ResourcePackRepository;
+import net.minecraft.item.ItemStack;
 
 @NotableComments
 public class QMAWLoader implements IResourceManagerReloadListener {
@@ -31,6 +38,7 @@ public class QMAWLoader implements IResourceManagerReloadListener {
 	public static final Gson gson = new Gson();
 	public static final JsonParser parser = new JsonParser();
 	public static HashMap<String, QuickManualAndWiki> qmaw = new HashMap();
+	public static HashMap<ComparableStack, QuickManualAndWiki> triggers = new HashMap();
 
 	@Override
 	public void onResourceManagerReload(IResourceManager resMan) {
@@ -40,7 +48,7 @@ public class QMAWLoader implements IResourceManagerReloadListener {
 		MainRegistry.logger.info("[QMAW] Loaded " + qmaw.size() + " manual entries! (" + (System.currentTimeMillis() - timestamp) + "ms)");
 	}
 	
-	/** For the like 2 people who might consider making an NTM addon and want to include manual pages */
+	/** For the like 2 people who might consider making an NTM addon and want to include manual pages. Requires the mod's actual JAR file as the parameter. */
 	public static void registerModFileURL(File file) {
 		registeredModFiles.add(file);
 	}
@@ -48,20 +56,35 @@ public class QMAWLoader implements IResourceManagerReloadListener {
 	/** Searches the asset folder for QMAW format JSON files and adds entries based on that */
 	public static void init() {
 
-		//the mod's file, assuming the mod is a file (not the case in a dev env, fuck!)
+		/*//the mod's file, assuming the mod is a file (not the case in a dev env, fuck!)
 		//no fucking null check, if this fails then the entire game will sink along with the ship
-		registerModFileURL(new File(QMAWLoader.class.getProtectionDomain().getCodeSource().getLocation().getPath())); // i am going to shit myself
+		String path = QMAWLoader.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		// exclude .class in the case of a dev env
+		MainRegistry.logger.info("[QMAW] Current running file: " + path);
+		if(!path.endsWith(".class")) registerModFileURL(new File(path)); // i am going to shit myself*/ // deactivated because it likely doesn't even fucking work
+		
+		// registering of the mod file now happens in the MainRegistry during preinit
 		
 		qmaw.clear();
+		triggers.clear();
 		agonyEngine();
 	}
 	
-	/** "digital equivalent to holywater" yielded few results on google, if only i had the answer i would drown this entire class in it */
+	/** "digital equivalent to holywater" yielded few results on google, if only i had the answer i would drown this entire class in it <br><br>
+	 * This affront to god can load QMAW definition files from four different sources:<br>
+	 * * Any mod's jar that has registered itself to include QMAW files<br>
+	 * * The dev environment, because "the mod file" would in this case be this very class file, and that's incorrect<br>
+	 * * ZIP-based resource packs<br>
+	 * * Folder-based resource packs
+	 * */
 	public static void agonyEngine() {
 		
-		for(File modFile : registeredModFiles) dissectZip(modFile);
+		for(File modFile : registeredModFiles) {
+			logJarAttempt(modFile.getName());
+			dissectZip(modFile);
+		}
 		
-		File devEnvManualFolder = new File(Minecraft.getMinecraft().mcDataDir.getAbsolutePath().replace("/eclipse/.", "") + "/src/main/resources/assets/hbm/manual");
+		File devEnvManualFolder = new File(Minecraft.getMinecraft().mcDataDir.getAbsolutePath().replace("/eclipse/.".replace('/', File.separatorChar), "") + "/src/main/resources/assets/hbm/manual".replace('/', File.separatorChar));
 		if(devEnvManualFolder.exists() && devEnvManualFolder.isDirectory()) {
 			MainRegistry.logger.info("[QMAW] Exploring " + devEnvManualFolder.getAbsolutePath());
 			dissectManualFolder(devEnvManualFolder);
@@ -85,6 +108,7 @@ public class QMAWLoader implements IResourceManagerReloadListener {
 		}
 	}
 
+	public static void logJarAttempt(String name) { MainRegistry.logger.info("[QMAW] Dissecting jar " + name); }
 	public static void logPackAttempt(String name) { MainRegistry.logger.info("[QMAW] Dissecting resource " + name); }
 	public static void logFoundManual(String name) { MainRegistry.logger.info("[QMAW] Found manual " + name); }
 	
@@ -131,7 +155,7 @@ public class QMAWLoader implements IResourceManagerReloadListener {
 	
 	/** Opens a resource pack folder, skips to the manual folder, then tries to dissect that */
 	public static void dissectFolder(File folder) {
-		File manualFolder = new File(folder, "/assets/manual");
+		File manualFolder = new File(folder, "/assets/hbm/manual");
 		if(manualFolder.exists() && manualFolder.isDirectory()) dissectManualFolder(manualFolder);
 	}
 	
@@ -150,11 +174,52 @@ public class QMAWLoader implements IResourceManagerReloadListener {
 				} catch(Exception ex) {
 					MainRegistry.logger.info("[QMAW] Error reading manual " + name + ": " + ex);
 				}
+			} else if(file.isDirectory()) {
+				dissectManualFolder(file); // scrape subfolders too lmao
 			}
 		}
 	}
 	
-	public static void registerJson(String name, JsonObject json) {
-		//TBI
+	/** Extracts all the info from a json file's main object to add a QMAW to the system. Very barebones, only handles name, icon and the localized text. */
+	public static void registerJson(String file, JsonObject json) {
+		
+		String name = json.get("name").getAsString();
+		
+		if(QMAWLoader.qmaw.containsKey(name)) {
+			MainRegistry.logger.info("[QMAW] Skipping existing entry " + file);
+			return;
+		}
+		
+		QuickManualAndWiki qmaw = new QuickManualAndWiki(name);
+		
+		if(json.has("icon")) {
+			qmaw.setIcon(SerializableRecipe.readItemStack(json.get("icon").getAsJsonArray()));
+		}
+		
+		JsonObject title = json.get("title").getAsJsonObject();
+		for(Entry<String, JsonElement> part : title.entrySet()) {
+			qmaw.addTitle(part.getKey(), part.getValue().getAsString());
+		}
+		
+		JsonObject content = json.get("content").getAsJsonObject();
+		for(Entry<String, JsonElement> part : content.entrySet()) {
+			qmaw.addLang(part.getKey(), part.getValue().getAsString());
+		}
+		
+		JsonArray triggers = json.get("trigger").getAsJsonArray();
+		
+		for(JsonElement element : triggers) {
+			ItemStack trigger = SerializableRecipe.readItemStack(element.getAsJsonArray());
+			// items get renamed and removed all the time, so we add some more debug goodness for those cases
+			if(trigger == null || trigger.getItem() == ModItems.nothing) {
+				MainRegistry.logger.info("[QMAW] Manual " + file + " references nonexistant trigger " + element.toString());
+			} else {
+				QMAWLoader.triggers.put(new ComparableStack(trigger).makeSingular(), qmaw);
+			}
+		}
+		
+		if(!qmaw.contents.isEmpty()) {
+			QMAWLoader.qmaw.put(name, qmaw);
+		}
 	}
 }

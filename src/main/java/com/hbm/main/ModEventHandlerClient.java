@@ -3,6 +3,7 @@ package com.hbm.main;
 import com.hbm.blocks.ILookOverlay;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockAshes;
+import com.hbm.blocks.generic.BlockRebar;
 import com.hbm.config.ClientConfig;
 import com.hbm.config.GeneralConfig;
 import com.hbm.entity.mob.EntityHunterChopper;
@@ -13,6 +14,7 @@ import com.hbm.extprop.HbmPlayerProps;
 import com.hbm.handler.ArmorModHandler;
 import com.hbm.handler.HTTPHandler;
 import com.hbm.handler.HazmatRegistry;
+import com.hbm.handler.HbmKeybinds;
 import com.hbm.handler.ImpactWorldHandler;
 import com.hbm.hazard.HazardSystem;
 import com.hbm.interfaces.IHoldableWeapon;
@@ -35,6 +37,9 @@ import com.hbm.lib.Library;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.toserver.AuxButtonPacket;
+import com.hbm.qmaw.GuiQMAW;
+import com.hbm.qmaw.QMAWLoader;
+import com.hbm.qmaw.QuickManualAndWiki;
 import com.hbm.render.anim.HbmAnimations;
 import com.hbm.render.anim.HbmAnimations.Animation;
 import com.hbm.render.block.ct.CTStitchReceiver;
@@ -109,6 +114,8 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.sound.PlaySoundEvent17;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.oredict.OreDictionary;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -746,6 +753,20 @@ public class ModEventHandlerClient {
 			list.add(EnumChatFormatting.RED + "Error loading cannery: " + ex.getLocalizedMessage());
 		}
 
+		try {
+			QuickManualAndWiki qmaw = QMAWLoader.triggers.get(comp);
+			if(qmaw == null) {
+				qmaw = QMAWLoader.triggers.get(new ComparableStack(comp.item, 1, OreDictionary.WILDCARD_VALUE));
+			}
+			if(qmaw != null) {
+				list.add(EnumChatFormatting.YELLOW + I18nUtil.resolveKey("qmaw.tab", Keyboard.getKeyName(HbmKeybinds.qmaw.getKeyCode())));
+				lastQMAW = qmaw;
+				qmawTimestamp = Clock.get_ms();
+			}
+		} catch(Exception ex) {
+			list.add(EnumChatFormatting.RED + "Error loading cannery: " + ex.getLocalizedMessage());
+		}
+
 		/*ItemStack copy = stack.copy();
 		List<MaterialStack> materials = Mats.getMaterialsFromItem(copy);
 
@@ -758,6 +779,8 @@ public class ModEventHandlerClient {
 
 	private static long canneryTimestamp;
 	private static ComparableStack lastCannery = null;
+	private static long qmawTimestamp;
+	private static QuickManualAndWiki lastQMAW = null;
 
 	private ResourceLocation ashes = new ResourceLocation(RefStrings.MODID + ":textures/misc/overlay_ash.png");
 
@@ -890,6 +913,16 @@ public class ModEventHandlerClient {
 			}
 		}
 
+		if(Keyboard.isKeyDown(HbmKeybinds.qmaw.getKeyCode()) && Minecraft.getMinecraft().currentScreen != null) {
+
+			QuickManualAndWiki qmaw = qmawTimestamp > Clock.get_ms() - 100 ? lastQMAW : null;
+
+			if(qmaw != null) {
+				Minecraft.getMinecraft().thePlayer.closeScreen();
+				FMLCommonHandler.instance().showGuiScreen(new GuiQMAW(qmaw));
+			}
+		}
+
 		if(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_LMENU)) {
 
 			ItemStack stack = getMouseOverStack();
@@ -924,9 +957,9 @@ public class ModEventHandlerClient {
 				);
 				
 				String prefix = "Gun ";
-				int gunScale = 16;
-				int defaultScale = 1;
-				int slotScale = gunScale;
+				//int gunScale = 16;
+				//int defaultScale = 1;
+				int slotScale = 16;
 				boolean ignoreNonNTM = true;
 				boolean onlyGuns = true;
 
@@ -1138,6 +1171,8 @@ public class ModEventHandlerClient {
 	public void onRenderWorldLastEvent(RenderWorldLastEvent event) {
 
 		Clock.update();
+		
+		BlockRebar.renderRebar(Minecraft.getMinecraft().theWorld.loadedTileEntityList, event.partialTicks);
 
 		GL11.glPushMatrix();
 
