@@ -1,10 +1,7 @@
-## NTM-1-of-90-Editon-r.9-alpha.1
+## NTM-1-of-90-Editon-r.9-alpha.2
 
 Up to date with HBM-NTM: X5418 (see changelog of HBM X5418 for additional information)
 
-## Fixes
-- MainRegistry potentially not registering ntm1of90api
-- The hbm forgefluid compat (ntm1of90api) now uses the correct hbm fluid textures
 
 
 
