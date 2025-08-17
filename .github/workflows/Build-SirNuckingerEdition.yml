@@ -5,12 +5,12 @@
 # This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 
-name: Build - SirNuckingerEdition
+name: Build - NTM1of90Edition
 on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version (z. B. a1.0.0, b1.0.0 oder r1.0.0)'
+        description: 'Version (for instance: a.1.0.0, b1.0.0 oder r1.0.0)'
         required: true
 
         
@@ -95,7 +95,7 @@ jobs:
         with:
           tag_name: ${{ env.TAG_NAME }}
           name: "Release ${{ env.TAG_NAME }}"
-          body: "Automatisch generiertes Release für Version ${{ env.TAG_NAME }}"
+          body: "Release for version ${{ env.TAG_NAME }}"
           prerelease: ${{ env.IS_PRERELEASE }}
           files: |
             build/libs/*.jar
