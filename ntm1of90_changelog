@@ -2,6 +2,11 @@
 
 Up to date with HBM-NTM: X5418 (see changelog of HBM X5418 for additional information)
 
+## Fixes
+
+Fixed Issue # 46: Forge Fluid pipes do eventually not connect and transfer from/to HBM Machines
+
+
 
 
 

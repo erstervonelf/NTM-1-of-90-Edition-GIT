@@ -37,11 +37,14 @@ public abstract class ForgeFluidHandlerAdapter implements IFluidHandler {
     protected abstract TileEntity getTileEntity();
 
     /**
-     * Check if the given direction is valid for fluid transfer
-     * @param from The direction to check
-     * @return True if the direction is valid, false otherwise
+     * Check if filling from the given direction is allowed.
      */
-    protected abstract boolean isValidDirection(ForgeDirection from);
+    protected abstract boolean isFillAllowed(ForgeDirection from);
+
+    /**
+     * Check if draining from the given direction is allowed.
+     */
+    protected abstract boolean isDrainAllowed(ForgeDirection from);
 
     /**
      * Convert NTM fluid amount to Forge fluid amount (mB)
@@ -59,7 +62,7 @@ public abstract class ForgeFluidHandlerAdapter implements IFluidHandler {
 
     @Override
     public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-        if (resource == null || resource.amount <= 0 || !isValidDirection(from)) {
+        if (resource == null || resource.amount <= 0 || !isFillAllowed(from)) {
             return 0;
         }
 
@@ -111,7 +114,7 @@ public abstract class ForgeFluidHandlerAdapter implements IFluidHandler {
 
     @Override
     public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-        if (resource == null || resource.amount <= 0 || !isValidDirection(from)) {
+        if (resource == null || resource.amount <= 0 || !isDrainAllowed(from)) {
             return null;
         }
 
@@ -167,7 +170,7 @@ public abstract class ForgeFluidHandlerAdapter implements IFluidHandler {
 
     @Override
     public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-        if (maxDrain <= 0 || !isValidDirection(from)) {
+        if (maxDrain <= 0 || !isDrainAllowed(from)) {
             return null;
         }
 
@@ -220,7 +223,19 @@ public abstract class ForgeFluidHandlerAdapter implements IFluidHandler {
 
     @Override
     public boolean canFill(ForgeDirection from, Fluid fluid) {
-        if (fluid == null || !isValidDirection(from)) {
+        if (!isFillAllowed(from)) {
+            return false;
+        }
+
+        FluidTank[] tanks = getHbmTanks();
+
+        // If fluid is null, treat as generic probe: any capacity available?
+        if (fluid == null) {
+            for (FluidTank tank : tanks) {
+                if (tank.getFill() < tank.getMaxFill()) {
+                    return true;
+                }
+            }
             return false;
         }
 
@@ -230,10 +245,8 @@ public abstract class ForgeFluidHandlerAdapter implements IFluidHandler {
             return false; // Unknown fluid
         }
 
-        // Find a tank that can accept this fluid
-        FluidTank[] tanks = getHbmTanks();
+        // Find a tank that can accept this specific fluid
         for (FluidTank tank : tanks) {
-            // Check if tank is empty or contains the same fluid
             int currentFill = tank.getFill();
             FluidType currentType = tank.getTankType();
             int maxFill = tank.getMaxFill();
@@ -248,7 +261,19 @@ public abstract class ForgeFluidHandlerAdapter implements IFluidHandler {
 
     @Override
     public boolean canDrain(ForgeDirection from, Fluid fluid) {
-        if (fluid == null || !isValidDirection(from)) {
+        if (!isDrainAllowed(from)) {
+            return false;
+        }
+
+        FluidTank[] tanks = getHbmTanks();
+
+        // If fluid is null, treat as generic probe: any fluid present?
+        if (fluid == null) {
+            for (FluidTank tank : tanks) {
+                if (tank.getFill() > 0 && tank.getTankType() != Fluids.NONE) {
+                    return true;
+                }
+            }
             return false;
         }
 
@@ -258,10 +283,8 @@ public abstract class ForgeFluidHandlerAdapter implements IFluidHandler {
             return false; // Unknown fluid
         }
 
-        // Find a tank that contains this fluid
-        FluidTank[] tanks = getHbmTanks();
+        // Find a tank that contains this specific fluid
         for (FluidTank tank : tanks) {
-            // Check if tank contains the requested fluid
             int currentFill = tank.getFill();
             FluidType currentType = tank.getTankType();
 
@@ -275,10 +298,6 @@ public abstract class ForgeFluidHandlerAdapter implements IFluidHandler {
 
     @Override
     public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-        if (!isValidDirection(from)) {
-            return new FluidTankInfo[0];
-        }
-
         // Get the HBM tanks
         FluidTank[] hbmTanks = getHbmTanks();
         FluidTankInfo[] tankInfo = new FluidTankInfo[hbmTanks.length];

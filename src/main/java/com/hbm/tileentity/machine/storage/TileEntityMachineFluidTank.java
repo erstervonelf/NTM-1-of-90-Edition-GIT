@@ -477,10 +477,17 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 		}
 
 		@Override
-		protected boolean isValidDirection(ForgeDirection from) {
-			// Only allow fluid transfer if the tank is in the right mode
-			if(hasExploded) return false;
-			return (mode == 0 || mode == 1); // Only allow in input or buffer mode
+		protected boolean isFillAllowed(ForgeDirection from) {
+			// allow filling in input or buffer mode
+			if (hasExploded) return false;
+			return (mode == 0 || mode == 1);
+		}
+
+		@Override
+		protected boolean isDrainAllowed(ForgeDirection from) {
+			// allow draining in output or buffer mode
+			if (hasExploded) return false;
+			return (mode == 1 || mode == 2);
 		}
 	};
 
@@ -488,6 +495,18 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 		// Initialize the fluid mapping registry
 		FluidMappingRegistry.initialize();
 	}
+
+	// Common compatibility helpers that some pipe mods reflectively probe for
+	public boolean canConnectFluid(ForgeDirection from) { return !hasExploded; }
+	public boolean isConnectable(ForgeDirection from) { return !hasExploded; }
+	public boolean canInterface(ForgeDirection from) { return !hasExploded; }
+	public boolean canInputFluid(ForgeDirection from) { return !hasExploded && (mode == 0 || mode == 1); }
+	public boolean canOutputFluid(ForgeDirection from) { return !hasExploded && (mode == 1 || mode == 2); }
+	public boolean canReceiveFrom(ForgeDirection from) { return !hasExploded && (mode == 0 || mode == 1); }
+	public boolean canSendTo(ForgeDirection from) { return !hasExploded && (mode == 1 || mode == 2); }
+	public boolean canAcceptFluid(ForgeDirection from) { return !hasExploded && (mode == 0 || mode == 1); }
+	public boolean canProvideFluid(ForgeDirection from) { return !hasExploded && (mode == 1 || mode == 2); }
+	public boolean isFluidHandler(ForgeDirection from) { return !hasExploded; }
 
 	@Override
 	public int fill(ForgeDirection from, net.minecraftforge.fluids.FluidStack resource, boolean doFill) {
