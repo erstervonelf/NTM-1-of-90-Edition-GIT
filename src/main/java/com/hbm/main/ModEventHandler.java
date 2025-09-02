@@ -128,6 +128,13 @@ public class ModEventHandler {
 
 	private static Random rand = new Random();
 
+	// Konfigurierbare Werte für Bomber-Spawn
+	public static int BOMBER_SPAWN_INTERVAL_TICKS = 30 * 20; // 30 Sekunden
+	public static int BOMBER_SPAWN_CHANCE = 2; // Prozent
+	public static int[] BOMBER_TYPES = {0, 1, 2}; // Beispiel-Typen
+	private static long lastBomberSpawnTick = 0;
+	private static final Random bomberRandom = new Random();
+
 	@SubscribeEvent
 	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
 
@@ -1400,6 +1407,30 @@ public class ModEventHandler {
 					MainRegistry.logger.error("Prevented spawning of multipart entity " + entity.getClass().getCanonicalName() + " due to parts being null!");
 					event.setCanceled(true);
 					return;
+				}
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void worlTick(TickEvent.WorldTickEvent event) {
+		if(event.world != null && !event.world.isRemote) {
+			long time = event.world.getTotalWorldTime();
+			if(time - lastBomberSpawnTick >= BOMBER_SPAWN_INTERVAL_TICKS) {
+				lastBomberSpawnTick = time;
+				if(bomberRandom.nextInt(100) < BOMBER_SPAWN_CHANCE) {
+					List playerList = event.world.playerEntities;
+					if(!playerList.isEmpty()) {
+						Object playerObj = playerList.get(bomberRandom.nextInt(playerList.size()));
+						if(playerObj instanceof net.minecraft.entity.player.EntityPlayer) {
+							net.minecraft.entity.player.EntityPlayer player = (net.minecraft.entity.player.EntityPlayer) playerObj;
+							int bomberType = BOMBER_TYPES[bomberRandom.nextInt(BOMBER_TYPES.length)];
+							com.hbm.entity.logic.EntityBomber bomber = new com.hbm.entity.logic.EntityBomber(event.world);
+							bomber.type = bomberType;
+							bomber.setPosition(player.posX, player.posY + 50, player.posZ); // Spawne Bomber 50 Blöcke über Spieler
+							event.world.spawnEntityInWorld(bomber);
+						}
+					}
 				}
 			}
 		}
