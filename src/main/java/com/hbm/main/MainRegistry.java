@@ -255,7 +255,11 @@ public class MainRegistry {
 	public void PreLoad(FMLPreInitializationEvent PreEvent) {
 		CrashHelper.init();
 		
-		QMAWLoader.registerModFileURL(FMLCommonHandler.instance().findContainerFor(RefStrings.MODID).getSource());
+		// Register the mod jar for the client-only QMAW manual loader.
+		// Must only run on the client side to avoid loading client-only classes on a dedicated server.
+		if(PreEvent.getSide() == Side.CLIENT) {
+			QMAWLoader.registerModFileURL(FMLCommonHandler.instance().findContainerFor(RefStrings.MODID).getSource());
+		}
 
 		startupTime = System.currentTimeMillis();
 		configDir = PreEvent.getModConfigurationDirectory();
