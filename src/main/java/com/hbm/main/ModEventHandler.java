@@ -128,10 +128,10 @@ public class ModEventHandler {
 
 	private static Random rand = new Random();
 
-	// Konfigurierbare Werte für Bomber-Spawn
-	public static int BOMBER_SPAWN_INTERVAL_TICKS = 30 * 20; // 30 Sekunden
-	public static int BOMBER_SPAWN_CHANCE = 2; // Prozent
-	public static int[] BOMBER_TYPES = {0, 1, 2}; // Beispiel-Typen
+	// config Bomber-Spawn
+	public static int BOMBER_SPAWN_INTERVAL_TICKS = 60 * 1200; // 60 minutes
+	public static int BOMBER_SPAWN_CHANCE = 2; // percent
+	public static int[] BOMBER_TYPES = {3}; // example-types
 	private static long lastBomberSpawnTick = 0;
 	private static final Random bomberRandom = new Random();
 
