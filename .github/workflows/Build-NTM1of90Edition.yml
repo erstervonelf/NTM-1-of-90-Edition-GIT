@@ -94,7 +94,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.TAG_NAME }}
-          name: "Release ${{ env.TAG_NAME }}"
+          name: "${{ env.TAG_NAME }}"
           body: "Release for version ${{ env.TAG_NAME }}"
           prerelease: ${{ env.IS_PRERELEASE }}
           files: |
