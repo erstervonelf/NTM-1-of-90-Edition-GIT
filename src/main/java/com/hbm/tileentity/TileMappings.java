@@ -64,6 +64,9 @@ public class TileMappings {
 	public static List<Class<? extends IConfigurableMachine>> configurables = new ArrayList<Class<? extends IConfigurableMachine>>();
 
 	public static void writeMappings() {
+		put(TileEntityNTMSteelBeam.class, "tileentity_ntmsteelbeam");
+		put(TileEntityNTMSteelBeamVertical.class, "tileentity_ntmsteelbeamvertical");
+
 		put(TileEntityDiFurnace.class, "tilentity_diFurnace");
 		put(TileEntityObjTester.class, "tilentity_objtester");
 		put(TileEntityMachineCentrifuge.class, "tileentity_centrifuge");
