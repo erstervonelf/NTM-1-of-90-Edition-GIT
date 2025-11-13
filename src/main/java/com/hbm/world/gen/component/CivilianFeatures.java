@@ -937,7 +937,7 @@ public class CivilianFeatures {
 
 			fillWithBlocks(world, box, 2, 1, 12, 3, 1, 12, Blocks.bookshelf); //bookshelf/desk
 			placeBlockAtCurrentPosition(world, Blocks.oak_stairs, stairE | 4, 4, 1, 12, box);
-			placeBlockAtCurrentPosition(world, Blocks.wooden_slab, 8, 5, 1, 12, box);
+			placeBlockAtCurrentPosition(world, Blocks.wooden_slab, 8, 12, 1, 12, box);
 			placeBlockAtCurrentPosition(world, Blocks.oak_stairs, stairW | 4, 6, 1, 12, box);
 			fillWithBlocks(world, box, 7, 1, 12, 7, 2, 12, Blocks.bookshelf);
 			placeBlockAtCurrentPosition(world, Blocks.wooden_slab, 5, 5, 1, 11, box); //seat

@@ -10,7 +10,7 @@ import net.minecraft.item.Item;
 
 public class AmmoIndex {
 	
-	private static final HashMap<ComparableStack, Set<AmmoTrait>> ammo = new HashMap();
+	private static final HashMap<ComparableStack, Set<AmmoTrait>> ammo = new HashMap<>();
 
 	public static void registerAmmo(Item ammo, AmmoTrait... traits) {
 		registerAmmo(new ComparableStack(ammo), traits);
