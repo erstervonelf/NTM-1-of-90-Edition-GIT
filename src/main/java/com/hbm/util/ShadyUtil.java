@@ -72,11 +72,11 @@ public class ShadyUtil {
 	public static String smTest3 =		"j11D";
 	public static String smTest4 =		"s783";
 
-	public static Set<String> contributors = Sets.newHashSet(new String[] {
+	public static Set<String> contributors = Sets.newHashSet(
 			"06ab7c03-55ce-43f8-9d3c-2850e3c652de", //mustang_rudolf
 			"5bf069bc-5b46-4179-aafe-35c0a07dee8b", //JMF781
-			"ccd9aa1c-26b9-4dde-8f37-b96f8d99de22", //kakseao
-			});
+			"ccd9aa1c-26b9-4dde-8f37-b96f8d99de22"  //kakseao
+			);
 
 	// simple cryptographic utils
 	public static String encode(String msg) { return Base64.getEncoder().encodeToString(msg.getBytes()); }

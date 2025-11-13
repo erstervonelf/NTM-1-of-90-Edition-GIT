@@ -258,15 +258,25 @@ public class BobMathUtil {
 	// so I wrote this thing that can shit any int-ish list-ish into a regular fucking int[]
 	// made by mellow, thrown here by 70k
 	public static int[] intCollectionToArray(Collection<Integer> in) {
-		return intCollectionToArray(in, i -> (int)i);
+		return in.stream().mapToInt(Integer::intValue).toArray();
 	}
 
-	public static int[] intCollectionToArray(Collection<Integer> in, ToIntFunction<? super Object> mapper) {
-		return Arrays.stream(in.toArray()).mapToInt(mapper).toArray();
+	public static int[] intCollectionToArray(Collection<?> in, ToIntFunction<? super Object> mapper) {
+		int[] out = new int[in.size()];
+		int i = 0;
+		for (Object o : in) {
+			out[i++] = mapper.applyAsInt(o);
+		}
+		return out;
 	}
 
 	public static int[] collectionToIntArray(Collection<? extends Object> in, ToIntFunction<? super Object> mapper) {
-		return Arrays.stream(in.toArray()).mapToInt(mapper).toArray();
+		int[] out = new int[in.size()];
+		int i = 0;
+		for (Object o : in) {
+			out[i++] = mapper.applyAsInt(o);
+		}
+		return out;
 	}
 	
 	public static void shuffleIntArray(int[] array) {

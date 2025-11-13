@@ -232,7 +232,7 @@ public class ItemRenderFolly extends ItemRenderWeaponBase {
 	}
 	
 	public static List<String> getTTY() {
-		List<String> tty = new ArrayList();
+		List<String> tty = new ArrayList<>();
 		long now = System.currentTimeMillis();
 		int time = (int)((now - timeAiming));
 		if(time < 3000) {

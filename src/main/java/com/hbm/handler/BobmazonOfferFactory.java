@@ -24,8 +24,8 @@ import net.minecraft.item.ItemStack;
 
 public class BobmazonOfferFactory {
 
-	public static List<Offer> standard = new ArrayList();
-	public static List<Offer> special = new ArrayList();
+	public static List<Offer> standard = new ArrayList<>();
+	public static List<Offer> special = new ArrayList<>();
 	
 	public static void init() {
 		

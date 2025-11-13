@@ -13,8 +13,8 @@ import net.minecraft.util.MathHelper;
 public class JarScript {
 
 	public  WorldInAJar world;
-	public List<JarScene> scenes = new ArrayList();
-	public HashMap<Integer, ISpecialActor> actors = new HashMap();
+	public List<JarScene> scenes = new ArrayList<>();
+	public HashMap<Integer, ISpecialActor> actors = new HashMap<>();
 	public JarScene currentScene;
 	public int sceneNumber = 0;
 
