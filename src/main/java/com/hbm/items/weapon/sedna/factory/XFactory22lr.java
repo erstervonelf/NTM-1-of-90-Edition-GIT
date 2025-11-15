@@ -18,16 +18,16 @@ import com.hbm.items.weapon.sedna.ItemGunBaseNT.LambdaContext;
 import com.hbm.items.weapon.sedna.ItemGunBaseNT.WeaponQuality;
 import com.hbm.items.weapon.sedna.factory.GunFactory.EnumAmmo;
 import com.hbm.items.weapon.sedna.mags.MagazineFullReload;
-import com.hbm.items.weapon.sedna.mods.WeaponModManager;
+import com.hbm.items.weapon.sedna.mods.XWeaponModManager;
 import com.hbm.main.MainRegistry;
 import com.hbm.main.NTMSounds;
 import com.hbm.main.ResourceManager;
 import com.hbm.particle.SpentCasing;
 import com.hbm.particle.SpentCasing.CasingType;
+import com.hbm.render.anim.AnimationEnums.GunAnimation;
 import com.hbm.render.anim.BusAnimation;
 import com.hbm.render.anim.BusAnimationSequence;
 import com.hbm.render.anim.BusAnimationKeyframe.IType;
-import com.hbm.render.anim.HbmAnimations.AnimType;
 
 import net.minecraft.item.ItemStack;
 
@@ -106,16 +106,16 @@ public class XFactory22lr {
 				.anim(LAMBDA_STAR_F_ANIMS).orchestra(Orchestras.ORCHESTRA_STAR_F_AKIMBO)
 				).setDefaultAmmo(EnumAmmo.P22_SP, 30).setUnlocalizedName("gun_star_f_akimbo");
 	}
-	
+
 	public static Function<ItemStack, String> LAMBDA_NAME_SILENCED = (stack) -> {
-		if(WeaponModManager.hasUpgrade(stack, 0, WeaponModManager.ID_SILENCER)) return stack.getUnlocalizedName() + "_silenced";
+		if(XWeaponModManager.hasUpgrade(stack, 0, XWeaponModManager.ID_SILENCER)) return stack.getUnlocalizedName() + "_silenced";
 		return null;
 	};
-	
+
 	public static BiConsumer<ItemStack, LambdaContext> LAMBDA_SMOKE = (stack, ctx) -> {
 		Lego.handleStandardSmoke(ctx.entity, stack, 3000, 0.05D, 1.1D, ctx.configIndex);
 	};
-	
+
 	public static BiConsumer<ItemStack, LambdaContext> LAMBDA_RECOIL_AM180 = (stack, ctx) -> {
 		ItemGunBaseNT.setupRecoil((float) (ctx.getPlayer().getRNG().nextGaussian() * 0.25), (float) (ctx.getPlayer().getRNG().nextGaussian() * 0.25));
 	};
@@ -124,7 +124,7 @@ public class XFactory22lr {
 		ItemGunBaseNT.setupRecoil(2.5F, (float) (ctx.getPlayer().getRNG().nextGaussian() * 0.5));
 	};
 
-	@SuppressWarnings("incomplete-switch") public static BiFunction<ItemStack, AnimType, BusAnimation> LAMBDA_AM180_ANIMS = (stack, type) -> {
+	@SuppressWarnings("incomplete-switch") public static BiFunction<ItemStack, GunAnimation, BusAnimation> LAMBDA_AM180_ANIMS = (stack, type) -> {
 		if(ClientConfig.GUN_ANIMS_LEGACY.get()) {
 			switch(type) {
 			case EQUIP: return new BusAnimation()
@@ -159,7 +159,7 @@ public class XFactory22lr {
 			case INSPECT: return ResourceManager.am180_anim.get("Inspect");
 			}
 		}
-		return null;
+return null;
 	};
 
 	@SuppressWarnings("incomplete-switch") public static BiFunction<ItemStack, GunAnimation, BusAnimation> LAMBDA_STAR_F_ANIMS = (stack, type) -> {

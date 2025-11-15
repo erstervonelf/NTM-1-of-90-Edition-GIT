@@ -24,10 +24,10 @@ import com.hbm.lib.RefStrings;
 import com.hbm.main.NTMSounds;
 import com.hbm.particle.SpentCasing;
 import com.hbm.particle.SpentCasing.CasingType;
+import com.hbm.render.anim.AnimationEnums.GunAnimation;
 import com.hbm.render.anim.BusAnimation;
 import com.hbm.render.anim.BusAnimationSequence;
 import com.hbm.render.anim.BusAnimationKeyframe.IType;
-import com.hbm.render.anim.HbmAnimations.AnimType;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
@@ -42,7 +42,7 @@ public class XFactory50 {
 	
 	public static final ResourceLocation scope = new ResourceLocation(RefStrings.MODID, "textures/misc/scope_amat.png");
 	public static final ResourceLocation scope_thermal = new ResourceLocation(RefStrings.MODID, "textures/misc/scope_penance.png");
-	
+
 	public static BulletConfig bmg50_sp;
 	public static BulletConfig bmg50_fmj;
 	public static BulletConfig bmg50_jhp;
@@ -52,7 +52,7 @@ public class XFactory50 {
 	public static BulletConfig bmg50_sm;
 	public static BulletConfig bmg50_black;
 	public static BulletConfig bmg50_equestrian;
-	public static void initConfig() {
+public static void initConfig() {
 		ServerConfig.configMap.put("GUN_ANTI_MATERIEL_DAMAGE", GUN_ANTI_MATERIEL_DAMAGE);
 		ServerConfig.configMap.put("GUN_SUBTLETY_DAMAGE", GUN_SUBTLETY_DAMAGE);
 		ServerConfig.configMap.put("GUN_PENANCE_DAMAGE", GUN_PENANCE_DAMAGE);
@@ -66,7 +66,7 @@ public class XFactory50 {
 		bullet.worldObj.spawnEntityInWorld(silver);
 		bullet.setDead();
 	};
-	
+
 	public static BiConsumer<EntityBulletBaseMK4, MovingObjectPosition> LAMBDA_STANDARD_EXPLODE = (bullet, mop) -> {
 		if(mop.typeOfHit == mop.typeOfHit.ENTITY && bullet.ticksExisted < 3 && mop.entityHit == bullet.getThrower()) return;
 		Lego.tinyExplode(bullet, mop, 2F); bullet.setDead();
@@ -92,7 +92,7 @@ public class XFactory50 {
 				.setCasing(casing50.clone().setColor(SpentCasing.COLOR_CASE_EQUESTRIAN).register("bmg50black"));
 		bmg50_equestrian = new BulletConfig().setItem(EnumAmmoSecret.BMG50_EQUESTRIAN).setDamage(0F).setOnImpact(LAMBDA_BUILDING)
 				.setCasing(casing50.clone().setColor(SpentCasing.COLOR_CASE_EQUESTRIAN).register("bmg50equestrian"));
-		
+
 		ModItems.gun_amat = new ItemGunBaseNT(WeaponQuality.A_SIDE, new GunConfig()
 				.dura(350).draw(20).inspect(50).crosshair(Crosshair.CIRCLE).scopeTexture(scope).smoke(LAMBDA_SMOKE)
 				.rec(new Receiver(0)
@@ -135,27 +135,27 @@ public class XFactory50 {
 				.anim(LAMBDA_M2_ANIMS).orchestra(Orchestras.ORCHESTRA_M2)
 				).setDefaultAmmo(EnumAmmo.BMG50_FMJ, 25).setUnlocalizedName("gun_m2");
 	}
-	
+
 	public static BiConsumer<ItemStack, LambdaContext> LAMBDA_SMOKE = (stack, ctx) -> {
 		Lego.handleStandardSmoke(ctx.entity, stack, 2000, 0.05D, 1.1D, 0);
 	};
-	
+
 	public static BiConsumer<ItemStack, LambdaContext> LAMBDA_RECOIL_AMAT = (stack, ctx) -> {
 		ItemGunBaseNT.setupRecoil(12.5F, (float) (ctx.getPlayer().getRNG().nextGaussian() * 1));
 	};
-	
+
 	public static BiConsumer<ItemStack, LambdaContext> LAMBDA_RECOIL_M2 = (stack, ctx) -> {
 		ItemGunBaseNT.setupRecoil((float) (ctx.getPlayer().getRNG().nextGaussian() * 0.5), (float) (ctx.getPlayer().getRNG().nextGaussian() * 0.5));
 	};
 
-	@SuppressWarnings("incomplete-switch") public static BiFunction<ItemStack, AnimType, BusAnimation> LAMBDA_AMAT_ANIMS = (stack, type) -> {
+	@SuppressWarnings("incomplete-switch") public static BiFunction<ItemStack, GunAnimation, BusAnimation> LAMBDA_AMAT_ANIMS = (stack, type) -> {
 		double turn = -60;
 		double pullAmount = -2.5;
 		double side = 4;
 		double down = -2;
 		double detach = 0.5;
 		double apex = 7;
-		
+
 		switch(type) {
 		case EQUIP: return new BusAnimation()
 				.addBus("EQUIP", new BusAnimationSequence().addPos(45, 0, 0, 0).addPos(0, 0, 0, 500, IType.SIN_FULL))
@@ -182,18 +182,18 @@ public class XFactory50 {
 				.addBus("SCOPE_THROW", new BusAnimationSequence().addPos(0, detach, 0, 100, IType.SIN_FULL).addPos(side, down, 0, 500, IType.SIN_FULL).addPos(side, down - 0.5, 0, 100).addPos(side, apex, 0, 350, IType.SIN_FULL).addPos(side, down - 0.5, 0, 350, IType.SIN_DOWN).addPos(side, down, 0, 100).hold(250).addPos(0, detach, 0, 500, IType.SIN_FULL).addPos(0, 0, 0, 250, IType.SIN_FULL))
 				.addBus("SCOPE_SPIN", new BusAnimationSequence().hold(700).addPos(-360, 0, 0, 700));
 		}
-		
+
 		return null;
 	};
 
-	@SuppressWarnings("incomplete-switch") public static BiFunction<ItemStack, AnimType, BusAnimation> LAMBDA_M2_ANIMS = (stack, type) -> {
+	@SuppressWarnings("incomplete-switch") public static BiFunction<ItemStack, GunAnimation, BusAnimation> LAMBDA_M2_ANIMS = (stack, type) -> {
 		switch(type) {
 		case EQUIP: return new BusAnimation()
 				.addBus("EQUIP", new BusAnimationSequence().addPos(80, 0, 0, 0).addPos(0, 0, 0, 500, IType.SIN_FULL));
 		case CYCLE: return new BusAnimation()
 				.addBus("RECOIL", new BusAnimationSequence().addPos(0, 0, -0.25, 25).addPos(0, 0, 0, 75));
 		}
-		
+
 		return null;
 	};
 }
