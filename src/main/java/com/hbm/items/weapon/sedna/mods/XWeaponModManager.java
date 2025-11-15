@@ -11,6 +11,7 @@ import com.hbm.items.ModItems;
 import com.hbm.items.weapon.sedna.BulletConfig;
 import com.hbm.items.weapon.sedna.ItemGunBaseNT;
 import com.hbm.items.weapon.sedna.factory.XFactory9mm;
+import com.hbm.items.weapon.sedna.mags.IMagazine;
 import com.hbm.items.weapon.sedna.factory.GunFactory.EnumModCaliber;
 import com.hbm.items.weapon.sedna.factory.GunFactory.EnumModGeneric;
 import com.hbm.items.weapon.sedna.factory.GunFactory.EnumModSpecial;
@@ -27,6 +28,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MathHelper;
 
 /**
  * The mod manager operates by scraping upgrades from a gun, then iterating over them and evaluating the given value, passing the modified value to successive mods.
@@ -34,7 +36,7 @@ import net.minecraft.nbt.NBTTagCompound;
  * 
  * @author hbm
  */
-public class WeaponModManager {
+public class XWeaponModManager {
 	
 	public static final String KEY_MOD_LIST = "KEY_MOD_LIST_";
 	
@@ -63,8 +65,7 @@ public class WeaponModManager {
 		new WeaponModDefinition(new ItemStack(ModItems.weapon_mod_test, 1, EnumModTest.OVERRIDE_5.ordinal())).addDefault(new WeaponModOverride(4, 5F, "OVERRIDE"));
 		new WeaponModDefinition(new ItemStack(ModItems.weapon_mod_test, 1, EnumModTest.OVERRIDE_7_5.ordinal())).addDefault(new WeaponModOverride(5, 7.5F, "OVERRIDE"));
 		new WeaponModDefinition(new ItemStack(ModItems.weapon_mod_test, 1, EnumModTest.OVERRIDE_10.ordinal())).addDefault(new WeaponModOverride(6, 10F, "OVERRIDE"));
-		new WeaponModDefinition(new ItemStack(ModItems.weapon_mod_test, 1, EnumModTest.OVERRIDE_12_5.ordinal()))
-    		.addDefault(new WeaponModOverride(7, 12.5F, "OVERRIDE"));
+		new WeaponModDefinition(new ItemStack(ModItems.weapon_mod_test, 1, EnumModTest.OVERRIDE_12_5.ordinal())).addDefault(new WeaponModOverride(7, 12_5F, "OVERRIDE"));
 		new WeaponModDefinition(new ItemStack(ModItems.weapon_mod_test, 1, EnumModTest.OVERRIDE_15.ordinal())).addDefault(new WeaponModOverride(8, 15F, "OVERRIDE"));
 		new WeaponModDefinition(new ItemStack(ModItems.weapon_mod_test, 1, EnumModTest.OVERRIDE_20.ordinal())).addDefault(new WeaponModOverride(9, 20F, "OVERRIDE"));
 
@@ -161,7 +162,7 @@ public class WeaponModManager {
 		new WeaponModDefinition(EnumModSpecial.ENGINE_DIESEL).addMod(new Item[] {ModItems.gun_drill}, new WeaponModEngine(ID_ENGINE_DIESEL).mag(WeaponModEngine.ENGINE_DIESEL).delay(15));
 		new WeaponModDefinition(EnumModSpecial.ENGINE_AVIATION).addMod(new Item[] {ModItems.gun_drill}, new WeaponModEngine(ID_ENGINE_AVIATION).mag(WeaponModEngine.ENGINE_AVIATION).delay(10));
 		new WeaponModDefinition(EnumModSpecial.ENGINE_ELECTRIC).addMod(new Item[] {ModItems.gun_drill}, new WeaponModEngine(ID_ENGINE_ELECTRIC).mag(WeaponModEngine.ENGINE_ELECTRIC).delay(15));
-		new WeaponModDefinition(EnumModSpecial.ENGINE_TURBO).addMod(new Item[] {ModItems.gun_drill}, new WeaponModEngine(ID_ENGINE_TURBO).mag(WeaponModEngine.ENGINE_TURBO).delay(2));
+		new WeaponModDefinition(EnumModSpecial.ENGINE_TURBO).addMod(new Item[] {ModItems.gun_drill}, new WeaponModEngine(ID_ENGINE_TURBO).mag(WeaponModEngine.ENGINE_TURBO).delay(5));
 		new WeaponModDefinition(EnumModSpecial.MAGNET).addMod(new Item[] {ModItems.gun_drill}, new WeaponModDrillFortune(230, "MAGNET", 2));
 		new WeaponModDefinition(EnumModSpecial.SIFTER).addMod(new Item[] {ModItems.gun_drill}, new WeaponModDrillFortune(231, "SIFTER", 1));
 		new WeaponModDefinition(EnumModSpecial.CANISTERS).addMod(new Item[] {ModItems.gun_drill}, new WeaponModCanisters(232));
@@ -220,15 +221,14 @@ public class WeaponModManager {
 	public static final int ID_CARBINE_BAYONET = 219;
 	public static final int ID_NI4NI_NICKEL = 220;
 	public static final int ID_NI4NI_DOUBLOONS = 221;
-	public static final int ID_STACK_MAG = 222; // example if you need a constant for STACK_MAG (ensure uniqueness)
-	public static final int ID_DRILL_HSS = 230;
-	public static final int ID_DRILL_WSTEEL = 231;
-	public static final int ID_DRILL_TCALLOY = 232;
-	public static final int ID_DRILL_SATURN = 233;
-	public static final int ID_ENGINE_DIESEL = 234;
-	public static final int ID_ENGINE_AVIATION = 235;
-	public static final int ID_ENGINE_ELECTRIC = 236;
-	public static final int ID_ENGINE_TURBO = 237;
+	public static final int ID_DRILL_HSS = 222;
+	public static final int ID_DRILL_WSTEEL = 223;
+	public static final int ID_DRILL_TCALLOY = 224;
+	public static final int ID_DRILL_SATURN = 225;
+	public static final int ID_ENGINE_DIESEL = 226;
+	public static final int ID_ENGINE_AVIATION = 227;
+	public static final int ID_ENGINE_ELECTRIC = 228;
+	public static final int ID_ENGINE_TURBO = 229;
 	
 	public static ItemStack[] getUpgradeItems(ItemStack stack, int cfg) {
 		if(!stack.hasTagCompound()) return new ItemStack[0];
@@ -254,8 +254,51 @@ public class WeaponModManager {
 		return false;
 	}
 	
-	/** Installs the supplied mods to the gun */
+	private static Object prevMagType;
+	private static int prevMagCount;
+	private static boolean changedMagState = false;
+	
+	public static void changedMagState() {
+		changedMagState = true;
+	}
+	
+	/** Saves the state on receiver 0 so that if the mag changes through upgrading, the state may potentially be restored, if compatible */
+	private static void saveMagState(ItemStack stack, int cfg) {
+		IMagazine mag = ((ItemGunBaseNT) stack.getItem()).getConfig(stack, cfg).getReceivers(stack)[0].getMagazine(stack);
+		prevMagType = mag.getType(stack, null);
+		prevMagCount = mag.getAmount(stack, null);
+	}
+	
+	/* 
+	 * TODO: as soon as there's guns that use more receivers, handle those as well
+	 * arising problem: assume there's three receivers, 0, 1, 2, and receiver 1 is removed by pulling a weapon mod.
+	 * the previous states of receivers 0 and 2 would need to be mapped to the new receivers 0 and 1.
+	 * proposed solution: order can be expected the same, simply check both arrays side by side and skip an index on either
+	 * one if that one's type doesn't match. there may be edge cases where this doesn't work, especially with a ton of
+	 * receivers, but for a common case of an SMG + GL this should work just fine
+	 */
+	private static void restoreMagState(ItemStack stack, int cfg) {
+		if(!changedMagState) return;
+		changedMagState = false;
+
+		IMagazine mag = ((ItemGunBaseNT) stack.getItem()).getConfig(stack, cfg).getReceivers(stack)[0].getMagazine(stack);
+		if(mag.getType(stack, null) == prevMagType) {
+			mag.setAmount(stack, MathHelper.clamp_int(prevMagCount, 0, mag.getCapacity(stack)));
+		} else {
+			mag.setAmount(stack, 0);
+		}
+	}
+	
+	/**
+	 * Saves the mag state on receiver 0, uninstalls all existing mods to ensure there's no double install calls,
+	 * then installs the mods. If a mag state change has been reported, the mag on receiver 0 is validated,
+	 * i.e. if the type is still the same, the amount is restored, otherwise the mag is cleared.
+	 */
 	public static void install(ItemStack stack, int cfg, ItemStack... mods) {
+		saveMagState(stack, cfg);
+		// we need to always clear things, so existing mods aren't installed twice, i.e. enchantment levels applied twice
+		uninstall(stack, cfg);
+		
 		List<IWeaponMod> toInstall = new ArrayList();
 		ComparableStack gun = new ComparableStack(stack);
 		
@@ -265,8 +308,9 @@ public class WeaponModManager {
 			WeaponModDefinition def = stackToMod.get(comp);
 			if(def != null) {
 				IWeaponMod forGun = def.modByGun.get(gun);
-				if(forGun != null) toInstall.add(forGun); //since this code only runs for upgrading, we can just indexOf because who cares
-				else {
+				if(forGun != null) {
+					toInstall.add(forGun); //since this code only runs for upgrading, we can just indexOf because who cares
+				} else {
 					forGun = def.modByGun.get(null);
 					if(forGun != null) toInstall.add(forGun);
 				}
@@ -276,13 +320,21 @@ public class WeaponModManager {
 		toInstall.sort(modSorter);
 		if(!stack.hasTagCompound()) stack.stackTagCompound = new NBTTagCompound();
 		int[] modIds = new int[toInstall.size()];
-		for(int i = 0; i < modIds.length; i++) modIds[i] = idToMod.inverse().get(toInstall.get(i));
+		for(int i = 0; i < modIds.length; i++) {
+			IWeaponMod mod = toInstall.get(i);
+			modIds[i] = idToMod.inverse().get(mod);
+			onInstallStack(stack, modToStack.get(mod), cfg);
+		}
 		stack.stackTagCompound.setIntArray(KEY_MOD_LIST + cfg, modIds);
+		restoreMagState(stack, cfg);
 	}
 	
 	/** Wipes all mods from the gun */
 	public static void uninstall(ItemStack stack, int cfg) {
-		if(stack.hasTagCompound()) {
+		if(stack != null && stack.hasTagCompound()) {
+			for(ItemStack mod : getUpgradeItems(stack, cfg)) {
+				XWeaponModManager.onUninstallStack(stack, mod, cfg);
+			}
 			stack.stackTagCompound.removeTag(KEY_MOD_LIST + cfg);
 			//no need to clean up empty stackTagCompound because gun NBT is never empty anyway
 		}
