@@ -427,7 +427,7 @@ public class XWeaponModManager {
 		public WeaponModDefinition addMod(ComparableStack gun, IWeaponMod mod) {
 			modByGun.put(gun, mod);
 			modToStack.put(mod, stack);
-			if(gun != null) {
+			if(gun != null && gun.item instanceof ItemGunBaseNT) {
 				ItemGunBaseNT nt = (ItemGunBaseNT) gun.item;
 				ComparableStack comp = new ComparableStack(stack);
 				if(!nt.recognizedMods.contains(comp)) nt.recognizedMods.add(comp);
