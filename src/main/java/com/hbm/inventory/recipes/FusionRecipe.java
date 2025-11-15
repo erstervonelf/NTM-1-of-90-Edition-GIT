@@ -9,7 +9,9 @@ import com.hbm.util.i18n.I18nUtil;
 
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
+import com.hbm.inventory.RecipesCommon.AStack;
+import com.hbm.inventory.FluidStack;
+import com.hbm.inventory.recipes.loader.GenericRecipes.IOutput;
 
 public class FusionRecipe extends GenericRecipe {
 	
@@ -52,9 +54,10 @@ public class FusionRecipe extends GenericRecipe {
 	
 	private void input(List<String> list) {
 		list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("gui.recipe.input") + ":");
-		if(inputItem != null) for(ItemStack stack : inputItem) {
+		if(inputItem != null) for(AStack stack : inputItem) {
 			ItemStack display = stack.extractForCyclingDisplay(20);
-			list.add("  " + EnumChatFormatting.GRAY + display.stackSize + "x " + display.getDisplayName());
+			if(display != null)
+				list.add("  " + EnumChatFormatting.GRAY + display.stackSize + "x " + display.getDisplayName());
 		}
 		if(inputFluid != null) for(FluidStack fluid : inputFluid) {
 			list.add("  " + EnumChatFormatting.BLUE + fluid.fill + "mB " + fluid.type.getLocalizedName());
@@ -63,7 +66,7 @@ public class FusionRecipe extends GenericRecipe {
 	
 	private void output(List<String> list) {
 		list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("gui.recipe.output") + ":");
-		if(outputItem != null) for(ItemStack output : outputItem) {
+		if(outputItem != null) for(IOutput output : outputItem) {
 			for(String line : output.getLabel()) list.add("  " + line);
 		}
 		if(outputFluid != null) for(FluidStack fluid : outputFluid) {

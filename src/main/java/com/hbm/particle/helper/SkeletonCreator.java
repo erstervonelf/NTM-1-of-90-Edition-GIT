@@ -41,6 +41,15 @@ public class SkeletonCreator implements IParticleCreator {
 		IParticleCreator.sendPacket(world, toSkeletonize.posX, toSkeletonize.posY, toSkeletonize.posZ, 100, data);
 	}
 
+	public static void composeEffectGib(World world, Entity toGib, float brightness) {
+
+		NBTTagCompound data = new NBTTagCompound();
+		data.setString("type", "giblets");
+		data.setInteger("ent", toGib.getEntityId());
+		data.setFloat("brightness", brightness);
+		IParticleCreator.sendPacket(world, toGib.posX, toGib.posY, toGib.posZ, 150, data);
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void makeParticle(World world, EntityPlayer player, TextureManager texman, Random rand, double x, double y, double z, NBTTagCompound data) {

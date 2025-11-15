@@ -135,7 +135,6 @@ public class ItemCrucible extends ItemSwordAbility implements IEquipReceiver {
 		list.add(charge);
 	}
 
-	@Override
 	public BusAnimation getAnimation(ToolAnimation type, ItemStack stack) {
 		/* crucible deploy */
 		if(type == ToolAnimation.EQUIP) {

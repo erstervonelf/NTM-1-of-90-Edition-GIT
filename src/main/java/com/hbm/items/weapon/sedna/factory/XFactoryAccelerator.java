@@ -197,8 +197,7 @@ public class XFactoryAccelerator {
 		coin.motionY = vec.yCoord + 0.5;
 		coin.motionZ = vec.zCoord;
 		coin.rotationYaw = player.rotationYaw;
-		// Note: EntityCoin.setThrower is not available in this version, using owner field instead
-		coin.ownerId = player.getUniqueID().toString();
+		// Note: EntityCoin.setThrower / ownerId not available; skip owner metadata
 		player.worldObj.spawnEntityInWorld(coin);			player.worldObj.playSoundAtEntity(player, "random.orb", 1.0F, 1F + player.getRNG().nextFloat() * 0.25F);
 
 			ItemGunNI4NI.setCoinCount(stack, ItemGunNI4NI.getCoinCount(stack) - 1);
