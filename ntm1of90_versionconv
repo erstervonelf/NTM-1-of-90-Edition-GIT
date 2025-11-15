@@ -5,6 +5,6 @@ TYPE.MAJOR.MINOR-SUFFIX
 TYPE: r (release), b (beta), a (alpha), dev
 MAJOR: number
 MINOR: number
-SUFFIX: additional information, such as "hotfix" or "rc" (release candidate)
+SUFFIX: additional information, such as "hotfix" or "rc" (release candidate) or "tv" (Testing version)
 No inappropiate suffixes.
 Hotfix is not always necessary.
