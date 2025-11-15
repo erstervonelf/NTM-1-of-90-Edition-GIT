@@ -25,6 +25,7 @@ import com.hbm.items.weapon.sedna.factory.XFactory762mm;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
@@ -62,7 +63,8 @@ public class WeaponModManager {
 		new WeaponModDefinition(new ItemStack(ModItems.weapon_mod_test, 1, EnumModTest.OVERRIDE_5.ordinal())).addDefault(new WeaponModOverride(4, 5F, "OVERRIDE"));
 		new WeaponModDefinition(new ItemStack(ModItems.weapon_mod_test, 1, EnumModTest.OVERRIDE_7_5.ordinal())).addDefault(new WeaponModOverride(5, 7.5F, "OVERRIDE"));
 		new WeaponModDefinition(new ItemStack(ModItems.weapon_mod_test, 1, EnumModTest.OVERRIDE_10.ordinal())).addDefault(new WeaponModOverride(6, 10F, "OVERRIDE"));
-		new WeaponModDefinition(new ItemStack(ModItems.weapon_mod_test, 1, EnumModTest.OVERRIDE_12_5.ordinal())).addDefault(new WeaponModOverride(7, 12_5F, "OVERRIDE"));
+		new WeaponModDefinition(new ItemStack(ModItems.weapon_mod_test, 1, EnumModTest.OVERRIDE_12_5.ordinal()))
+    		.addDefault(new WeaponModOverride(7, 12.5F, "OVERRIDE"));
 		new WeaponModDefinition(new ItemStack(ModItems.weapon_mod_test, 1, EnumModTest.OVERRIDE_15.ordinal())).addDefault(new WeaponModOverride(8, 15F, "OVERRIDE"));
 		new WeaponModDefinition(new ItemStack(ModItems.weapon_mod_test, 1, EnumModTest.OVERRIDE_20.ordinal())).addDefault(new WeaponModOverride(9, 20F, "OVERRIDE"));
 
@@ -216,6 +218,17 @@ public class WeaponModManager {
 	public static final int ID_LAS_CAPACITOR = 217;
 	public static final int ID_LAS_AUTO = 218;
 	public static final int ID_CARBINE_BAYONET = 219;
+	public static final int ID_NI4NI_NICKEL = 220;
+	public static final int ID_NI4NI_DOUBLOONS = 221;
+	public static final int ID_STACK_MAG = 222; // example if you need a constant for STACK_MAG (ensure uniqueness)
+	public static final int ID_DRILL_HSS = 230;
+	public static final int ID_DRILL_WSTEEL = 231;
+	public static final int ID_DRILL_TCALLOY = 232;
+	public static final int ID_DRILL_SATURN = 233;
+	public static final int ID_ENGINE_DIESEL = 234;
+	public static final int ID_ENGINE_AVIATION = 235;
+	public static final int ID_ENGINE_ELECTRIC = 236;
+	public static final int ID_ENGINE_TURBO = 237;
 	
 	public static ItemStack[] getUpgradeItems(ItemStack stack, int cfg) {
 		if(!stack.hasTagCompound()) return new ItemStack[0];
