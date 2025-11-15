@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 public class ParticleCoolingTower extends EntityFX {
 
 	private float baseScale = 2.0F;
-	private float maxScale = 10.0F;
+	private float maxScale = 100.0F;
 	private float lift = 0.6F;
 	private float strafe = 0.0F;
 	private boolean windDir = false;
