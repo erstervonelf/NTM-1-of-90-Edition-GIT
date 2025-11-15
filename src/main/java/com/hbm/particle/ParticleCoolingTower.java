@@ -12,11 +12,11 @@ import net.minecraft.world.World;
 @SideOnly(Side.CLIENT)
 public class ParticleCoolingTower extends EntityFX {
 
-	private float baseScale = 1.0F;
-	private float maxScale = 1.0F;
-	private float lift = 0.3F;
-	private float strafe = 0.075F;
-	private boolean windDir = true;
+	private float baseScale = 2.0F;
+	private float maxScale = 10.0F;
+	private float lift = 0.6F;
+	private float strafe = 0.0F;
+	private boolean windDir = false;
 	private float alphaMod = 0.25F;
 
 	public ParticleCoolingTower(TextureManager texman, World world, double x, double y, double z) {
