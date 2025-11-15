@@ -5,6 +5,8 @@ import com.hbm.interfaces.IControlReceiver;
 import com.hbm.inventory.container.ContainerCraneInserter;
 import com.hbm.inventory.gui.GUICraneInserter;
 import com.hbm.tileentity.IGUIProvider;
+import com.hbm.tileentity.TileEntityProxyBase;
+import com.hbm.tileentity.machine.TileEntityMachineArcFurnaceLarge;
 import com.hbm.util.Compat;
 import com.hbm.util.InventoryUtil;
 

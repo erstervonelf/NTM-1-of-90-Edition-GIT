@@ -35,7 +35,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-public class ItemCrucible extends ItemSwordAbility implements IEquipReceiver, IAnimatedItem<ToolAnimation> {
+public class ItemCrucible extends ItemSwordAbility implements IEquipReceiver {
 
 	public ItemCrucible(float damage, double movement, ToolMaterial material) {
 		super(damage, movement, material);
@@ -52,7 +52,7 @@ public class ItemCrucible extends ItemSwordAbility implements IEquipReceiver, IA
 			World world = player.worldObj;
 			world.playSoundEffect(player.posX, player.posY, player.posZ, "hbm:weapon.cDeploy", 1.0F, 1.0F);
 
-			playAnimation(player, ToolAnimation.EQUIP);
+			// Animation wird über IAnimatedItem nicht mehr unterstützt
 		}
 	}
 
@@ -69,7 +69,7 @@ public class ItemCrucible extends ItemSwordAbility implements IEquipReceiver, IA
 		if(stack.getItemDamage() >= stack.getMaxDamage())
 			return false;
 
-		playAnimation((EntityPlayerMP)entityLiving, ToolAnimation.SWING);
+		// Animation wird über IAnimatedItem nicht mehr unterstützt
 
 		return false;
 	}
@@ -178,14 +178,6 @@ public class ItemCrucible extends ItemSwordAbility implements IEquipReceiver, IA
 		Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("hbm:weapon.cSwing"), pitchProbablyIDontFuckingCare));
 	}
 
-	@Override
-	public Class<ToolAnimation> getEnum() {
-		return ToolAnimation.class;
-	}
-
-	@Override
-	public boolean shouldPlayerModelAim(ItemStack stack) {
-		return false;
-	}
+	// Methods from IAnimatedItem removed
 
 }

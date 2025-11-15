@@ -86,6 +86,25 @@ public class GunAnimationPacket implements IMessage {
 			return null;
 		}
 		
+		private static com.hbm.render.anim.AnimationEnums.GunAnimation toGunAnim(AnimType a) {
+			switch(a) {
+				case RELOAD: return com.hbm.render.anim.AnimationEnums.GunAnimation.RELOAD;
+				case RELOAD_EMPTY: return com.hbm.render.anim.AnimationEnums.GunAnimation.RELOAD_EMPTY;
+				case RELOAD_CYCLE: return com.hbm.render.anim.AnimationEnums.GunAnimation.RELOAD_CYCLE;
+				case RELOAD_END: return com.hbm.render.anim.AnimationEnums.GunAnimation.RELOAD_END;
+				case CYCLE: return com.hbm.render.anim.AnimationEnums.GunAnimation.CYCLE;
+				case CYCLE_EMPTY: return com.hbm.render.anim.AnimationEnums.GunAnimation.CYCLE_EMPTY;
+				case CYCLE_DRY: return com.hbm.render.anim.AnimationEnums.GunAnimation.CYCLE_DRY;
+				case ALT_CYCLE: return com.hbm.render.anim.AnimationEnums.GunAnimation.ALT_CYCLE;
+				case SPINUP: return com.hbm.render.anim.AnimationEnums.GunAnimation.SPINUP;
+				case SPINDOWN: return com.hbm.render.anim.AnimationEnums.GunAnimation.SPINDOWN;
+				case EQUIP: return com.hbm.render.anim.AnimationEnums.GunAnimation.EQUIP;
+				case INSPECT: return com.hbm.render.anim.AnimationEnums.GunAnimation.INSPECT;
+				case JAMMED: return com.hbm.render.anim.AnimationEnums.GunAnimation.JAMMED;
+				default: return com.hbm.render.anim.AnimationEnums.GunAnimation.CYCLE;
+			}
+		}
+		
 		public static void handleSedna(EntityPlayer player, ItemStack stack, int slot, AnimType type, int receiverIndex, int gunIndex) {
 			ItemGunBaseNT gun = (ItemGunBaseNT) stack.getItem();
 			GunConfig config = gun.getConfig(stack, gunIndex);
@@ -102,14 +121,14 @@ public class GunAnimationPacket implements IMessage {
 				}
 			}
 			
-			BiFunction<ItemStack, AnimType, BusAnimation> anims = config.getAnims(stack);
-			BusAnimation animation = anims.apply(stack, type);
+			BiFunction<ItemStack, com.hbm.render.anim.AnimationEnums.GunAnimation, BusAnimation> anims = config.getAnims(stack);
+			BusAnimation animation = anims.apply(stack, toGunAnim(type));
 			
 			if(animation == null && type == AnimType.RELOAD_EMPTY) {
-				animation = anims.apply(stack, AnimType.RELOAD);
+				animation = anims.apply(stack, toGunAnim(AnimType.RELOAD));
 			}
 			if(animation == null && (type == AnimType.ALT_CYCLE || type == AnimType.CYCLE_EMPTY)) {
-				animation = anims.apply(stack, AnimType.CYCLE);
+				animation = anims.apply(stack, toGunAnim(AnimType.CYCLE));
 			}
 			
 			if(animation != null) {

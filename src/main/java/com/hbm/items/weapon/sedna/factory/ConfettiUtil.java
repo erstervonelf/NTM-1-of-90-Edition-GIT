@@ -67,7 +67,7 @@ public class ConfettiUtil {
 		if(entity instanceof EntityUFO) type = 2;
 		if(entity instanceof EntityBOTPrimeBase) type = 2;
 
-		SkeletonCreator.composeEffectGib(entity.worldObj, entity, 0.25F);
+	SkeletonCreator.composeEffectGib(entity.worldObj, entity, 0.25F);
 		
 		if(entity instanceof EntitySkeleton) return;
 
