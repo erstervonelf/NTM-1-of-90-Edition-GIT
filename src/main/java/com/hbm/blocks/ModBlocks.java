@@ -738,6 +738,10 @@ public class ModBlocks {
 	public static Block hadron_analysis_glass;
 	public static Block hadron_access;
 	public static Block hadron_core;
+	public static Block hadron_power_10m;
+	public static Block hadron_power_100m;
+	public static Block hadron_power_1g;
+	public static Block hadron_power_10g;
 
 	public static Block pa_source;
 	public static Block pa_beamline;

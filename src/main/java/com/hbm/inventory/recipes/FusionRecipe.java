@@ -8,6 +8,8 @@ import com.hbm.util.BobMathUtil;
 import com.hbm.util.i18n.I18nUtil;
 
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 public class FusionRecipe extends GenericRecipe {
 	
