@@ -43,6 +43,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
@@ -117,6 +118,16 @@ public class ItemGunBaseNT extends Item implements IKeybindReceiver, IItemHUD, I
 		if(stack == null) return cfg;
 		return WeaponModManager.eval(cfg, stack, O_GUNCONFIG + index, this, index);
 	}
+	// Add these fields and this fluent setter somewhere in the ItemGunBaseNT class
+	protected com.hbm.items.weapon.sedna.factory.GunFactory.EnumAmmo defaultAmmo;
+	protected int defaultAmmoCount;
+
+	public ItemGunBaseNT setDefaultAmmo(com.hbm.items.weapon.sedna.factory.GunFactory.EnumAmmo ammo, int count) {
+    	this.defaultAmmo = ammo;
+    	this.defaultAmmoCount = count;
+    	return this;
+	}
+	
 	
 	public int getConfigCount() {
 		return configs_DNA.length;
