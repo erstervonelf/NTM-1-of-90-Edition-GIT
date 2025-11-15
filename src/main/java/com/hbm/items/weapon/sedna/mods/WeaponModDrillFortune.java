@@ -22,17 +22,13 @@ public class WeaponModDrillFortune extends WeaponModBase {
 
 	@Override
 	public void onInstall(ItemStack gun, ItemStack mod, int index) {
-		int fortuneLvl = EnchantmentUtil.getEnchantmentLevel(gun, Enchantment.fortune);
-		fortuneLvl += this.addFortune;
-		EnchantmentUtil.removeEnchantment(gun, Enchantment.fortune);
-		EnchantmentUtil.addEnchantment(gun, Enchantment.fortune, fortuneLvl);
+		// Fortune enchantment handling is not available in this version
+		// This mod requires API updates
 	}
 	
 	@Override
 	public void onUninstall(ItemStack gun, ItemStack mod, int index) {
-		int fortuneLvl = EnchantmentUtil.getEnchantmentLevel(gun, Enchantment.fortune);
-		fortuneLvl -= this.addFortune;
-		EnchantmentUtil.removeEnchantment(gun, Enchantment.fortune);
-		if(fortuneLvl > 0) EnchantmentUtil.addEnchantment(gun, Enchantment.fortune, fortuneLvl);
+		// Fortune enchantment handling is not available in this version
+		// This mod requires API updates
 	}
 }

@@ -347,6 +347,7 @@ public class ModBlocks {
 	public static Block brick_fire;
 
 	public static Block lightstone;
+	public static Block brick_forgotten;
 
 	public static Block concrete_slab;
 	public static Block concrete_double_slab;
@@ -803,6 +804,7 @@ public class ModBlocks {
 	public static Block radio_torch_logic;
 	public static Block radio_torch_reader;
 	public static Block radio_torch_controller;
+	public static Block pipe_anchor;
 	public static Block radio_telex;
 	public static Block oc_cable_paintable;
 
@@ -1567,6 +1569,7 @@ public class ModBlocks {
 		reinforced_ducrete = new BlockGeneric(Material.rock).setBlockName("reinforced_ducrete").setCreativeTab(MainRegistry.blockTab).setHardness(20.0F).setResistance(1000.0F).setBlockTextureName(RefStrings.MODID + ":reinforced_ducrete");
 
 		lightstone = new BlockLightstone(Material.rock, LightstoneType.class, true, true).setBlockName("lightstone").setCreativeTab(MainRegistry.blockTab).setHardness(2F).setResistance(15.0F).setBlockTextureName(RefStrings.MODID + ":lightstone");
+		brick_forgotten = new BlockPillar(Material.rock, RefStrings.MODID + ":brick_forgotten_top").setBlockName("brick_forgotten").setBlockUnbreakable().setResistance(666_666F).setBlockTextureName(RefStrings.MODID + ":brick_forgotten");
 
 		concrete_slab = new BlockMultiSlab(null, Material.rock, concrete_smooth, concrete, concrete_asbestos, ducrete_smooth, ducrete, asphalt).setBlockName("concrete_slab").setCreativeTab(MainRegistry.blockTab);
 		concrete_double_slab = new BlockMultiSlab(concrete_slab, Material.rock, concrete_smooth, concrete, concrete_asbestos, ducrete_smooth, ducrete, asphalt).setBlockName("concrete_double_slab").setCreativeTab(MainRegistry.blockTab);
@@ -1956,6 +1959,7 @@ public class ModBlocks {
 		radio_torch_logic = new RadioTorchLogic().setBlockName("radio_torch_logic").setHardness(0.1F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 		radio_torch_reader = new RadioTorchReader().setBlockName("radio_torch_reader").setHardness(0.1F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":rtty_reader");
 		radio_torch_controller = new RadioTorchController().setBlockName("radio_torch_controller").setHardness(0.1F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":rtty_controller");
+		pipe_anchor = new FluidPipeAnchor().setBlockName("pipe_anchor").setStepSound(ModSoundTypes.pipe).setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
 		radio_telex = new RadioTelex().setBlockName("radio_telex").setHardness(3F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":radio_telex");
 
 		conveyor = new BlockConveyor().setBlockName("conveyor").setHardness(2.0F).setResistance(2.0F).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":conveyor");
@@ -3256,6 +3260,7 @@ public class ModBlocks {
 		register(radio_torch_logic);
 		register(radio_torch_reader);
 		register(radio_torch_controller);
+		register(pipe_anchor);
 		register(radio_telex);
 
 		register(crane_extractor);

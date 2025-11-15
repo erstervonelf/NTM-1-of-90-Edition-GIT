@@ -625,4 +625,43 @@ public class TileEntityMachineArcFurnaceLarge extends TileEntityMachineBase impl
 		return upgrades;
 	}
 
+	public ItemStack distributeInput(ItemStack stack, boolean simulated) {
+		if(stack == null) return null;
+		
+		ItemStack original = stack.copy();
+		
+		// Try to add to existing stacks in ingredient slots (5-24)
+		for(int i = 5; i < 25; i++) {
+			if(slots[i] != null && slots[i].isItemEqual(stack) && slots[i].stackSize < this.getMaxInputSize()) {
+				int canAdd = Math.min(this.getMaxInputSize() - slots[i].stackSize, stack.stackSize);
+				if(!simulated) {
+					slots[i].stackSize += canAdd;
+					stack.stackSize -= canAdd;
+				} else {
+					stack.stackSize -= canAdd;
+				}
+				if(stack.stackSize <= 0) return null;
+			}
+		}
+		
+		// Try to add to empty slots
+		for(int i = 5; i < 25; i++) {
+			if(slots[i] == null && stack.stackSize > 0) {
+				int canAdd = Math.min(this.getMaxInputSize(), stack.stackSize);
+				if(!simulated) {
+					ItemStack newStack = stack.copy();
+					newStack.stackSize = canAdd;
+					slots[i] = newStack;
+					stack.stackSize -= canAdd;
+				} else {
+					stack.stackSize -= canAdd;
+				}
+				if(stack.stackSize <= 0) return null;
+			}
+		}
+		
+		// Return remaining stack or null if all consumed
+		return stack.stackSize <= 0 ? null : stack;
+	}
+
 }

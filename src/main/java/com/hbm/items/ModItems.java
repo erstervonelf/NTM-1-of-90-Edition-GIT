@@ -1448,6 +1448,8 @@ public class ModItems {
 	public static Item gun_liberator;
 	public static Item gun_congolake;
 	public static Item gun_flamer;
+	public static Item gun_drill;
+	public static Item gun_n_i_4_n_i;
 	public static Item gun_flamer_topaz;
 	public static Item gun_flamer_daybreaker;
 	public static Item gun_uzi;

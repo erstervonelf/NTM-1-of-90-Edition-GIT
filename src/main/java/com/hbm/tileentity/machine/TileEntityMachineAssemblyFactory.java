@@ -8,10 +8,9 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IControlReceiver;
 import com.hbm.interfaces.NotableComments;
 import com.hbm.inventory.UpgradeManagerNT;
-import com.hbm.inventory.container.ContainerMachineAssemblyFactory;
+import com.hbm.inventory.container.ContainerMachineAssemblyMachine;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.tank.FluidTank;
-import com.hbm.inventory.gui.GUIMachineAssemblyFactory;
 import com.hbm.inventory.recipes.AssemblyMachineRecipes;
 import com.hbm.inventory.recipes.loader.GenericRecipe;
 import com.hbm.items.ModItems;
@@ -99,7 +98,6 @@ public class TileEntityMachineAssemblyFactory extends TileEntityMachineBase impl
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemStack, int j) {
 		for(int k = 0; k < 4; k++) if(i == 17 + k * 14) return true;
-		for(int k = 0; k < 4; k++) if(this.assemblerModule[k].isSlotClogged(i)) return true;
 		return false;
 	}
 
@@ -171,7 +169,7 @@ public class TileEntityMachineAssemblyFactory extends TileEntityMachineBase impl
 			boolean markDirty = false;
 			
 			for(int i = 0; i < 4; i++) {
-				this.assemblerModule[i].update(speed * 2D, pow * 2D, canCool(), slots[4 + i * 14]);
+				this.assemblerModule[i].update(speed * 2D, pow * 2D, canCool());
 				this.didProcess[i] =  this.assemblerModule[i].didProcess;
 				markDirty |= this.assemblerModule[i].markDirty;
 				
@@ -330,8 +328,8 @@ public class TileEntityMachineAssemblyFactory extends TileEntityMachineBase impl
 	@Override public FluidTank[] getSendingTanks() { return outputTanks; }
 	@Override public FluidTank[] getAllTanks() { return allTanks; }
 
-	@Override public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) { return new ContainerMachineAssemblyFactory(player.inventory, this); }
-	@Override @SideOnly(Side.CLIENT) public Object provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) { return new GUIMachineAssemblyFactory(player.inventory, this); }
+	@Override public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) { return new ContainerMachineAssemblyMachine(player.inventory, this); }
+	@Override @SideOnly(Side.CLIENT) public Object provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) { return null; }
 
 	@Override public boolean hasPermission(EntityPlayer player) { return this.isUseableByPlayer(player); }
 

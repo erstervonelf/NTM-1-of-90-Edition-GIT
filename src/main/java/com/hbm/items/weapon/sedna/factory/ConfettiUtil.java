@@ -47,7 +47,7 @@ public class ConfettiUtil {
 		if(entity instanceof EntityTaintCrab) return;
 		if(entity instanceof EntitySlime) return;
 
-		SkeletonCreator.composeEffectGib(entity.worldObj, entity, 0.25F);
+	SkeletonCreator.composeEffectGib(entity.worldObj, entity, 0.25F);
 		
 		if(entity instanceof EntitySkeleton) return;
 

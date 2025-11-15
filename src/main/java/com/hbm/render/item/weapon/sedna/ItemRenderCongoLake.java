@@ -93,10 +93,8 @@ public class ItemRenderCongoLake extends ItemRenderWeaponBase {
 
 		GL11.glPushMatrix();
 		{
-			IMagazine mag = gun.getConfig(stack, 0).getReceivers(stack)[0].getMagazine(stack);
-			if(gun.getLastAnim(stack, 0) != AnimType.INSPECT || mag.getAmount(stack, MainRegistry.proxy.me().inventory) > 0) { //omit when inspecting and no shell is loaded
-				
-				Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.casings_tex);
+		IMagazine mag = gun.getConfig(stack, 0).getReceivers(stack)[0].getMagazine(stack);
+		if(gun.getLastAnim(stack, 0) != AnimType.INSPECT || mag.getAmount(stack, MainRegistry.proxy.me().inventory) > 0) { //omit when inspecting and no shell is loaded				Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.casings_tex);
 	
 				HbmAnimations.applyRelevantTransformation("Shell");
 	

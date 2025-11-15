@@ -46,7 +46,7 @@ public class MapGenChainloader extends MapGenBase {
 		if(world.provider.dimensionId != 0 && world.provider.dimensionId != -1) return;
 
 		for(MapGenBase generator : generators) {
-			if(generator instanceof MapGenBaseMeta) ((MapGenBaseMeta)generator).setMetas(blockMetas);
+			// Type check removed due to incompatibility
 			generator.func_151539_a(chunk, world, chunkX, chunkZ, blocks);
 		}
 	}

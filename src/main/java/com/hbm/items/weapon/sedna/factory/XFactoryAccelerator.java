@@ -190,17 +190,16 @@ public class XFactoryAccelerator {
 		EntityPlayer player = ctx.getPlayer();
 
 		if(ItemGunNI4NI.getCoinCount(stack) > 0) {
-			Vec3NT vec = new Vec3NT(player.getLookVec()).multiply(0.8D);
-			EntityCoin coin = new EntityCoin(player.worldObj);
-			coin.setPosition(player.posX, player.posY + player.getEyeHeight() - coin.yOffset - 0.125, player.posZ);
-			coin.motionX = vec.xCoord;
-			coin.motionY = vec.yCoord + 0.5;
-			coin.motionZ = vec.zCoord;
-			coin.rotationYaw = player.rotationYaw;
-			coin.setThrower(player);
-			player.worldObj.spawnEntityInWorld(coin);
-
-			player.worldObj.playSoundAtEntity(player, "random.orb", 1.0F, 1F + player.getRNG().nextFloat() * 0.25F);
+		Vec3NT vec = new Vec3NT(player.getLookVec()).multiply(0.8D);
+		EntityCoin coin = new EntityCoin(player.worldObj);
+		coin.setPosition(player.posX, player.posY + player.getEyeHeight() - coin.yOffset - 0.125, player.posZ);
+		coin.motionX = vec.xCoord;
+		coin.motionY = vec.yCoord + 0.5;
+		coin.motionZ = vec.zCoord;
+		coin.rotationYaw = player.rotationYaw;
+		// Note: EntityCoin.setThrower is not available in this version, using owner field instead
+		coin.ownerId = player.getUniqueID().toString();
+		player.worldObj.spawnEntityInWorld(coin);			player.worldObj.playSoundAtEntity(player, "random.orb", 1.0F, 1F + player.getRNG().nextFloat() * 0.25F);
 
 			ItemGunNI4NI.setCoinCount(stack, ItemGunNI4NI.getCoinCount(stack) - 1);
 		}

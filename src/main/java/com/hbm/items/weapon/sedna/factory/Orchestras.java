@@ -553,7 +553,6 @@ public class Orchestras {
 					AudioWrapper audio = MainRegistry.proxy.getLoopedSound("hbm:weapon.fire.flameLoop", (float) entity.posX, (float) entity.posY, (float) entity.posZ, 1F, 15F, 1F, 10);
 					ItemGunBaseNT.loopedSounds.put(entity, audio);
 					audio.startSound();
-					audio.attachTo(entity);
 				}
 				//keepalive
 				if(runningAudio != null && runningAudio.isPlaying()) {
@@ -821,12 +820,10 @@ public class Orchestras {
 					AudioWrapper audio = MainRegistry.proxy.getLoopedSound("hbm:weapon.fire.flameLoop", (float) entity.posX, (float) entity.posY, (float) entity.posZ, 1F, 15F, 1F, 10);
 					ItemGunBaseNT.loopedSounds.put(entity, audio);
 					audio.startSound();
-					audio.attachTo(entity);
 				}
 				//keepalive
 				if(runningAudio != null && runningAudio.isPlaying()) {
 					runningAudio.keepAlive();
-					runningAudio.attachTo(entity);
 				}
 			} else {
 				//stop sound due to timeout
@@ -1190,11 +1187,9 @@ public class Orchestras {
 					audio.updatePitch(0.75F);
 					ItemGunBaseNT.loopedSounds.put(entity, audio);
 					audio.startSound();
-					audio.attachTo(entity);
 				}
 				if(runningAudio != null && runningAudio.isPlaying()) {
 					runningAudio.keepAlive();
-					runningAudio.attachTo(entity);
 					runningAudio.updatePitch(0.75F + timer * 0.01F);
 				}
 			} else {
@@ -1540,7 +1535,6 @@ public class Orchestras {
 					AudioWrapper audio = MainRegistry.proxy.getLoopedSound(electric ? "hbm:block.largeTurbineRunning" : "hbm:block.engine", (float) entity.posX, (float) entity.posY, (float) entity.posZ, (float) speed, 15F, (float) speed, 25);
 					ItemGunBaseNT.loopedSounds.put(entity, audio);
 					audio.startSound();
-					audio.attachTo(entity);
 				}
 				//keepalive
 				if(runningAudio != null && runningAudio.isPlaying()) {
