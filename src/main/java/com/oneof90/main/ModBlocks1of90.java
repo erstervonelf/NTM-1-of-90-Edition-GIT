@@ -1,0 +1,64 @@
+package com.oneof90.main;
+
+import com.hbm.main.MainRegistry;
+import com.oneof90.blocks.NTMSteelBeam;
+import com.oneof90.blocks.NTMSteelBeamVertical;
+import com.oneof90.tileentity.TileEntityNTMSteelBeam;
+import com.oneof90.tileentity.TileEntityNTMSteelBeamVertical;
+
+import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+
+/**
+ * 1of90 Edition Block Registry
+ * 
+ * Separate block registration system to allow adding new content
+ * without modifying HBM's original code structure.
+ */
+public class ModBlocks1of90 {
+
+	// Steel Beams
+	public static Block ntm_steel_beam_1of90;
+	public static Block ntm_steel_beam_vertical_1of90;
+
+	/**
+	 * Initialize all 1of90 blocks
+	 */
+	public static void init() {
+		
+		// Steel Beams
+		ntm_steel_beam_1of90 = new NTMSteelBeam(Material.iron)
+			.setBlockName("ntm_steel_beam_1of90")
+			.setCreativeTab(MainRegistry.blockTab)
+			.setHardness(5.0F)
+			.setResistance(200.0F)
+			.setBlockTextureName("hbm:1of90_steel_beam");
+		
+		ntm_steel_beam_vertical_1of90 = new NTMSteelBeamVertical(Material.iron)
+			.setBlockName("ntm_steel_beam_vertical_1of90")
+			.setCreativeTab(MainRegistry.blockTab)
+			.setHardness(5.0F)
+			.setResistance(200.0F)
+			.setBlockTextureName("hbm:1of90_steel_beam_vertical");
+		
+		registerBlocks();
+		registerTileEntities();
+	}
+
+	/**
+	 * Register all blocks with the game registry
+	 */
+	private static void registerBlocks() {
+		GameRegistry.registerBlock(ntm_steel_beam_1of90, ntm_steel_beam_1of90.getUnlocalizedName());
+		GameRegistry.registerBlock(ntm_steel_beam_vertical_1of90, ntm_steel_beam_vertical_1of90.getUnlocalizedName());
+	}
+
+	/**
+	 * Register all tile entities
+	 */
+	private static void registerTileEntities() {
+		GameRegistry.registerTileEntity(TileEntityNTMSteelBeam.class, "tileentity_ntmsteelbeam_1of90");
+		GameRegistry.registerTileEntity(TileEntityNTMSteelBeamVertical.class, "tileentity_ntmsteelbeamvertical_1of90");
+	}
+}

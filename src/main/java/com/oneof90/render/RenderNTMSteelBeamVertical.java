@@ -1,9 +1,9 @@
-package com.hbm.render.tileentity;
+package com.oneof90.render;
 
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.main.ResourceManager;
-import com.hbm.tileentity.deco.TileEntityNTMSteelBeamVertical;
+import com.oneof90.tileentity.TileEntityNTMSteelBeamVertical;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
@@ -23,8 +23,8 @@ public class RenderNTMSteelBeamVertical extends TileEntitySpecialRenderer {
 		// Rotate 90 degrees around X-axis to make it vertical
 		GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
 
-		// Bind texture
-		bindTexture(new ResourceLocation("hbm", "textures/models/ntm_steel_beam.png"));
+		// Bind texture - 1of90 steel beam texture
+		bindTexture(new ResourceLocation("hbm", "textures/models/1of90_steel_beam.png"));
 
 		// Render the OBJ model if available (reuse the same model, just rotated)
 		if(ResourceManager.ntm_steel_beam != null) {
