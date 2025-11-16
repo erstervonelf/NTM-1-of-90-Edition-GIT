@@ -165,6 +165,9 @@ public class ClientProxy extends ServerProxy {
 		registerItemRenderer();
 		registerEntityRenderer();
 		registerBlockRenderer();
+		
+		// Initialize 1of90 client-side content
+		com.oneof90.main.MainRegistry1of90.initClient();
 
 		Jars.initJars();
 

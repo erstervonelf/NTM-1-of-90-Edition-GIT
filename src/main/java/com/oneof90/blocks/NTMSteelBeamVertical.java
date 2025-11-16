@@ -1,7 +1,7 @@
-package com.hbm.blocks.generic;
+package com.oneof90.blocks;
 
 import com.hbm.lib.RefStrings;
-import com.hbm.tileentity.deco.TileEntityNTMSteelBeamVertical;
+import com.oneof90.tileentity.TileEntityNTMSteelBeamVertical;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -39,7 +39,7 @@ public class NTMSteelBeamVertical extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconregister) {
-		this.blockIcon = iconregister.registerIcon(RefStrings.MODID + ":steel_beam_vertical");
+		this.blockIcon = iconregister.registerIcon(RefStrings.MODID + ":1of90_steel_beam_vertical");
 	}
 	
 	@Override

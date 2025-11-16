@@ -1,10 +1,9 @@
-package com.hbm.render.tileentity;
+package com.oneof90.render;
 
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.main.ResourceManager;
-import com.hbm.render.util.ObjUtil;
-import com.hbm.tileentity.deco.TileEntityNTMSteelBeam;
+import com.oneof90.tileentity.TileEntityNTMSteelBeam;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
@@ -42,8 +41,8 @@ public class RenderNTMSteelBeam extends TileEntitySpecialRenderer {
 
 		GL11.glRotatef(rotation, 0.0F, 1.0F, 0.0F);
 
-		// Bind texture
-		bindTexture(new ResourceLocation("hbm", "textures/models/ntm_steel_beam.png"));
+		// Bind texture - 1of90 steel beam texture
+		bindTexture(new ResourceLocation("hbm", "textures/models/1of90_steel_beam.png"));
 
 		// Render the OBJ model if available
 		if(ResourceManager.ntm_steel_beam != null) {
