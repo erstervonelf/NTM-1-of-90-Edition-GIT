@@ -2,15 +2,28 @@
 
 This package (`com.oneof90`) provides a separate, modular structure for adding new content to NTM without modifying the original HBM codebase directly.
 
+## 📖 Documentation
+
+**[⭐ MACHINE CREATION GUIDE ⭐](MACHINE_CREATION_GUIDE.md)** - Complete guide for creating simple blocks and multiblock machines
+
 ## Package Structure
 
 ```
 com/oneof90/
 ├── blocks/          - Custom block classes
+│   └── machine/     - Multiblock machine blocks
 ├── tileentity/      - Custom tile entities
+│   └── machine/     - Machine tile entities
 ├── render/          - Custom renderers (TESR, etc.)
+│   └── machine/     - Machine renderers
 └── main/            - Registry and initialization classes
 ```
+
+## Example Templates
+
+Reference implementations are provided:
+- **Simple Block**: `NTMSteelBeam` and `NTMSteelBeamVertical`
+- **Multiblock Machine**: `MachineExampleMultiblock` with `TileEntityExampleMultiblock`
 
 ## Philosophy
 
