@@ -19,8 +19,8 @@ import net.minecraft.block.material.Material;
 public class ModBlocks1of90 {
 
 	// Steel Beams
-	public static Block ntm_steel_beam_1of90;
-	public static Block ntm_steel_beam_vertical_1of90;
+	public static Block ntm_steel_beam;
+	public static Block ntm_steel_beam_vertical;
 
 	/**
 	 * Initialize all 1of90 blocks
@@ -28,19 +28,19 @@ public class ModBlocks1of90 {
 	public static void init() {
 		
 		// Steel Beams
-		ntm_steel_beam_1of90 = new NTMSteelBeam(Material.iron)
-			.setBlockName("ntm_steel_beam_1of90")
+		ntm_steel_beam = new NTMSteelBeam(Material.iron)
+			.setBlockName("ntm_steel_beam")
 			.setCreativeTab(MainRegistry.blockTab)
 			.setHardness(5.0F)
 			.setResistance(200.0F)
-			.setBlockTextureName("hbm:1of90_steel_beam");
+			.setBlockTextureName("hbm:ntm_steel_beam");
 		
-		ntm_steel_beam_vertical_1of90 = new NTMSteelBeamVertical(Material.iron)
-			.setBlockName("ntm_steel_beam_vertical_1of90")
+		ntm_steel_beam_vertical = new NTMSteelBeamVertical(Material.iron)
+			.setBlockName("ntm_steel_beam_vertical")
 			.setCreativeTab(MainRegistry.blockTab)
 			.setHardness(5.0F)
 			.setResistance(200.0F)
-			.setBlockTextureName("hbm:1of90_steel_beam_vertical");
+			.setBlockTextureName("hbm:ntm_steel_beam_vertical");
 		
 		registerBlocks();
 		registerTileEntities();
@@ -50,15 +50,15 @@ public class ModBlocks1of90 {
 	 * Register all blocks with the game registry
 	 */
 	private static void registerBlocks() {
-		GameRegistry.registerBlock(ntm_steel_beam_1of90, ntm_steel_beam_1of90.getUnlocalizedName());
-		GameRegistry.registerBlock(ntm_steel_beam_vertical_1of90, ntm_steel_beam_vertical_1of90.getUnlocalizedName());
+		GameRegistry.registerBlock(ntm_steel_beam, ntm_steel_beam.getUnlocalizedName());
+		GameRegistry.registerBlock(ntm_steel_beam_vertical, ntm_steel_beam_vertical.getUnlocalizedName());
 	}
 
 	/**
 	 * Register all tile entities
 	 */
 	private static void registerTileEntities() {
-		GameRegistry.registerTileEntity(TileEntityNTMSteelBeam.class, "tileentity_ntmsteelbeam_1of90");
-		GameRegistry.registerTileEntity(TileEntityNTMSteelBeamVertical.class, "tileentity_ntmsteelbeamvertical_1of90");
+		GameRegistry.registerTileEntity(TileEntityNTMSteelBeam.class, "tileentity_ntmsteelbeam");
+		GameRegistry.registerTileEntity(TileEntityNTMSteelBeamVertical.class, "tileentity_ntmsteelbeamvertical");
 	}
 }
