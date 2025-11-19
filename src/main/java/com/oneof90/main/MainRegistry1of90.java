@@ -10,6 +10,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import com.hbm.render.item.ItemRenderNTMSteelBeam;
 import com.hbm.render.item.ItemRenderNTMSteelBeamVertical;
 import net.minecraft.item.Item;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -44,6 +45,7 @@ public class MainRegistry1of90 {
 	private static void registerTileEntityRenderers() {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNTMSteelBeam.class, new RenderNTMSteelBeam());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNTMSteelBeamVertical.class, new RenderNTMSteelBeamVertical());
+		// Marble Saw renderer removed (saw was deleted)
 	}
 
 	/**
