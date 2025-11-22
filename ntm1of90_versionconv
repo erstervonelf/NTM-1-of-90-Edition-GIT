@@ -1,10 +1,15 @@
 ## NTM1of90 Version Definition
 
-TYPE.MAJOR.MINOR-SUFFIX
+TYPE.MAJOR.MINOR-SUFFIX_BUILD
 
-TYPE: r (release), b (beta), a (alpha), dev
+TYPE: r (release)
 MAJOR: number
 MINOR: number
-SUFFIX: additional information, such as "hotfix" or "rc" (release candidate) or "tv" (Testing version)
+SUFFIX: additional information, such as "hotfix" or "rc" (release candidate)
+BUILD: E (experimental) number
+
+Example
+r.10.0.0-E1
+
 No inappropiate suffixes.
 Hotfix is not always necessary.
