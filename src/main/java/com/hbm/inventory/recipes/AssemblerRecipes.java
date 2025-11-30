@@ -371,14 +371,6 @@ import net.minecraft.item.ItemStack;
 				new ComparableStack(ModItems.ingot_u238m2),
 				new ComparableStack(ModItems.ingot_cft, 128)
 			}, 1200);
-		makeRecipe(new ComparableStack(ModBlocks.struct_iter_core, 1), new AStack[] {
-				!exp ? new OreDictStack(ANY_RESISTANTALLOY.plateWelded(), 6) : new OreDictStack(ANY_RESISTANTALLOY.heavyComp(), 2),
-				!exp ? new OreDictStack(W.plateWelded(), 6) : new OreDictStack(W.heavyComp(), 1),
-				new OreDictStack(OreDictManager.getReflector(), 12),
-				new ComparableStack(ModItems.coil_advanced_alloy, 12),
-				new OreDictStack(ANY_PLASTIC.ingot(), 8),
-				new ComparableStack(ModItems.circuit, 4, EnumCircuitType.BISMOID),
-			}, 600);
 		makeRecipe(new ComparableStack(ModBlocks.machine_combustion_engine, 1), new AStack[] {
 				new OreDictStack(STEEL.plate528(), 16),
 				new OreDictStack(CU.ingot(), 12),
@@ -784,37 +776,6 @@ import net.minecraft.item.ItemStack;
 				new OreDictStack(CU.ingot(), 4),
 				new ComparableStack(ModItems.plate_polymer, 4)
 			}, 100);
-
-		makeRecipe(new ComparableStack(ModItems.multitool_hit, 1), new AStack[] {
-				new OreDictStack(ANY_RESISTANTALLOY.ingot(), 4),
-				new OreDictStack(STEEL.plate(), 4),
-				new OreDictStack(GOLD.wireFine(), 12),
-				new ComparableStack(ModItems.motor, 4),
-				new ComparableStack(ModItems.circuit, 16, EnumCircuitType.CAPACITOR_BOARD)
-			}, 100);
-
-		makeRecipe(new ComparableStack(ModBlocks.machine_assemfac, 1), new AStack[] {
-				!exp ? new OreDictStack(STEEL.ingot(), 48) : new OreDictStack(STEEL.heavyComp(), 2),
-				new OreDictStack(ANY_RESISTANTALLOY.ingot(), 8),
-				new OreDictStack(B.ingot(), 4),
-				new OreDictStack(RUBBER.ingot(), 16),
-				new OreDictStack(KEY_ANYPANE, 64),
-				new ComparableStack(ModItems.motor, 18),
-				new OreDictStack(W.bolt(), 16),
-				new OreDictStack(STEEL.pipe(), 8),
-				new ComparableStack(ModItems.circuit, 16, EnumCircuitType.BASIC)
-			}, 400);
-
-		makeRecipe(new ComparableStack(ModBlocks.machine_chemical_factory, 1), new AStack[] {
-				new OreDictStack(DURA.ingot(), 16),
-				new OreDictStack(ANY_RESISTANTALLOY.ingot(), 8),
-				new OreDictStack(RUBBER.ingot(), 16),
-				new OreDictStack(STEEL.shell(), 12),
-				new OreDictStack(CU.pipe(), 8),
-				new ComparableStack(ModItems.motor_desh, 4),
-				new ComparableStack(ModItems.coil_tungsten, 16),
-				new ComparableStack(ModItems.circuit, 16, EnumCircuitType.BASIC)
-			}, 400);
 
 		makeRecipe(new ComparableStack(ModItems.missile_shuttle, 1), new AStack[] {
 				new ComparableStack(ModItems.missile_generic, 2),

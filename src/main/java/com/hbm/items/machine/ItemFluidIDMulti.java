@@ -30,6 +30,19 @@ public class ItemFluidIDMulti extends Item implements IItemFluidIdentifier, IIte
 	IIcon overlayIcon;
 
 	@Override
+	@SideOnly(Side.CLIENT)
+	public void getSubItems(Item item, CreativeTabs tabs, List list) {
+		FluidType[] order = Fluids.getInNiceOrder();
+		for(int i = 1; i < order.length; ++i) {
+			if(!order[i].hasNoID()) {
+				ItemStack id = new ItemStack(item, 1, order[i].getID());
+				setType(id, order[i], true);
+				list.add(id);
+			}
+		}
+	}
+
+	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
 		
 		if(!world.isRemote && !player.isSneaking()) {

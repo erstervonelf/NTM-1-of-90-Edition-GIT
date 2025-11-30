@@ -1974,17 +1974,6 @@ public class ModItems {
 	public static Item wrench_flipped;
 	public static Item memespoon;
 
-	public static Item multitool_hit;
-	public static Item multitool_dig;
-	public static Item multitool_silk;
-	public static Item multitool_ext;
-	public static Item multitool_miner;
-	public static Item multitool_beam;
-	public static Item multitool_sky;
-	public static Item multitool_mega;
-	public static Item multitool_joule;
-	public static Item multitool_decon;
-
 	public static Item saw;
 	public static Item bat;
 	public static Item bat_nail;
@@ -4085,9 +4074,7 @@ public class ModItems {
 		linker = new ItemTeleLink().setUnlocalizedName("linker").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":linker");
 		reactor_sensor = new ItemReactorSensor().setUnlocalizedName("reactor_sensor").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":reactor_sensor");
 		oil_detector = new ItemOilDetector().setUnlocalizedName("oil_detector").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":oil_detector");
-		//turret_control = new ItemTurretControl().setUnlocalizedName("turret_control").setFull3D().setMaxStackSize(1).setCreativeTab(null).setTextureName(RefStrings.MODID + ":turret_control");
 		turret_chip = new ItemTurretChip().setUnlocalizedName("turret_chip").setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":turret_chip");
-		//turret_biometry = new ItemTurretBiometry().setUnlocalizedName("turret_biometry").setFull3D().setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":rei_scanner");
 		dosimeter = new ItemDosimeter().setUnlocalizedName("dosimeter").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":dosimeter");
 		geiger_counter = new ItemGeigerCounter().setUnlocalizedName("geiger_counter").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":geiger_counter");
 		digamma_diagnostic = new ItemDigammaDiagnostic().setUnlocalizedName("digamma_diagnostic").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":digamma_diagnostic");
@@ -4120,8 +4107,8 @@ public class ModItems {
 		blueprints = new ItemBlueprints().setUnlocalizedName("blueprints").setCreativeTab(MainRegistry.templateTab).setTextureName(RefStrings.MODID + ":blueprints");
 		blueprint_folder = new ItemBlueprintFolder().setUnlocalizedName("blueprint_folder").setCreativeTab(MainRegistry.templateTab).setTextureName(RefStrings.MODID + ":blueprint_folder");
 		template_folder = new ItemTemplateFolder().setUnlocalizedName("template_folder").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab).setTextureName(RefStrings.MODID + ":template_folder");
-		assembly_template = new ItemAssemblyTemplate().setUnlocalizedName("assembly_template").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab).setTextureName(RefStrings.MODID + ":assembly_template");
-		chemistry_template = new ItemChemistryTemplate().setUnlocalizedName("chemistry_template").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab).setTextureName(RefStrings.MODID + ":chemistry_template");
+		assembly_template = new ItemAssemblyTemplate().setUnlocalizedName("assembly_template").setMaxStackSize(1).setCreativeTab(null).setTextureName(RefStrings.MODID + ":assembly_template");
+		chemistry_template = new ItemChemistryTemplate().setUnlocalizedName("chemistry_template").setMaxStackSize(1).setCreativeTab(null).setTextureName(RefStrings.MODID + ":chemistry_template");
 		chemistry_icon = new ItemChemistryIcon().setUnlocalizedName("chemistry_icon").setMaxStackSize(1).setCreativeTab(null);
 		crucible_template = new ItemCrucibleTemplate().setUnlocalizedName("crucible_template").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab).setTextureName(RefStrings.MODID + ":crucible_template");
 		fluid_identifier = new ItemFluidIdentifier().setUnlocalizedName("fluid_identifier").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab).setTextureName(RefStrings.MODID + ":fluid_identifier");
@@ -4880,17 +4867,6 @@ public class ModItems {
 				.addAbility(IWeaponAbility.STUN, 3)
 				.addAbility(IWeaponAbility.VAMPIRE, 4)
 				.addAbility(IWeaponAbility.BEHEADER, 0).setUnlocalizedName("mese_gavel").setMaxStackSize(1).setTextureName(RefStrings.MODID + ":mese_gavel");
-
-		multitool_hit = new ItemMultitoolPassive().setUnlocalizedName("multitool_hit").setCreativeTab(null).setTextureName(RefStrings.MODID + ":multitool_fist");
-		multitool_dig = new ItemMultitoolTool(4.0F, MainRegistry.enumToolMaterialMultitool, ItemMultitoolTool.getAllBlocks()).setFull3D().setUnlocalizedName("multitool_dig").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":multitool_claw");
-		multitool_silk = new ItemMultitoolTool(4.0F, MainRegistry.enumToolMaterialMultitool, ItemMultitoolTool.getAllBlocks()).setFull3D().setUnlocalizedName("multitool_silk").setCreativeTab(null).setTextureName(RefStrings.MODID + ":multitool_claw");
-		multitool_ext = new ItemMultitoolPassive().setUnlocalizedName("multitool_ext").setCreativeTab(null).setTextureName(RefStrings.MODID + ":multitool_open");
-		multitool_miner = new ItemMultitoolPassive().setUnlocalizedName("multitool_miner").setCreativeTab(null).setTextureName(RefStrings.MODID + ":multitool_pointer");
-		multitool_beam = new ItemMultitoolPassive().setUnlocalizedName("multitool_beam").setCreativeTab(null).setTextureName(RefStrings.MODID + ":multitool_pointer");
-		multitool_sky= new ItemMultitoolPassive().setUnlocalizedName("multitool_sky").setCreativeTab(null).setTextureName(RefStrings.MODID + ":multitool_open");
-		multitool_mega = new ItemMultitoolPassive().setUnlocalizedName("multitool_mega").setCreativeTab(null).setTextureName(RefStrings.MODID + ":multitool_fist");
-		multitool_joule = new ItemMultitoolPassive().setUnlocalizedName("multitool_joule").setCreativeTab(null).setTextureName(RefStrings.MODID + ":multitool_fist");
-		multitool_decon = new ItemMultitoolPassive().setUnlocalizedName("multitool_decon").setCreativeTab(null).setTextureName(RefStrings.MODID + ":multitool_fist");
 
 		saw = new ModSword(MainRegistry.enumToolMaterialSaw).setUnlocalizedName("weapon_saw").setCreativeTab(null).setFull3D().setTextureName(RefStrings.MODID + ":saw");
 		bat = new ModSword(MainRegistry.enumToolMaterialBat).setUnlocalizedName("weapon_bat").setCreativeTab(null).setFull3D().setTextureName(RefStrings.MODID + ":bat");
@@ -6615,18 +6591,6 @@ public class ModItems {
 		GameRegistry.registerItem(meteorite_sword_irradiated, meteorite_sword_irradiated.getUnlocalizedName());
 		GameRegistry.registerItem(meteorite_sword_fused, meteorite_sword_fused.getUnlocalizedName());
 		GameRegistry.registerItem(meteorite_sword_baleful, meteorite_sword_baleful.getUnlocalizedName());
-
-		//Multitool
-		GameRegistry.registerItem(multitool_hit, multitool_hit.getUnlocalizedName());
-		GameRegistry.registerItem(multitool_dig, multitool_dig.getUnlocalizedName());
-		GameRegistry.registerItem(multitool_silk, multitool_silk.getUnlocalizedName());
-		GameRegistry.registerItem(multitool_ext, multitool_ext.getUnlocalizedName());
-		GameRegistry.registerItem(multitool_miner, multitool_miner.getUnlocalizedName());
-		GameRegistry.registerItem(multitool_beam, multitool_beam.getUnlocalizedName());
-		GameRegistry.registerItem(multitool_sky, multitool_sky.getUnlocalizedName());
-		GameRegistry.registerItem(multitool_mega, multitool_mega.getUnlocalizedName());
-		GameRegistry.registerItem(multitool_joule, multitool_joule.getUnlocalizedName());
-		GameRegistry.registerItem(multitool_decon, multitool_decon.getUnlocalizedName());
 
 		//Syringes & Pills
 		GameRegistry.registerItem(syringe_empty, syringe_empty.getUnlocalizedName());
