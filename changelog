@@ -1,12 +1,8 @@
 ## Changed
-* New fusion reactor and particle accelerator parts now have OpenComputers compat
-* Irradiation recipe config now has the `fusionOnly` flag, preventing the recipe from being done in the RBMK irradiation channel
-* Removed legacy fusion reactor parts from the creative inventory
-* Removed the legacy fusion reactor core components
-* If a legacy fusion reactor explodes, it is now destroyed forever and cannot be reassembled
-* Legacy fusion reactors no longer disassemble when being mined, rather they drop as one block
-* Legacy templates are no longer listed in the creative tab
-* Removed the old meltdown achievement
+* Updated chinese and russian localization
+* Increased density of osmiridium ores in tom craters considerably (from 1:500 to 1:200)
 
 ## Fixed
-* Fixed gamebreaking issue causing crashes and world corruption where the multi detonator had its tooltip misspelled
+* Fixed missing battery socket tooltip
+* Potentially fixed an issue in regards to some hidden structures spawning
+* Fixed FEnSU not immediately applying the muffler effect when used

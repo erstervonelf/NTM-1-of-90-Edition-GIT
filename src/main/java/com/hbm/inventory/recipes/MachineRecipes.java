@@ -1,14 +1,13 @@
 package com.hbm.inventory.recipes;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import com.hbm.interfaces.Spaghetti;
 import com.hbm.inventory.FluidContainer;
 import com.hbm.inventory.FluidContainerRegistry;
-import com.hbm.inventory.fluid.FluidType;
-import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.ModItems;
+import com.hbm.items.machine.ItemBatteryPack.EnumBatteryPack;
+import com.hbm.util.Tuple.Triplet;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -23,15 +22,6 @@ public class MachineRecipes {
 
 	public static MachineRecipes instance() {
 		return new MachineRecipes();
-	}
-	
-	//return: FluidType, amount produced, amount required, heat required (°C * 100)
-	public static Object[] getBoilerOutput(FluidType type) {
-		
-		if(type == Fluids.OIL) return new Object[] { Fluids.HOTOIL, 5, 5, 35000 };
-		if(type == Fluids.CRACKOIL) return new Object[] { Fluids.HOTCRACKOIL, 5, 5, 35000 };
-		
-		return null;
 	}
 
 
@@ -59,32 +49,17 @@ public class MachineRecipes {
 		ArrayList<ItemStack> fuels = new ArrayList<ItemStack>();
 		fuels.add(new ItemStack(ModItems.battery_potato));
 		fuels.add(new ItemStack(ModItems.battery_potatos));
-		fuels.add(new ItemStack(ModItems.battery_generic));
-		fuels.add(new ItemStack(ModItems.battery_red_cell));
-		fuels.add(new ItemStack(ModItems.battery_red_cell_6));
-		fuels.add(new ItemStack(ModItems.battery_red_cell_24));
-		fuels.add(new ItemStack(ModItems.battery_advanced));
-		fuels.add(new ItemStack(ModItems.battery_advanced_cell));
-		fuels.add(new ItemStack(ModItems.battery_advanced_cell_4));
-		fuels.add(new ItemStack(ModItems.battery_advanced_cell_12));
-		fuels.add(new ItemStack(ModItems.battery_lithium));
-		fuels.add(new ItemStack(ModItems.battery_lithium_cell));
-		fuels.add(new ItemStack(ModItems.battery_lithium_cell_3));
-		fuels.add(new ItemStack(ModItems.battery_lithium_cell_6));
-		fuels.add(new ItemStack(ModItems.battery_schrabidium));
-		fuels.add(new ItemStack(ModItems.battery_schrabidium_cell));
-		fuels.add(new ItemStack(ModItems.battery_schrabidium_cell_2));
-		fuels.add(new ItemStack(ModItems.battery_schrabidium_cell_4));
-		fuels.add(new ItemStack(ModItems.battery_trixite));
-		fuels.add(new ItemStack(ModItems.battery_spark));
-		fuels.add(new ItemStack(ModItems.battery_spark_cell_6));
-		fuels.add(new ItemStack(ModItems.battery_spark_cell_25));
-		fuels.add(new ItemStack(ModItems.battery_spark_cell_100));
-		fuels.add(new ItemStack(ModItems.battery_spark_cell_1000));
-		fuels.add(new ItemStack(ModItems.battery_spark_cell_10000));
-		fuels.add(new ItemStack(ModItems.battery_spark_cell_power));
 		fuels.add(new ItemStack(ModItems.fusion_core));
 		fuels.add(new ItemStack(ModItems.energy_core));
+		for(EnumBatteryPack num : EnumBatteryPack.values()) fuels.add(new ItemStack(ModItems.battery_pack, 1, num.ordinal()));
+		fuels.add(new ItemStack(ModItems.battery_creative));
+		fuels.add(new ItemStack(ModItems.battery_sc_uranium));
+		fuels.add(new ItemStack(ModItems.battery_sc_technetium));
+		fuels.add(new ItemStack(ModItems.battery_sc_plutonium));
+		fuels.add(new ItemStack(ModItems.battery_sc_polonium));
+		fuels.add(new ItemStack(ModItems.battery_sc_gold));
+		fuels.add(new ItemStack(ModItems.battery_sc_lead));
+		fuels.add(new ItemStack(ModItems.battery_sc_americium));
 		return fuels;
 	}
 
@@ -133,18 +108,20 @@ public class MachineRecipes {
 		return false;
 	}
 	
-	public Map<Object, Object> getFluidContainers() {
-		Map<Object, Object> map = new HashMap<Object, Object>();
+	public List<Triplet<ItemStack, ItemStack, ItemStack>> getFluidContainers() {
+		List<Triplet<ItemStack, ItemStack, ItemStack>> list = new ArrayList();
 		
 		for(FluidContainer con : FluidContainerRegistry.allContainers) {
+			
 			if(con != null) {
+				
 				ItemStack fluid = new ItemStack(ModItems.fluid_icon, 1, con.type.getID());
 				fluid.stackTagCompound = new NBTTagCompound();
 				fluid.stackTagCompound.setInteger("fill", con.content);
-				map.put(fluid, con.fullContainer);
+				list.add(new Triplet(fluid, con.emptyContainer, con.fullContainer));
 			}
 		}
 		
-		return map;
+		return list;
 	}
 }

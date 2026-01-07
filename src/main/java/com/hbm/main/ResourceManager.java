@@ -134,6 +134,9 @@ public class ResourceManager {
 	public static final IModelCustom epress_head = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/epress_head.obj"));
 	public static final IModelCustom conveyor_press = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/machines/conveyor_press.obj"));
 	public static final IModelCustom ammo_press = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/ammo_press.obj")).asVBO();
+	
+	//Annihilator
+	public static final IModelCustom annihilator = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/annihilator.obj")).asVBO();
 
 	//Assembler
 	public static final IModelCustom assembler_body = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/assembler_new_body.obj"));
@@ -266,6 +269,8 @@ public class ResourceManager {
 	public static final IModelCustom watz_pump = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/watz_pump.obj")).asVBO();
 
 	//FENSU
+	public static final IModelCustom battery_socket = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/battery.obj")).asVBO();
+	public static final IModelCustom battery_redd = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/fensu2.obj")).asVBO();
 	public static final IModelCustom fensu = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/fensu.obj")).asVBO();
 
 	//Radar
@@ -577,6 +582,10 @@ public class ResourceManager {
 	public static final ResourceLocation conveyor_press_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/conveyor_press.png");
 	public static final ResourceLocation conveyor_press_belt_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/conveyor_press_belt.png");
 	public static final ResourceLocation ammo_press_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/ammo_press.png");
+	
+	//Annihilator
+	public static final ResourceLocation annihilator_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/annihilator.png");
+	public static final ResourceLocation annihilator_belt_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/annihilator_belt.png");
 
 	//Assembler
 	public static final ResourceLocation assembler_body_tex = new ResourceLocation(RefStrings.MODID, "textures/models/assembler_base_new.png");
@@ -731,6 +740,8 @@ public class ResourceManager {
 	public static final ResourceLocation watz_pump_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/watz_pump.png");
 
 	//FENSU
+	public static final ResourceLocation battery_socket_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/battery_socket.png");
+	public static final ResourceLocation battery_redd_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/fensu2.png");
 	public static final ResourceLocation fensu_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/fensu.png");
 
 	//Radar

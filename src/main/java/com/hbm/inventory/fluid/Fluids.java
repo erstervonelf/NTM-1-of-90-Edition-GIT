@@ -1,9 +1,8 @@
 package com.hbm.inventory.fluid;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +34,7 @@ import net.minecraft.potion.PotionEffect;
 public class Fluids {
 
 	public static final Gson gson = new Gson();
-	
+
 	public static List<IFluidRegisterListener> additionalListeners = new ArrayList();
 
 	public static FluidType NONE;
@@ -379,7 +378,7 @@ public class Fluids {
 		SMOKE =					new FluidType("SMOKE",				0x808080, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS, NOID, NOCON);
 		SMOKE_LEADED =			new FluidType("SMOKE_LEADED",		0x808080, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS, NOID, NOCON);
 		SMOKE_POISON =			new FluidType("SMOKE_POISON",		0x808080, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS, NOID, NOCON);
-		HELIUM4 =				new FluidType("HELIUM4",			0xE54B0A, 0, 0, 0, EnumSymbol.ASPHYXIANT).addTraits(GASEOUS);
+		HELIUM4 =				new FluidType("HELIUM4",			0xE54B0A, 0, 0, 0, EnumSymbol.ASPHYXIANT).addTraits(GASEOUS).addContainers(new CD_Gastank(0xFD631F, 0xffff00));
 		HEAVYWATER_HOT =		new FluidType("HEAVYWATER_HOT",		0x4D007B, 1, 0, 0, EnumSymbol.NONE).setTemp(600).addTraits(LIQUID, VISCOUS);
 		SODIUM =				new FluidType("SODIUM",				0xCCD4D5, 1, 2, 3, EnumSymbol.NONE).setTemp(400).addTraits(LIQUID, VISCOUS);
 		SODIUM_HOT =			new FluidType("SODIUM_HOT",			0xE2ADC1, 1, 2, 3, EnumSymbol.NONE).setTemp(1200).addTraits(LIQUID, VISCOUS);
@@ -800,7 +799,7 @@ public class Fluids {
 	private static void readCustomFluids(File file) {
 
 		try {
-			JsonObject json = gson.fromJson(new FileReader(file), JsonObject.class);
+			JsonObject json = gson.fromJson(new InputStreamReader(Files.newInputStream(file.toPath()), StandardCharsets.UTF_8), JsonObject.class);
 
 			for(Entry<String, JsonElement> entry : json.entrySet()) {
 
@@ -818,7 +817,9 @@ public class Fluids {
 				String texture = obj.get("texture").getAsString();
 				int temperature = obj.get("temperature").getAsInt();
 
-				FluidType type = new FluidType(name, color, p, f, r, symbol, texture, tint, id, displayName).setTemp(temperature);
+				FluidType type = fluidMigration.get(name);
+				if(type == null) type = new FluidType(name, color, p, f, r, symbol, texture, tint, id, displayName).setTemp(temperature);
+				else type.setupCustom(name, color, p, f, r, symbol, texture, tint, id, displayName).setTemp(temperature);
 				customFluids.add(type);
 			}
 
@@ -883,27 +884,30 @@ public class Fluids {
 		}
 	}
 	
+	private static HashMap<String, FluidType> fluidMigration = new HashMap(); // since reloading would create new fluid instances, and those break existing machines
+
 	public static void reloadFluids(){
 		File folder = MainRegistry.configHbmDir;
 		File customTypes = new File(folder.getAbsolutePath() + File.separatorChar + "hbmFluidTypes.json");
 		if(!customTypes.exists()) initDefaultFluids(customTypes);
-		
-		for(FluidType type : customFluids){
+
+		for(FluidType type : customFluids) {
+			fluidMigration.put(type.getName(), type);
 			idMapping.remove(type.getID());
 			registerOrder.remove(type);
 			nameMapping.remove(type.getName());
 			metaOrder.remove(type);
 		}
 		customFluids.clear();
-		
-		for(FluidType type : foreignFluids){
+
+		for(FluidType type : foreignFluids) {
 			idMapping.remove(type.getID());
 			registerOrder.remove(type);
 			nameMapping.remove(type.getName());
 			metaOrder.remove(type);
 		}
 		foreignFluids.clear();
-		
+
 		readCustomFluids(customTypes);
 		for(FluidType custom : customFluids) metaOrder.add(custom);
 		File config = new File(MainRegistry.configHbmDir.getAbsolutePath() + File.separatorChar + "hbmFluidTraits.json");
@@ -914,7 +918,7 @@ public class Fluids {
 		} else {
 			readTraits(config);
 		}
-		
+
 		for(IFluidRegisterListener listener : additionalListeners) listener.onFluidsLoad();
 	}
 	private static void registerCalculatedFuel(FluidType type, double base, double combustMult, FuelGrade grade) {

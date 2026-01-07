@@ -106,7 +106,7 @@ public class EntityEffectHandler {
 				}
 			}
 			//only sets players on fire so mod compatibility doesnt die
-			if((GeneralConfig.enable528 && GeneralConfig.enable528NetherBurn) && entity instanceof EntityPlayer && !entity.isImmuneToFire() && entity.worldObj.provider.isHellWorld) {
+			if(GeneralConfig.enable528NetherBurn && entity instanceof EntityPlayer && !entity.isImmuneToFire() && entity.worldObj.provider.isHellWorld) {
 				entity.setFire(5);
 			}
 
@@ -676,7 +676,7 @@ public class EntityEffectHandler {
 			FlameCreator.composeEffect(entity.worldObj, x - living.width / 2 + living.width * rand.nextDouble(), y + rand.nextDouble() * living.height, z - living.width / 2 + living.width * rand.nextDouble(), FlameCreator.META_BLACK);
 		}
 
-		if(props.fire > 0 || props.phosphorus > 0 || props.balefire > 0) if(!entity.isEntityAlive()) ConfettiUtil.decideConfetti(living, DamageSource.onFire);
+		if(props.fire > 0 || props.phosphorus > 0 || props.balefire > 0 || props.blackFire > 0) if(!entity.isEntityAlive()) ConfettiUtil.decideConfetti(living, DamageSource.onFire);
 	}
 
 	private static void handleDashing(Entity entity) {
