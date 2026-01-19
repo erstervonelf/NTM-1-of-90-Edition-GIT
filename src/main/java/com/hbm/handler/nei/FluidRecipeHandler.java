@@ -3,12 +3,12 @@ package com.hbm.handler.nei;
 import java.awt.Rectangle;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import com.hbm.handler.imc.ICompatNHNEI;
 import com.hbm.inventory.recipes.MachineRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
+import com.hbm.util.Tuple.Triplet;
 
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
@@ -69,9 +69,9 @@ public class FluidRecipeHandler extends TemplateRecipeHandler implements ICompat
 	@Override
 	public void loadCraftingRecipes(String outputId, Object... results) {
 		if ((outputId.equals("fluidcons")) && getClass() == FluidRecipeHandler.class) {
-			Map<Object, Object> recipes = MachineRecipes.instance().getFluidContainers();
-			for (Map.Entry<Object, Object> recipe : recipes.entrySet()) {
-				this.arecipes.add(new SmeltingSet((ItemStack)recipe.getKey(), (ItemStack)recipe.getValue()));
+			List<Triplet<ItemStack, ItemStack, ItemStack>> recipes = MachineRecipes.instance().getFluidContainers();
+			for (Triplet<ItemStack, ItemStack, ItemStack> recipe : recipes) {
+				this.arecipes.add(new SmeltingSet(recipe.getY(), recipe.getZ()));
 			}
 		} else {
 			super.loadCraftingRecipes(outputId, results);
@@ -80,10 +80,10 @@ public class FluidRecipeHandler extends TemplateRecipeHandler implements ICompat
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
-		Map<Object, Object> recipes = MachineRecipes.instance().getFluidContainers();
-		for (Map.Entry<Object, Object> recipe : recipes.entrySet()) {
-			if (NEIServerUtils.areStacksSameType((ItemStack)recipe.getValue(), result) || compareFluidStacks(result, (ItemStack)recipe.getKey()))
-				this.arecipes.add(new SmeltingSet((ItemStack)recipe.getKey(), (ItemStack)recipe.getValue()));
+		List<Triplet<ItemStack, ItemStack, ItemStack>> recipes = MachineRecipes.instance().getFluidContainers();
+		for (Triplet<ItemStack, ItemStack, ItemStack> recipe : recipes) {
+			if (NEIServerUtils.areStacksSameType(recipe.getZ(), result) || compareFluidStacks(result, recipe.getY()))
+				this.arecipes.add(new SmeltingSet(recipe.getY(), recipe.getZ()));
 		}
 	}
 
@@ -98,10 +98,10 @@ public class FluidRecipeHandler extends TemplateRecipeHandler implements ICompat
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
-		Map<Object, Object> recipes = MachineRecipes.instance().getFluidContainers();
-		for (Map.Entry<Object, Object> recipe : recipes.entrySet()) {
-			if (NEIServerUtils.areStacksSameType((ItemStack)recipe.getValue(), ingredient) || compareFluidStacks(ingredient, (ItemStack)recipe.getKey()))
-				this.arecipes.add(new SmeltingSet((ItemStack)recipe.getKey(), (ItemStack)recipe.getValue()));				
+		List<Triplet<ItemStack, ItemStack, ItemStack>> recipes = MachineRecipes.instance().getFluidContainers();
+		for (Triplet<ItemStack, ItemStack, ItemStack> recipe : recipes) {
+			if (NEIServerUtils.areStacksSameType(recipe.getZ(), ingredient) || compareFluidStacks(ingredient, recipe.getY()))
+				this.arecipes.add(new SmeltingSet(recipe.getY(), recipe.getZ()));				
 		}
 	}
 	
