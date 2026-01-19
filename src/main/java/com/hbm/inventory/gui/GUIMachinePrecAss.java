@@ -54,7 +54,7 @@ public class GUIMachinePrecAss extends GuiInfoContainer {
 	protected void mouseClicked(int x, int y, int button) {
 		super.mouseClicked(x, y, button);
 
-		if(this.checkClick(x, y, 7, 125, 18, 18)) GUIScreenRecipeSelector.openSelector(PrecAssRecipes.INSTANCE, assembler, assembler.assemblerModule.recipe, 0, ItemBlueprints.grabPool(assembler.slots[1]), this);
+		if(this.checkClick(x, y, 7, 125, 18, 18)) GUIScreenRecipeSelector.openSelector(PrecAssRecipes.INSTANCE, assembler, assembler.assemblerModule.recipe, 0, this);
 	}
 
 	@Override

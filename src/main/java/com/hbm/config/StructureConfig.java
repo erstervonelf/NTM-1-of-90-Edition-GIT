@@ -16,6 +16,34 @@ public class StructureConfig {
 	public static double lootAmountFactor = 1D;
 
 	public static boolean debugStructures = false;
+	public static int vertibirdCrashedSpawnWeight = 1;
+	public static int beachedPatrolSpawnWeight = 1;
+	public static int dishSpawnWeight = 1;
+	public static int forestChemSpawnWeight = 1;
+	public static int laboratorySpawnWeight = 1;
+	public static int forestPostSpawnWeight = 1;
+	public static int radioSpawnWeight = 1;
+	public static int factorySpawnWeight = 1;
+	public static int craneSpawnWeight = 1;
+	public static int broadcastingTowerSpawnWeight = 1;
+	public static int plane1SpawnWeight = 1;
+	public static int plane2SpawnWeight = 1;
+	public static int desertShack1SpawnWeight = 1;
+	public static int desertShack2SpawnWeight = 1;
+	public static int desertShack3SpawnWeight = 1;
+	public static boolean enableRuins = true;
+	public static int ruinsASpawnWeight = 1;
+	public static int ruinsBSpawnWeight = 1;
+	public static int ruinsCSpawnWeight = 1;
+	public static int ruinsDSpawnWeight = 1;
+	public static int ruinsESpawnWeight = 1;
+	public static int ruinsFSpawnWeight = 1;
+	public static int ruinsGSpawnWeight = 1;
+	public static int ruinsHSpawnWeight = 1;
+	public static int ruinsISpawnWeight = 1;
+	public static int ruinsJSpawnWeight = 1;
+	public static int plainsNullWeight = 1;
+	public static int oceanNullWeight = 1;
 
 	public static void loadFromConfig(Configuration config) {
 
@@ -31,6 +59,9 @@ public class StructureConfig {
 		lootAmountFactor = CommonConfig.createConfigDouble(config, CATEGORY_STRUCTURES, "5.03_lootAmountFactor", "General factor for loot spawns. Applies to spawned IInventories, not loot blocks.", 1D);
 
 		debugStructures = CommonConfig.createConfigBool(config, CATEGORY_STRUCTURES, "5.04_debugStructures", "If enabled, special structure blocks like jigsaw blocks will not be transformed after generating", false);
+		
+		vertibirdCrashedSpawnWeight = CommonConfig.createConfigInt(config, CATEGORY_STRUCTURES, "5.05_vertibirdCrashedSpawnWeight", "Spawn weight for crashed vertibird structures.", 1);
+		beachedPatrolSpawnWeight = CommonConfig.createConfigInt(config, CATEGORY_STRUCTURES, "5.06_beachedPatrolSpawnWeight", "Spawn weight for beached patrol structures.", 1);
 
 		structureMinChunks = CommonConfig.setDef(structureMinChunks, 8);
 		structureMaxChunks = CommonConfig.setDef(structureMaxChunks, 24);

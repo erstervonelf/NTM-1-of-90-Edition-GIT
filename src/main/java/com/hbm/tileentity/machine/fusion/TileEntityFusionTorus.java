@@ -172,7 +172,7 @@ public class TileEntityFusionTorus extends TileEntityCooledBase implements IGUIP
 			this.plasmaEnergy = 0;
 			this.fuelConsumption = 0;
 			this.fusionModule.preUpdate(factor, collectors * 0.5D);
-			this.fusionModule.update(1D, 1D, this.isCool() && ignition, slots[1]);
+			this.fusionModule.update(1D, 1D, this.isCool() && ignition);
 			this.didProcess = this.fusionModule.didProcess;
 			if(this.fusionModule.markDirty) this.markDirty();
 			if(didProcess && recipe != null) {

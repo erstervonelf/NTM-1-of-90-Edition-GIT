@@ -118,7 +118,7 @@ public class TileEntityMachinePrecAss extends TileEntityMachineBase implements I
 			pow += Math.min(upgradeManager.getLevel(UpgradeType.SPEED), 3) * 1D;
 			pow += Math.min(upgradeManager.getLevel(UpgradeType.OVERDRIVE), 3) * 10D / 3D;
 			
-			this.assemblerModule.update(speed, pow, true, slots[1]);
+			this.assemblerModule.update(speed, pow, true);
 			this.didProcess = this.assemblerModule.didProcess;
 			if(this.assemblerModule.markDirty) this.markDirty();
 			
@@ -325,7 +325,7 @@ public class TileEntityMachinePrecAss extends TileEntityMachineBase implements I
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemStack, int j) {
-		return i >= 13 || this.assemblerModule.isSlotClogged(i);
+		return i >= 13; // Can only extract from output slots (13+)
 	}
 
 	@Override

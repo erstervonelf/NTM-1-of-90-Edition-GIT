@@ -1761,6 +1761,10 @@ public class ModItems {
 	public static Item t45_plate;
 	public static Item t45_legs;
 	public static Item t45_boots;
+	public static Item t51_helmet;
+	public static Item t51_plate;
+	public static Item t51_legs;
+	public static Item t51_boots;
 	public static Item steamsuit_helmet;
 	public static Item steamsuit_plate;
 	public static Item steamsuit_legs;
@@ -4253,6 +4257,19 @@ public class ModItems {
 		t45_plate = new ArmorT45(aMatT45, 1, 1000000, 10000, 1000, 5).cloneStats((ArmorFSB) t45_helmet).setUnlocalizedName("t45_plate").setMaxStackSize(1).setTextureName(RefStrings.MODID + ":t45_plate");
 		t45_legs = new ArmorT45(aMatT45, 2, 1000000, 10000, 1000, 5).cloneStats((ArmorFSB) t45_helmet).setUnlocalizedName("t45_legs").setMaxStackSize(1).setTextureName(RefStrings.MODID + ":t45_legs");
 		t45_boots = new ArmorT45(aMatT45, 3, 1000000, 10000, 1000, 5).cloneStats((ArmorFSB) t45_helmet).setUnlocalizedName("t45_boots").setMaxStackSize(1).setTextureName(RefStrings.MODID + ":t45_boots");
+
+		ArmorMaterial aMatT51 = EnumHelper.addArmorMaterial("HBM_T51", 150, new int[] { 3, 8, 6, 3 }, 0);
+		aMatT51.customCraftingMaterial = ModItems.plate_armor_titanium;
+		t51_helmet = new ArmorT45(aMatT51, 0, 1000000, 10000, 1000, 5)
+				.enableVATS(true)
+				.setHasGeigerSound(true)
+				.setHasHardLanding(true)
+				.addEffect(new PotionEffect(Potion.damageBoost.id, 20, 0))
+				.hides(EnumPlayerPart.HAT)
+				.setUnlocalizedName("t51_helmet").setMaxStackSize(1).setTextureName(RefStrings.MODID + ":t51_helmet");
+		t51_plate = new ArmorT45(aMatT51, 1, 1000000, 10000, 1000, 5).cloneStats((ArmorFSB) t51_helmet).setUnlocalizedName("t51_plate").setMaxStackSize(1).setTextureName(RefStrings.MODID + ":t51_plate");
+		t51_legs = new ArmorT45(aMatT51, 2, 1000000, 10000, 1000, 5).cloneStats((ArmorFSB) t51_helmet).setUnlocalizedName("t51_legs").setMaxStackSize(1).setTextureName(RefStrings.MODID + ":t51_legs");
+		t51_boots = new ArmorT45(aMatT51, 3, 1000000, 10000, 1000, 5).cloneStats((ArmorFSB) t51_helmet).setUnlocalizedName("t51_boots").setMaxStackSize(1).setTextureName(RefStrings.MODID + ":t51_boots");
 
 		ArmorMaterial aMatDesh = EnumHelper.addArmorMaterial("HBM_DESH", 150, new int[] { 3, 8, 6, 3 }, 0);
 		aMatDesh.customCraftingMaterial = ModItems.ingot_desh;

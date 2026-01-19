@@ -51,6 +51,7 @@ import com.hbm.particle.psys.engine.EventHandlerParticleEngine;
 import com.hbm.qmaw.QMAWLoader;
 import com.hbm.render.block.*;
 import com.hbm.render.entity.RenderEmpty;
+import com.hbm.render.entity.RenderCoin;
 import com.hbm.render.entity.effect.*;
 import com.hbm.render.entity.item.*;
 import com.hbm.render.entity.mob.*;

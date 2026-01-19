@@ -259,4 +259,9 @@ public class Compat {
 		if(!world.getChunkProvider().chunkExists(x >> 4, z >> 4)) return null;
 		return world.getTileEntity(x, y, z);
 	}
+
+	/** Stub for accelerator blacklisting (used for compatibility). */
+	public static void blacklistAccelerator(Class<?> clazz) {
+		// Placeholder implementation: no-op for now
+	}
 }

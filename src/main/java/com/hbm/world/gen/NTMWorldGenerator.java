@@ -108,14 +108,14 @@ public class NTMWorldGenerator implements IWorldGenerator {
 		}});
 
 		NBTStructure.registerStructure(0, new SpawnCondition("beached_patrol") {{
-			canSpawn = beachBiomes::contains;
+			canSpawn = biome -> BiomeDictionary.isBiomeOfType(biome, Type.BEACH);
 			structure = new JigsawPiece("beached_patrol", StructureManager.beached_patrol, -5);
 			minHeight = 58;
 			maxHeight = 67;
 			spawnWeight = 8;
 		}});
 
-		NBTStructure.registerNullWeight(0, 2, oceanBiomes::contains); //why the fuck did this change
+		NBTStructure.registerNullWeight(0, 2, biome -> BiomeDictionary.isBiomeOfType(biome, Type.OCEAN)); //why the fuck did this change
 
 		NBTStructure.registerStructure(0, new SpawnCondition("dish") {{
 			canSpawn = biome -> BiomeDictionary.isBiomeOfType(biome, Type.PLAINS);
