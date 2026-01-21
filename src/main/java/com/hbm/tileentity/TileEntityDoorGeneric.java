@@ -8,6 +8,7 @@ import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.generic.BlockDoorGeneric;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
+import com.hbm.render.anim.HbmAnimations.Animation;
 import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.machine.TileEntityLockableBase;
 import com.hbm.util.fauxpointtwelve.BlockPos;
@@ -23,6 +24,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityDoorGeneric extends TileEntityLockableBase {
 
+	public static byte STATE_CLOSED =	0;
+	public static byte STATE_OPEN =		1;
+	public static byte STATE_CLOSING =	2;
+	public static byte STATE_OPENING =	3;
+
 	//0: closed, 1: open, 2: closing, 3: opening
 	public byte state = 0;
 	protected DoorDecl doorType;
@@ -36,6 +42,8 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase {
 
 	private AudioWrapper audio;
 	private AudioWrapper audio2;
+	
+	public Animation currentAnimation;
 
 	@Override
 	public void updateEntity() {
@@ -301,6 +309,10 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase {
 
 			this.state = state;
 			if(state > 1) animStartTime = System.currentTimeMillis();
+			
+			if(state == STATE_OPENING || state == STATE_CLOSING) {
+				currentAnimation = this.doorType.getSEDNAAnim(state);
+			}
 		}
 	}
 
@@ -316,6 +328,15 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase {
 		}
 		this.skinIndex = skinIndex;
 		return true;
+	}
+
+	/**Useful for logic block interactions, as a way to close/open doors**/
+	public void open(){
+		if(state == 0) state = 3;
+	}
+
+	public void close() {
+		if(state == 1) state = 2;
 	}
 
 	@Override

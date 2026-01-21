@@ -123,7 +123,6 @@ public class TileMappings {
 		put(TileEntityMachinePress.class, "tileentity_press");
 		put(TileEntityMachineAmmoPress.class, "tileentity_ammo_press");
 		put(TileEntityMachineSiren.class, "tileentity_siren");
-		put(TileEntityMachineSPP.class, "tileentity_spp");
 		put(TileEntityMachineRadGen.class, "tileentity_radgen");
 		put(TileEntityMachineRadarNT.class, "tileentity_radar");
 		put(TileEntityMachineRadarLarge.class, "tileentity_radar_large");
@@ -418,6 +417,7 @@ public class TileMappings {
 		put(TileEntityFusionTorusStruct.class, "tileentity_fusion_torus_struct");
 		put(TileEntityFusionTorus.class, "tileentity_fusion_torus");
 		put(TileEntityFusionKlystron.class, "tileentity_fusion_klystron");
+		put(TileEntityFusionKlystronCreative.class, "tileentity_fusion_klystron_creative");
 		put(TileEntityFusionBreeder.class, "tileentity_fusion_breeder");
 		put(TileEntityFusionCollector.class, "tileentity_fusion_collector");
 		put(TileEntityFusionBoiler.class, "tileentity_fusion_boiler");

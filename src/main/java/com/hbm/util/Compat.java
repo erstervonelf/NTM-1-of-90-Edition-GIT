@@ -9,6 +9,7 @@ import com.hbm.inventory.fluid.Fluids;
 import com.hbm.main.MainRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.eventhandler.EventBus;
 import cpw.mods.fml.common.eventhandler.IEventListener;
 import cpw.mods.fml.relauncher.ReflectionHelper;
@@ -37,6 +38,8 @@ public class Compat {
 	public static final String MOD_TC = "tc";
 	public static final String MOD_EIDS = "endlessids";
 	public static final String MOD_ANG = "angelica";
+	public static final String MOD_TOR = "Torcherino";
+	public static final String MOD_OC = "OpenComputers";
 
 	public static Item tryLoadItem(String domain, String name) {
 		return (Item) Item.itemRegistry.getObject(getReg(domain, name));
@@ -259,9 +262,8 @@ public class Compat {
 		if(!world.getChunkProvider().chunkExists(x >> 4, z >> 4)) return null;
 		return world.getTileEntity(x, y, z);
 	}
-
-	/** Stub for accelerator blacklisting (used for compatibility). */
-	public static void blacklistAccelerator(Class<?> clazz) {
-		// Placeholder implementation: no-op for now
+	
+	public static void blacklistAccelerator(Class clazz) {
+		FMLInterModComms.sendMessage("Torcherino", "blacklist-tile", clazz.getName());
 	}
 }
