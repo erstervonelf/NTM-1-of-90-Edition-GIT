@@ -7,8 +7,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public interface IAnimatedItem {
+public interface IAnimatedItem<T> {
 
 	@SideOnly(Side.CLIENT)
 	public BusAnimation getAnimation(NBTTagCompound data, ItemStack stack);
+
+	@SideOnly(Side.CLIENT)
+	public boolean shouldPlayerModelAim(ItemStack stack);
 }

@@ -48,20 +48,20 @@ public class FusionRecipe extends GenericRecipe {
 		return list;
 	}
 	
-	private void duration(List<String> list) {
+	protected void duration(List<String> list) {
 		if(duration > 0) {
 			double seconds = this.duration / 20D;
 			list.add(EnumChatFormatting.RED + I18nUtil.resolveKey("gui.recipe.duration") + ": " + seconds + "s");
 		}
 	}
 	
-	private void power(List<String> list) {
+	protected void power(List<String> list) {
 		if(power > 0) {
 			list.add(EnumChatFormatting.RED + I18nUtil.resolveKey("gui.recipe.consumption") + ": " + BobMathUtil.getShortNumber(power) + "HE/t");
 		}
 	}
 	
-	private void input(List<String> list) {
+	protected void input(List<String> list) {
 		list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("gui.recipe.input") + ":");
 		if(inputItem != null) for(AStack stack : inputItem) {
 			ItemStack display = stack.extractForCyclingDisplay(20);
@@ -73,7 +73,7 @@ public class FusionRecipe extends GenericRecipe {
 		}
 	}
 	
-	private void output(List<String> list) {
+	protected void output(List<String> list) {
 		list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("gui.recipe.output") + ":");
 		if(outputItem != null) for(IOutput output : outputItem) {
 			for(String line : output.getLabel()) list.add("  " + line);

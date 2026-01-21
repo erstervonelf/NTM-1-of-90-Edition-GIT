@@ -216,7 +216,7 @@ public class ModEventHandlerRenderer {
 		if(held == null) return;
 
 		if(held.getItem() instanceof IAnimatedItem) {
-			if(((IAnimatedItem<?>) held.getItem()).shouldPlayerModelAim(held)) {
+			if(((IAnimatedItem) held.getItem()).shouldPlayerModelAim(held)) {
 				renderer.modelBipedMain.aimedBow = true;
 				renderer.modelArmor.aimedBow = true;
 				renderer.modelArmorChestplate.aimedBow = true;

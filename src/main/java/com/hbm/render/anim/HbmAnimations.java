@@ -9,6 +9,23 @@ import org.lwjgl.opengl.GL11;
 
 public class HbmAnimations {
 
+	/** Animation types for gun animations */
+	public enum AnimType {
+		RELOAD,
+		RELOAD_EMPTY,
+		RELOAD_CYCLE,
+		RELOAD_END,
+		CYCLE,
+		CYCLE_EMPTY,
+		CYCLE_DRY,
+		ALT_CYCLE,
+		SPINUP,
+		SPINDOWN,
+		EQUIP,
+		INSPECT,
+		JAMMED
+	}
+
 	//in flans mod and afaik also MW, there's an issue that there is only one
 	//single animation timer for each client. this is fine for the most part,
 	//but once you reload and switch weapons while the animation plays, the
