@@ -52,7 +52,7 @@ public class ModBlocks1of90 {
 	private static void registerBlocks() {
 		GameRegistry.registerBlock(ntm_steel_beam, ntm_steel_beam.getUnlocalizedName());
 		GameRegistry.registerBlock(ntm_steel_beam_vertical, ntm_steel_beam_vertical.getUnlocalizedName());
-		registerTileEntities();
+	}
 
 	/**
 	 * Register all tile entities

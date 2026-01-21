@@ -1,0 +1,15 @@
+{
+	"name": "Java 8",
+	"image": "mcr.microsoft.com/devcontainers/java:8-jammy",
+	"features": {
+		"ghcr.io/devcontainers/features/git:1": {}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"redhat.java",
+				"vscjava.vscode-gradle"
+			]
+		}
+	}
+}
