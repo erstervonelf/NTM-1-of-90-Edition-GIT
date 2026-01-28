@@ -182,7 +182,7 @@ public class BlockDoorGeneric extends BlockDummyable implements IBomb, IToolable
 		TileEntity te2 = world.getTileEntity(core[0], core[1], core[2]);
 		ForgeDirection dir = ForgeDirection.getOrientation(te2.getBlockMetadata() - BlockDummyable.offset);
 		BlockPos pos = new BlockPos(x - core[0], y - core[1], z - core[2]).rotate(Rotation.getBlockRotation(dir).add(Rotation.COUNTERCLOCKWISE_90));
-		AxisAlignedBB box = type.getBlockBound(pos.getX(), pos.getY(), pos.getZ(), open);
+		AxisAlignedBB box = type.getBlockBound(pos.getX(), pos.getY(), pos.getZ(), open, false);
 		
 		switch(te2.getBlockMetadata() - offset){
 		case 2: return AxisAlignedBB.getBoundingBox(x + 1 - box.minX, y + box.minY, z + 1 - box.minZ, x + 1 - box.maxX, y + box.maxY, z + 1 - box.maxZ);
