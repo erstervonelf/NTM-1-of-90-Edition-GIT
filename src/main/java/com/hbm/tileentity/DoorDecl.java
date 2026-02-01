@@ -10,6 +10,8 @@ import com.hbm.render.anim.BusAnimationSequence;
 import com.hbm.render.loader.IModelCustomNamed;
 import com.hbm.render.tileentity.door.*;
 import com.hbm.util.BobMathUtil;
+import com.hbm.util.Clock;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.util.AxisAlignedBB;
@@ -119,35 +121,27 @@ public abstract class DoorDecl {
 			return null;
 		}
 
+		public final ResourceLocation[] skins = new ResourceLocation[] {
+				ResourceManager.pheo_fire_door_tex,
+				ResourceManager.pheo_fire_door_black_tex,
+				ResourceManager.pheo_fire_door_orange_tex,
+		};
+		
+		@Override public ResourceLocation[] getSEDNASkins() { return skins; }
+
 		@Override public int timeToOpen() { return 160; }
 		@Override public int[][] getDoorOpenRanges() { return new int[][] { { -1, 0, 0, 3, 4, 1 } }; }
 		@Override public int[] getDimensions() { return new int[] { 2, 0, 0, 0, 2, 1 }; }
 
 		@Override
 		public AxisAlignedBB getBlockBound(int x, int y, int z, boolean open, boolean forCollision) {
-			if(!open)
-				return AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1);
-			if(z == 1) {
-				return AxisAlignedBB.getBoundingBox(0.5, 0, 0, 1, 1, 1);
-			} else if(z == -2) {
-				return AxisAlignedBB.getBoundingBox(0, 0, 0, 0.5, 1, 1);
-			} else if(y > 1) {
-				return AxisAlignedBB.getBoundingBox(0, 0.75, 0, 1, 1, 1);
-			} else if(y == 0) {
-				return AxisAlignedBB.getBoundingBox(0, 0, 0, 1, forCollision ? 0 : 0.1, 1);
-			} else {
-				return super.getBlockBound(x, y, z, open, forCollision);
-			}
+			if(!open) return AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1);
+			if(z == 1) return AxisAlignedBB.getBoundingBox(0.5, 0, 0, 1, 1, 1);
+			else if(z == -2) return AxisAlignedBB.getBoundingBox(0, 0, 0, 0.5, 1, 1);
+			else if(y > 1) return AxisAlignedBB.getBoundingBox(0, 0.75, 0, 1, 1, 1);
+			else if(y == 0) return AxisAlignedBB.getBoundingBox(0, 0, 0, 1, forCollision ? 0 : 0.1, 1);
+			else return super.getBlockBound(x, y, z, open, forCollision);
 		}
-
-		@Deprecated
-		@Override
-		@SideOnly(Side.CLIENT)
-		public ResourceLocation getTextureForPart(int skinIndex, String partName) { return null; }
-		@Deprecated
-		@Override
-		@SideOnly(Side.CLIENT)
-		public IModelCustomNamed getModel() { return null; }
 	};
 
 	public static final DoorDecl SLIDE_DOOR = new DoorDecl() {
@@ -181,11 +175,8 @@ public abstract class DoorDecl {
 		@Override
 		public AxisAlignedBB getBlockBound(int x, int y, int z, boolean open, boolean forCollision) {
 			if(open) {
-				if(y == 3) {
-					return AxisAlignedBB.getBoundingBox(0, 0.5, 0, 1, 1, 1);
-				} else if(y == 0) {
-					return AxisAlignedBB.getBoundingBox(0, 0, 0, 1, forCollision ? 0 : 0.08, 1);
-				}
+				if(y == 3) return AxisAlignedBB.getBoundingBox(0, 0.5, 0, 1, 1, 1);
+				else if(y == 0) return AxisAlignedBB.getBoundingBox(0, 0, 0, 1, forCollision ? 0 : 0.08, 1);
 			}
 			return super.getBlockBound(x, y, z, open, forCollision);
 		}
@@ -215,11 +206,8 @@ public abstract class DoorDecl {
 
 		@Override
 		public AxisAlignedBB getBlockBound(int x, int y, int z, boolean open, boolean forCollision) {
-			if(forCollision && open) {
-				return AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
-			} else {
-				return AxisAlignedBB.getBoundingBox(0, 0, 1 - 0.25, 1, 1, 1);
-			}
+			if(forCollision && open) return AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
+			else return AxisAlignedBB.getBoundingBox(0, 0, 1 - 0.25, 1, 1, 1);
 		};
 
 		@Override public int[][] getDoorOpenRanges() { return new int[][] { { 0, 0, 0, 1, 2, 2 } }; }
@@ -253,26 +241,21 @@ public abstract class DoorDecl {
 		@Override
 		public AxisAlignedBB getBlockBound(int x, int y, int z, boolean open, boolean forCollision) {
 			if(!open) {
-				if(y > 0) {
-					return AxisAlignedBB.getBoundingBox(0, 0, 0.375, 1, 1, 0.625);
-				}
+				if(y > 0) return AxisAlignedBB.getBoundingBox(0, 0, 0.375, 1, 1, 0.625);
 				return AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1);
 			}
-			if(y == 1) {
-				return AxisAlignedBB.getBoundingBox(0, 0, 0, 1, forCollision ? 0 : 0.0625, 1);
-			} else if(y == 4) {
-				return AxisAlignedBB.getBoundingBox(0, 0.5, 0.15, 1, 1, 0.85);
-			} else if(y == 0) {
-				return AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1);
-			}else {
-				return super.getBlockBound(x, y, z, open, forCollision);
-			}
+			if(y == 1) return AxisAlignedBB.getBoundingBox(0, 0, 0, 1, forCollision ? 0 : 0.0625, 1);
+			else if(y == 4) return AxisAlignedBB.getBoundingBox(0, 0.5, 0.15, 1, 1, 0.85);
+			else if(y == 0) return AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1);
+			else return super.getBlockBound(x, y, z, open, forCollision);
 		}
 
-		@Override
-		public int getSkinCount() {
-			return 2;
-		}
+		public final ResourceLocation[] skins = new ResourceLocation[] {
+				ResourceManager.pheo_secure_door_tex,
+				ResourceManager.pheo_secure_door_grey_tex
+		};
+		
+		@Override public ResourceLocation[] getSEDNASkins() { return skins; }
 	};
 
 	public static final DoorDecl ROUND_AIRLOCK_DOOR = new DoorDecl() {
@@ -293,19 +276,21 @@ public abstract class DoorDecl {
 			return null;
 		}
 
+		public final ResourceLocation[] skins = new ResourceLocation[] {
+				ResourceManager.pheo_airlock_door_tex,
+				ResourceManager.pheo_airlock_door_clean_tex,
+				ResourceManager.pheo_airlock_door_green_tex
+		};
+		
+		@Override public ResourceLocation[] getSEDNASkins() { return skins; }
+
 		@Override
 		public AxisAlignedBB getBlockBound(int x, int y, int z, boolean open, boolean forCollision) {
-			if(!open)
-				return super.getBlockBound(x, y, z, open, forCollision);
-			if(z == 1) {
-				return AxisAlignedBB.getBoundingBox(0.4, 0, 0, 1, 1, 1);
-			} else if(z == -2) {
-				return AxisAlignedBB.getBoundingBox(0, 0, 0, 0.6, 1, 1);
-			} else if(y == 3) {
-				return AxisAlignedBB.getBoundingBox(0, 0.5, 0, 1, 1, 1);
-			} else if(y == 0) {
-				return AxisAlignedBB.getBoundingBox(0, 0, 0, 1, forCollision ? 0 : 0.0625, 1);
-			}
+			if(!open) return super.getBlockBound(x, y, z, open, forCollision);
+			if(z == 1) return AxisAlignedBB.getBoundingBox(0.4, 0, 0, 1, 1, 1);
+			else if(z == -2) return AxisAlignedBB.getBoundingBox(0, 0, 0, 0.6, 1, 1);
+			else if(y == 3) return AxisAlignedBB.getBoundingBox(0, 0.5, 0, 1, 1, 1);
+			else if(y == 0) return AxisAlignedBB.getBoundingBox(0, 0, 0, 1, forCollision ? 0 : 0.0625, 1);
 			return super.getBlockBound(x, y, z, open, forCollision);
 		};
 
@@ -337,11 +322,8 @@ public abstract class DoorDecl {
 		@Override
 		public AxisAlignedBB getBlockBound(int x, int y, int z, boolean open, boolean forCollision) {
 			if(forCollision && open) {
-				if(z == 0) {
-					return AxisAlignedBB.getBoundingBox(1 - 0.125, 0, 1 - 0.1875, 1, 1, 1);
-				} else {
-					return AxisAlignedBB.getBoundingBox(0, 0, 1 - 0.1875, 0.125, 1, 1);
-				}
+				if(z == 0) return AxisAlignedBB.getBoundingBox(1 - 0.125, 0, 1 - 0.1875, 1, 1, 1);
+				else return AxisAlignedBB.getBoundingBox(0, 0, 1 - 0.1875, 0.125, 1, 1);
 			} else {
 				return AxisAlignedBB.getBoundingBox(0, 0, 1 - 0.1875, 1, 1, 1);
 			}
@@ -376,12 +358,9 @@ public abstract class DoorDecl {
 
 		@Override
 		public AxisAlignedBB getBlockBound(int x, int y, int z, boolean open, boolean forCollision) {
-			if(!open)
-				return AxisAlignedBB.getBoundingBox(0, 0, 0.5, 1, 1, 1);
-			if(y > 1)
-				return AxisAlignedBB.getBoundingBox(0, 0.25, 0.5, 1, 1, 1);
-			else if(y == 0)
-				return AxisAlignedBB.getBoundingBox(0, 0, 0.5, 1, forCollision ? 0 : 0.125, 1);
+			if(!open) return AxisAlignedBB.getBoundingBox(0, 0, 0.5, 1, 1, 1);
+			if(y > 1) return AxisAlignedBB.getBoundingBox(0, 0.25, 0.5, 1, 1, 1);
+			else if(y == 0) return AxisAlignedBB.getBoundingBox(0, 0, 0.5, 1, forCollision ? 0 : 0.125, 1);
 			return super.getBlockBound(x, y, z, open, forCollision);
 		};
 
@@ -413,53 +392,10 @@ public abstract class DoorDecl {
 		}
 
 		@Override
-		@SideOnly(Side.CLIENT)
-		public void getTranslation(String partName, float openTicks, boolean child, float[] trans) {
-			if("bolt".equals(partName)) {
-				set(trans, 0, 0, 0.4F * Library.smoothstep(getNormTime(openTicks, 0, 30), 0, 1));
-			} else {
-				set(trans, 0, 0, 0);
-			}
-		};
-
-		@Override
-		@SideOnly(Side.CLIENT)
-		public void getOrigin(String partName, float[] orig) {
-			if("door".equals(partName) || "bolt".equals(partName)) {
-				set(orig, 0.125F, 1.5F, 1.18F);
-				return;
-			} else if("spinny_upper".equals(partName)) {
-				set(orig, 0.041499F, 2.43569F, -0.587849F);
-				return;
-			} else if("spinny_lower".equals(partName)) {
-				set(orig, 0.041499F, 0.571054F, -0.587849F);
-				return;
-			}
-			super.getOrigin(partName, orig);
-		};
-
-		@Override
-		@SideOnly(Side.CLIENT)
-		public void getRotation(String partName, float openTicks, float[] rot) {
-			if(partName.startsWith("spinny")) {
-				set(rot, Library.smoothstep(getNormTime(openTicks, 0, 30), 0, 1) * 360, 0, 0);
-				return;
-			} else if("door".equals(partName) || "bolt".equals(partName)) {
-				set(rot, 0, Library.smoothstep(getNormTime(openTicks, 30, 60), 0, 1) * -134, 0);
-				return;
-			}
-			super.getRotation(partName, openTicks, rot);
-		};
-
-		@Override
 		public AxisAlignedBB getBlockBound(int x, int y, int z, boolean open, boolean forCollision) {
-			if(!open) {
-				return AxisAlignedBB.getBoundingBox(0, 0, 0.75, 1, 1, 1);
-			} else if(y > 1) {
-				return AxisAlignedBB.getBoundingBox(0, 0.85, 0.75, 1, 1, 1);
-			} else if(y == 0) {
-				return AxisAlignedBB.getBoundingBox(0, 0, 0.75, 1, forCollision ? 0 : 0.15, 1);
-			}
+			if(!open) return AxisAlignedBB.getBoundingBox(0, 0, 0.75, 1, 1, 1);
+			else if(y > 1) return AxisAlignedBB.getBoundingBox(0, 0.85, 0.75, 1, 1, 1);
+			else if(y == 0) return AxisAlignedBB.getBoundingBox(0, 0, 0.75, 1, forCollision ? 0 : 0.15, 1);
 			return super.getBlockBound(x, y, z, open, forCollision);
 		};
 
@@ -508,12 +444,6 @@ public abstract class DoorDecl {
 				return;
 			}
 			super.getRotation(partName, openTicks, rot);
-		};
-
-		@Override
-		@SideOnly(Side.CLIENT)
-		public boolean doesRender(String partName, boolean child) {
-			return true;
 		};
 
 		@Override public int timeToOpen() { return 60; };
@@ -570,12 +500,6 @@ public abstract class DoorDecl {
 			super.getRotation(partName, openTicks, rot);
 		};
 
-		@Override
-		@SideOnly(Side.CLIENT)
-		public boolean doesRender(String partName, boolean child) {
-			return true;
-		};
-
 		@Override public int timeToOpen() { return 60; };
 		@Override public int[][] getDoorOpenRanges() { return new int[][] { { 2, 0, 1, -3, 3, 0 }, { 1, 0, 2, -5, 3, 0 }, { 0, 0, 2, -5, 3, 0 }, { -1, 0, 2, -5, 3, 0 }, { -2, 0, 1, -3, 3, 0 } }; }
 		@Override public float getDoorRangeOpenTime(int ticks, int idx) { return getNormTime(ticks, 20, 20); };
@@ -609,15 +533,10 @@ public abstract class DoorDecl {
 
 		@Override
 		public AxisAlignedBB getBlockBound(int x, int y, int z, boolean open, boolean forCollision) {
-			if(!open)
-				return super.getBlockBound(x, y, z, open, forCollision);
-			if(z == 3) {
-				return AxisAlignedBB.getBoundingBox(0.4, 0, 0, 1, 1, 1);
-			} else if(z == -3) {
-				return AxisAlignedBB.getBoundingBox(0, 0, 0, 0.6, 1, 1);
-			} else if(y == 0) {
-				return AxisAlignedBB.getBoundingBox(0, 0, 0, 1, forCollision ? 0 : 0.0625, 1);
-			}
+			if(!open) return super.getBlockBound(x, y, z, open, forCollision);
+			if(z == 3) return AxisAlignedBB.getBoundingBox(0.4, 0, 0, 1, 1, 1);
+			else if(z == -3) return AxisAlignedBB.getBoundingBox(0, 0, 0, 0.6, 1, 1);
+			else if(y == 0) return AxisAlignedBB.getBoundingBox(0, 0, 0, 1, forCollision ? 0 : 0.0625, 1);
 			return super.getBlockBound(x, y, z, open, forCollision);
 		};
 
@@ -627,11 +546,10 @@ public abstract class DoorDecl {
 
 	};
 
-	// Format: x, y, z, tangent amount 1 (how long the door would be if it moved
-	// up), tangent amount 2 (door places blocks in this direction), axis (0-x,
-	// 1-y, 2-z)
+	/** Format: x, y, z, tangent amount 1 (how long the door would be if it moved
+		up), tangent amount 2 (door places blocks in this direction), axis (0-x,
+		1-y, 2-z) */
 	public abstract int[][] getDoorOpenRanges();
-
 	public abstract int[] getDimensions();
 	
 	public int getBlockOffset() { return 0; }
@@ -651,9 +569,6 @@ public abstract class DoorDecl {
 		return BobMathUtil.remap01_clamp(time, min, max);
 	}
 
-	public boolean hasSkins() { return getSkinCount() > 0; }
-	public int getSkinCount() { return 0; }
-
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation getTextureForPart(String partName) {
 		return getTextureForPart(0, partName);
@@ -664,23 +579,16 @@ public abstract class DoorDecl {
 	@SideOnly(Side.CLIENT) public AnimatedModel getAnimatedModel() { return null; }
 	@SideOnly(Side.CLIENT) public Animation getAnim() { return null; }
 
-	@SideOnly(Side.CLIENT)
-	public void getTranslation(String partName, float openTicks, boolean child, float[] trans) { set(trans, 0, 0, 0); }
-	@SideOnly(Side.CLIENT)
-	public void getRotation(String partName, float openTicks, float[] rot) { set(rot, 0, 0, 0); }
-	@SideOnly(Side.CLIENT)
-	public void getOrigin(String partName, float[] orig) { set(orig, 0, 0, 0); }
-	@SideOnly(Side.CLIENT)
-	public boolean doesRender(String partName, boolean child) { return true; }
+	@SideOnly(Side.CLIENT) public void getTranslation(String partName, float openTicks, boolean child, float[] trans) { set(trans, 0, 0, 0); }
+	@SideOnly(Side.CLIENT) public void getRotation(String partName, float openTicks, float[] rot) { set(rot, 0, 0, 0); }
+	@SideOnly(Side.CLIENT) public void getOrigin(String partName, float[] orig) { set(orig, 0, 0, 0); }
+	@SideOnly(Side.CLIENT) public boolean doesRender(String partName, boolean child) { return true; }
 
 	private static final String[] nothing = new String[] {};
 
-	@SideOnly(Side.CLIENT)
-	public String[] getChildren(String partName) { return nothing; }
-	@SideOnly(Side.CLIENT)
-	public double[][] getClippingPlanes() { return new double[][] {}; }
-	@SideOnly(Side.CLIENT)
-	public void doOffsetTransform() { }
+	@SideOnly(Side.CLIENT) public String[] getChildren(String partName) { return nothing; }
+	@SideOnly(Side.CLIENT) public double[][] getClippingPlanes() { return new double[][] {}; }
+	@SideOnly(Side.CLIENT) public void doOffsetTransform() { }
 
 	public AxisAlignedBB getBlockBound(int x, int y, int z, boolean open, boolean forCollision) {
 		return open ? AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0) : AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1);
@@ -704,6 +612,26 @@ public abstract class DoorDecl {
 		f[1] = y;
 		f[2] = z;
 		return f;
+	}
+
+	public ResourceLocation[] getSEDNASkins() { return null; }
+	public boolean hasSkins() { return getSkinCount() > 0; }
+	
+	public int getSkinCount() {
+		ResourceLocation[] skins = this.getSEDNASkins();
+		if(skins == null || skins.length <= 1) return 0;
+		return skins.length;
+	}
+	
+	public ResourceLocation getCyclingSkins() {
+		ResourceLocation[] skins = this.getSEDNASkins();
+		int index = (int) ((Clock.get_ms() % (skins.length * 1000)) / 1000);
+		return skins[index];
+	}
+	
+	public ResourceLocation getSkinFromIndex(int index) {
+		ResourceLocation[] skins = this.getSEDNASkins();
+		return skins[Math.abs(index) % skins.length];
 	}
 	
 	// keyframe animation system sneakily stitched into the door decl
