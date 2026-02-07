@@ -3,6 +3,7 @@ package com.hbm.blocks.generic;
 import java.util.List;
 
 import com.hbm.blocks.BlockDummyable;
+import com.hbm.handler.MultiblockHandlerXR;
 import com.hbm.interfaces.IBomb;
 import com.hbm.tileentity.DoorDecl;
 import com.hbm.tileentity.TileEntityDoorGeneric;
@@ -34,8 +35,7 @@ public class BlockDoorGeneric extends BlockDummyable implements IBomb, IToolable
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta){
-		if(meta >= 12)
-			return new TileEntityDoorGeneric();
+		if(meta >= 12) return new TileEntityDoorGeneric();
 		return null;
 	}
 
@@ -103,7 +103,7 @@ public class BlockDoorGeneric extends BlockDummyable implements IBomb, IToolable
 	
 	@Override
 	public void addCollisionBoxesToList(World worldIn, int x, int y, int z, AxisAlignedBB entityBox, List collidingBoxes, Entity entityIn) {
-		AxisAlignedBB box = getBoundingBox(worldIn, x, y ,z);
+		AxisAlignedBB box = getBoundingBox(worldIn, x, y, z, true);
 		box = AxisAlignedBB.getBoundingBox(
 				Math.min(box.minX, box.maxX), Math.min(box.minY, box.maxY), Math.min(box.minZ, box.maxZ),
 				Math.max(box.minX, box.maxX), Math.max(box.minY, box.maxY), Math.max(box.minZ, box.maxZ));
@@ -122,7 +122,7 @@ public class BlockDoorGeneric extends BlockDummyable implements IBomb, IToolable
 	
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-		AxisAlignedBB aabb = this.getBoundingBox(world, x, y, z);
+		AxisAlignedBB aabb = this.getBoundingBox(world, x, y, z, true);
 		if(aabb.minX == aabb.maxX && aabb.minY == aabb.maxY && aabb.minZ == aabb.maxZ) return null;
 		return aabb;
 	}
@@ -130,7 +130,7 @@ public class BlockDoorGeneric extends BlockDummyable implements IBomb, IToolable
 	// Enables clicking through the open door
 	@Override
 	public MovingObjectPosition collisionRayTrace(World world, int x, int y, int z, Vec3 startVec, Vec3 endVec) {
-		AxisAlignedBB box = getBoundingBox(world, x, y ,z);
+		AxisAlignedBB box = getBoundingBox(world, x, y, z, false);
 		box = AxisAlignedBB.getBoundingBox(
 			Math.min(box.minX, box.maxX), Math.min(box.minY, box.maxY), Math.min(box.minZ, box.maxZ),
 			Math.max(box.minX, box.maxX), Math.max(box.minY, box.maxY), Math.max(box.minZ, box.maxZ)
@@ -167,11 +167,10 @@ public class BlockDoorGeneric extends BlockDummyable implements IBomb, IToolable
 	
 	@Override
 	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
-		return getBoundingBox(world, x, y, z);
-		//return AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1);
+		return getBoundingBox(world, x, y, z, false);
 	}
 	
-	public AxisAlignedBB getBoundingBox(World world, int x, int y, int z) {
+	public AxisAlignedBB getBoundingBox(World world, int x, int y, int z, boolean forCollision) {
 		int meta = world.getBlockMetadata(x, y, z);
 		TileEntity te = world.getTileEntity(x, y, z);
 		int[] core = this.findCore(world, x, y, z);
@@ -182,7 +181,7 @@ public class BlockDoorGeneric extends BlockDummyable implements IBomb, IToolable
 		TileEntity te2 = world.getTileEntity(core[0], core[1], core[2]);
 		ForgeDirection dir = ForgeDirection.getOrientation(te2.getBlockMetadata() - BlockDummyable.offset);
 		BlockPos pos = new BlockPos(x - core[0], y - core[1], z - core[2]).rotate(Rotation.getBlockRotation(dir).add(Rotation.COUNTERCLOCKWISE_90));
-		AxisAlignedBB box = type.getBlockBound(pos.getX(), pos.getY(), pos.getZ(), open, false);
+		AxisAlignedBB box = type.getBlockBound(pos.getX(), pos.getY(), pos.getZ(), open, forCollision);
 		
 		switch(te2.getBlockMetadata() - offset){
 		case 2: return AxisAlignedBB.getBoundingBox(x + 1 - box.minX, y + box.minY, z + 1 - box.minZ, x + 1 - box.maxX, y + box.maxY, z + 1 - box.maxZ);
@@ -191,5 +190,25 @@ public class BlockDoorGeneric extends BlockDummyable implements IBomb, IToolable
 		case 5: return AxisAlignedBB.getBoundingBox(x + box.minZ, y + box.minY, z + 1 - box.maxX, x + box.maxZ, y + box.maxY, z + 1 - box.minX);
 		}
 		return AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1);
+	}
+
+	@Override
+	public boolean checkRequirement(World world, int x, int y, int z, ForgeDirection dir, int o) {
+		if(!MultiblockHandlerXR.checkSpace(world, x + dir.offsetX * o, y + dir.offsetY * o, z + dir.offsetZ * o, getDimensions(), x, y, z, dir)) return false;
+		
+		if(type.getExtraDimensions() != null) for(int[] dims : type.getExtraDimensions()) {
+			if(!MultiblockHandlerXR.checkSpace(world, x + dir.offsetX * o, y + dir.offsetY * o, z + dir.offsetZ * o, dims, x, y, z, dir)) return false;
+		}
+		
+		return true;
+	}
+
+	@Override
+	public void fillSpace(World world, int x, int y, int z, ForgeDirection dir, int o) {
+		MultiblockHandlerXR.fillSpace(world, x + dir.offsetX * o, y + dir.offsetY * o, z + dir.offsetZ * o, getDimensions(), this, dir);
+		
+		if(type.getExtraDimensions() != null) for(int[] dims : type.getExtraDimensions()) {
+			MultiblockHandlerXR.fillSpace(world, x + dir.offsetX * o, y + dir.offsetY * o, z + dir.offsetZ * o, dims, this, dir);
+		}
 	}
 }
