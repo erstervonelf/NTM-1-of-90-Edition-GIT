@@ -34,11 +34,11 @@ import net.minecraftforge.event.world.WorldEvent;
 public class NTMWorldGenerator implements IWorldGenerator {
 
 	boolean regTest = false;
-	
+
 	public static boolean isInvalidBiome(BiomeGenBase biome) {
 		return BiomeDictionary.isBiomeOfType(biome, Type.OCEAN) || BiomeDictionary.isBiomeOfType(biome, Type.RIVER);
 	}
-	
+
 	public static boolean isFlatBiome(BiomeGenBase biome) {
 		return biome.heightVariation <= 0.2F && !isInvalidBiome(biome) && BiomeDictionary.isBiomeOfType(biome, Type.SPARSE);
 	}
@@ -107,13 +107,8 @@ public class NTMWorldGenerator implements IWorldGenerator {
 			spawnWeight = 2;
 		}});
 
-		NBTStructure.registerStructure(0, new SpawnCondition("beached_patrol") {{
-			canSpawn = biome -> BiomeDictionary.isBiomeOfType(biome, Type.BEACH);
-			structure = new JigsawPiece("beached_patrol", StructureManager.beached_patrol, -5);
-			minHeight = 58;
-			maxHeight = 67;
-			spawnWeight = 8;
-		}});
+		// Duplicate registration for 'beached_patrol' removed here. The structure was already registered earlier
+		// which caused "A jigsaw piece has been registered with the same name as another: beached_patrol" at runtime.
 
 		NBTStructure.registerNullWeight(0, 2, biome -> BiomeDictionary.isBiomeOfType(biome, Type.OCEAN)); //why the fuck did this change
 
@@ -162,7 +157,7 @@ public class NTMWorldGenerator implements IWorldGenerator {
 			structure = new JigsawPiece("crane", StructureManager.crane, -9);
 			spawnWeight = StructureConfig.craneSpawnWeight;
 		}});
-		
+
 		NBTStructure.registerStructure(0, new SpawnCondition("broadcaster_tower") {{
 			canSpawn = biome -> isFlatBiome(biome);
 			structure = new JigsawPiece("broadcaster_tower", StructureManager.broadcasting_tower, -9);

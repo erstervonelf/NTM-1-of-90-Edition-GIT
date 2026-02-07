@@ -80,7 +80,7 @@ public class NBTStructure {
 	private Map<String, List<JigsawConnection>> toTopConnections;
 	private Map<String, List<JigsawConnection>> toBottomConnections;
 	private Map<String, List<JigsawConnection>> toHorizontalConnections;
-	
+
 	// incredibly shitty system for translating legacy block definitions to new ones
 	@Untested // i can't find a god damn factory
 	private static Map<String, String> substitutions = new HashMap() {{
@@ -328,7 +328,7 @@ public class NBTStructure {
 
 				String blockName = p.getString("Name");
 				NBTTagCompound prop = p.getCompoundTag("Properties");
-				
+
 				/// BOB PATCH ///
 				if(substitutions.containsKey(blockName)) blockName = substitutions.get(blockName);
 				/// BOB PATCH ///
@@ -855,6 +855,14 @@ public class NBTStructure {
 			this.minHeight = spawn.minHeight;
 			this.maxHeight = spawn.maxHeight;
 
+			// Prevent NPEs when the referenced NBTStructure failed to load or is invalid
+			if (this.piece == null || this.piece.structure == null || !this.piece.structure.isLoaded || this.piece.structure.size == null) {
+				MainRegistry.logger.warn("[Jigsaw] Invalid or unloaded structure for piece: " + (this.piece != null ? this.piece.name : "<null>") + " - aborting component placement.");
+				// create a minimal bounding box so other code won't NPE when querying it
+				this.boundingBox = new StructureBoundingBox(x, y, z, x, y, z);
+				return;
+			}
+
 			switch(this.coordBaseMode) {
 			case 1:
 			case 3:
@@ -1016,12 +1024,42 @@ public class NBTStructure {
 			int x = chunkX << 4;
 			int z = chunkZ << 4;
 
-			JigsawPiece startPiece = spawn.structure != null ? spawn.structure : spawn.pools.get(spawn.startPool).get(rand);
+			// Safely resolve the starting piece. Pools or startPool may be null or invalid,
+			// in which case we must avoid constructing a Component with a null piece (causes NPE).
+			JigsawPiece startPiece = null;
+			if (spawn.structure != null) {
+				startPiece = spawn.structure;
+			} else if (spawn.pools != null && spawn.startPool != null) {
+				JigsawPool startPoolObj = spawn.pools.get(spawn.startPool);
+				if (startPoolObj != null) {
+					startPiece = startPoolObj.get(rand);
+				} else {
+					MainRegistry.logger.warn("[Jigsaw] Start pool '" + spawn.startPool + "' not found for structure: " + name);
+				}
+			} else {
+				MainRegistry.logger.warn("[Jigsaw] No start piece or pools defined for structure: " + name);
+			}
+
+			// If the structure failed to load, abort gracefully
+			if (startPiece == null || startPiece.structure == null || !startPiece.structure.isLoaded) {
+				if (GeneralConfig.enableDebugMode) {
+					MainRegistry.logger.info("[Debug] Aborting NBT structure start for '" + name + "' - no valid start piece or structure not loaded.");
+				}
+				updateBoundingBox();
+				return;
+			}
 
 			Component startComponent = new Component(spawn, startPiece, rand, x, z);
 			startComponent.parent = this;
 
-			components.add(startComponent);
+			// only add if valid
+			if (startComponent.piece != null && startComponent.piece.structure != null && startComponent.piece.structure.isLoaded) {
+				components.add(startComponent);
+			} else {
+				if (GeneralConfig.enableDebugMode) MainRegistry.logger.info("[Debug] Start component invalid, aborting start for: " + name);
+				updateBoundingBox();
+				return;
+			}
 
 			List<Component> queuedComponents = new ArrayList<>();
 			if(spawn.structure == null) queuedComponents.add(startComponent);
@@ -1041,7 +1079,8 @@ public class NBTStructure {
 				final int i = rand.nextInt(max);
 				Component fromComponent = queuedComponents.remove(i);
 
-				if(fromComponent.piece.structure.fromConnections == null) continue;
+				// guard against invalid components
+				if(fromComponent == null || fromComponent.piece == null || fromComponent.piece.structure == null || fromComponent.piece.structure.fromConnections == null) continue;
 
 				int distance = getDistanceTo(fromComponent.getBoundingBox());
 
@@ -1107,7 +1146,9 @@ public class NBTStructure {
 				MainRegistry.logger.info("[Debug] Spawning NBT structure " + name + " with " + components.size() + " piece(s) at: " + chunkX * 16 + ", " + chunkZ * 16);
 				String componentList = "[Debug] Components: ";
 				for(Object component : this.components) {
-					componentList += ((Component) component).piece.structure.name + " ";
+					Component c = (Component) component;
+					String sname = (c != null && c.piece != null && c.piece.structure != null) ? c.piece.structure.name : "<invalid>";
+					componentList += sname + " ";
 				}
 				MainRegistry.logger.info(componentList);
 			}
