@@ -552,13 +552,13 @@ public class NBTStructure {
 	public void build(World world, JigsawPiece piece, int x, int y, int z, int coordBaseMode, String structureName) {
 		StructureBoundingBox bb;
 		switch(coordBaseMode) {
-		case 1:
-		case 3:
-			bb = new StructureBoundingBox(x, y, z, x + piece.structure.size.z - 1, y + piece.structure.size.y - 1, z + piece.structure.size.x - 1);
-			break;
-		default:
-			bb = new StructureBoundingBox(x, y, z, x + piece.structure.size.x - 1, y + piece.structure.size.y - 1, z + piece.structure.size.z - 1);
-			break;
+			case 1:
+			case 3:
+				bb = new StructureBoundingBox(x, y, z, x + piece.structure.size.z - 1, y + piece.structure.size.y - 1, z + piece.structure.size.x - 1);
+				break;
+			default:
+				bb = new StructureBoundingBox(x, y, z, x + piece.structure.size.x - 1, y + piece.structure.size.y - 1, z + piece.structure.size.z - 1);
+				break;
 		}
 
 		build(world, piece, bb, bb, coordBaseMode, structureName);
@@ -732,37 +732,37 @@ public class NBTStructure {
 
 	public int rotateX(int x, int z, int coordBaseMode) {
 		switch(coordBaseMode) {
-		case 1: return size.z - 1 - z;
-		case 2: return size.x - 1 - x;
-		case 3: return z;
-		default: return x;
+			case 1: return size.z - 1 - z;
+			case 2: return size.x - 1 - x;
+			case 3: return z;
+			default: return x;
 		}
 	}
 
 	public int rotateZ(int x, int z, int coordBaseMode) {
 		switch(coordBaseMode) {
-		case 1: return x;
-		case 2: return size.z - 1 - z;
-		case 3: return size.x - 1 - x;
-		default: return z;
+			case 1: return x;
+			case 2: return size.z - 1 - z;
+			case 3: return size.x - 1 - x;
+			default: return z;
 		}
 	}
 
 	private int unrotateX(int x, int z, int coordBaseMode) {
 		switch(coordBaseMode) {
-		case 3: return size.x - 1 - z;
-		case 2: return size.x - 1 - x;
-		case 1: return z;
-		default: return x;
+			case 3: return size.x - 1 - z;
+			case 2: return size.x - 1 - x;
+			case 1: return z;
+			default: return x;
 		}
 	}
 
 	private int unrotateZ(int x, int z, int coordBaseMode) {
 		switch(coordBaseMode) {
-		case 3: return x;
-		case 2: return size.z - 1 - z;
-		case 1: return size.z - 1 - x;
-		default: return z;
+			case 3: return x;
+			case 2: return size.z - 1 - z;
+			case 1: return size.z - 1 - x;
+			default: return z;
 		}
 	}
 
@@ -855,22 +855,14 @@ public class NBTStructure {
 			this.minHeight = spawn.minHeight;
 			this.maxHeight = spawn.maxHeight;
 
-			// Prevent NPEs when the referenced NBTStructure failed to load or is invalid
-			if (this.piece == null || this.piece.structure == null || !this.piece.structure.isLoaded || this.piece.structure.size == null) {
-				MainRegistry.logger.warn("[Jigsaw] Invalid or unloaded structure for piece: " + (this.piece != null ? this.piece.name : "<null>") + " - aborting component placement.");
-				// create a minimal bounding box so other code won't NPE when querying it
-				this.boundingBox = new StructureBoundingBox(x, y, z, x, y, z);
-				return;
-			}
-
 			switch(this.coordBaseMode) {
-			case 1:
-			case 3:
-				this.boundingBox = new StructureBoundingBox(x, y, z, x + piece.structure.size.z - 1, y + piece.structure.size.y - 1, z + piece.structure.size.x - 1);
-				break;
-			default:
-				this.boundingBox = new StructureBoundingBox(x, y, z, x + piece.structure.size.x - 1, y + piece.structure.size.y - 1, z + piece.structure.size.z - 1);
-				break;
+				case 1:
+				case 3:
+					this.boundingBox = new StructureBoundingBox(x, y, z, x + piece.structure.size.z - 1, y + piece.structure.size.y - 1, z + piece.structure.size.x - 1);
+					break;
+				default:
+					this.boundingBox = new StructureBoundingBox(x, y, z, x + piece.structure.size.x - 1, y + piece.structure.size.y - 1, z + piece.structure.size.z - 1);
+					break;
 			}
 		}
 
@@ -1024,42 +1016,12 @@ public class NBTStructure {
 			int x = chunkX << 4;
 			int z = chunkZ << 4;
 
-			// Safely resolve the starting piece. Pools or startPool may be null or invalid,
-			// in which case we must avoid constructing a Component with a null piece (causes NPE).
-			JigsawPiece startPiece = null;
-			if (spawn.structure != null) {
-				startPiece = spawn.structure;
-			} else if (spawn.pools != null && spawn.startPool != null) {
-				JigsawPool startPoolObj = spawn.pools.get(spawn.startPool);
-				if (startPoolObj != null) {
-					startPiece = startPoolObj.get(rand);
-				} else {
-					MainRegistry.logger.warn("[Jigsaw] Start pool '" + spawn.startPool + "' not found for structure: " + name);
-				}
-			} else {
-				MainRegistry.logger.warn("[Jigsaw] No start piece or pools defined for structure: " + name);
-			}
-
-			// If the structure failed to load, abort gracefully
-			if (startPiece == null || startPiece.structure == null || !startPiece.structure.isLoaded) {
-				if (GeneralConfig.enableDebugMode) {
-					MainRegistry.logger.info("[Debug] Aborting NBT structure start for '" + name + "' - no valid start piece or structure not loaded.");
-				}
-				updateBoundingBox();
-				return;
-			}
+			JigsawPiece startPiece = spawn.structure != null ? spawn.structure : spawn.pools.get(spawn.startPool).get(rand);
 
 			Component startComponent = new Component(spawn, startPiece, rand, x, z);
 			startComponent.parent = this;
 
-			// only add if valid
-			if (startComponent.piece != null && startComponent.piece.structure != null && startComponent.piece.structure.isLoaded) {
-				components.add(startComponent);
-			} else {
-				if (GeneralConfig.enableDebugMode) MainRegistry.logger.info("[Debug] Start component invalid, aborting start for: " + name);
-				updateBoundingBox();
-				return;
-			}
+			components.add(startComponent);
 
 			List<Component> queuedComponents = new ArrayList<>();
 			if(spawn.structure == null) queuedComponents.add(startComponent);
@@ -1079,8 +1041,7 @@ public class NBTStructure {
 				final int i = rand.nextInt(max);
 				Component fromComponent = queuedComponents.remove(i);
 
-				// guard against invalid components
-				if(fromComponent == null || fromComponent.piece == null || fromComponent.piece.structure == null || fromComponent.piece.structure.fromConnections == null) continue;
+				if(fromComponent.piece.structure.fromConnections == null) continue;
 
 				int distance = getDistanceTo(fromComponent.getBoundingBox());
 
@@ -1146,9 +1107,7 @@ public class NBTStructure {
 				MainRegistry.logger.info("[Debug] Spawning NBT structure " + name + " with " + components.size() + " piece(s) at: " + chunkX * 16 + ", " + chunkZ * 16);
 				String componentList = "[Debug] Components: ";
 				for(Object component : this.components) {
-					Component c = (Component) component;
-					String sname = (c != null && c.piece != null && c.piece.structure != null) ? c.piece.structure.name : "<invalid>";
-					componentList += sname + " ";
+					componentList += ((Component) component).piece.structure.name + " ";
 				}
 				MainRegistry.logger.info(componentList);
 			}
@@ -1269,9 +1228,7 @@ public class NBTStructure {
 		private SpawnCondition nextSpawn;
 
 		public void generateStructures(World world, Random rand, IChunkProvider chunkProvider, int chunkX, int chunkZ) {
-			Block[] ablock = new Block[65536];
-
-			func_151539_a(chunkProvider, world, chunkX, chunkZ, ablock);
+			func_151539_a(chunkProvider, world, chunkX, chunkZ, null);
 			generateStructuresInChunk(world, rand, chunkX, chunkZ);
 		}
 
