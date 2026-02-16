@@ -10,6 +10,7 @@ BUILD: E (experimental) number
 
 Example
 r.10.0.0-hotfix.1
+r.10-hotfix.1
 
 No inappropiate suffixes.
 Hotfix is not always necessary.
