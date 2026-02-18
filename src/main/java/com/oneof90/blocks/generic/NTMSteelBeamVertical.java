@@ -1,4 +1,4 @@
-package com.oneof90.blocks;
+package com.oneof90.blocks.generic;
 
 import com.hbm.lib.RefStrings;
 import com.oneof90.tileentity.TileEntityNTMSteelBeamVertical;
@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -20,41 +19,41 @@ public class NTMSteelBeamVertical extends BlockContainer {
 	public NTMSteelBeamVertical(Material material) {
 		super(material);
 	}
-	
+
 	@Override
 	public int getRenderType() {
 		return -1; // Use TESR (TileEntitySpecialRenderer)
 	}
-	
+
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean renderAsNormalBlock() {
 		return false;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconregister) {
 		this.blockIcon = iconregister.registerIcon(RefStrings.MODID + ":1of90_steel_beam_vertical");
 	}
-	
+
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack itemStack) {
 		// Vertical beam doesn't need rotation, but we can store orientation if needed
 		// For now, just set a default metadata
 		world.setBlockMetadataWithNotify(x, y, z, 0, 2);
 	}
-	
+
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
 		// Use full 16x16 block bounds
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 	}
-	
+
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		return new TileEntityNTMSteelBeamVertical();

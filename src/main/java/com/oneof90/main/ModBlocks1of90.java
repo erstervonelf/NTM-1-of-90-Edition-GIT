@@ -1,8 +1,8 @@
 package com.oneof90.main;
 
 import com.hbm.main.MainRegistry;
-import com.oneof90.blocks.NTMSteelBeam;
-import com.oneof90.blocks.NTMSteelBeamVertical;
+import com.oneof90.blocks.generic.NTMSteelBeam;
+import com.oneof90.blocks.generic.NTMSteelBeamVertical;
 import com.oneof90.tileentity.TileEntityNTMSteelBeam;
 import com.oneof90.tileentity.TileEntityNTMSteelBeamVertical;
 
@@ -12,7 +12,7 @@ import net.minecraft.block.material.Material;
 
 /**
  * 1of90 Edition Block Registry
- * 
+ *
  * Separate block registration system to allow adding new content
  * without modifying HBM's original code structure.
  */
@@ -26,7 +26,7 @@ public class ModBlocks1of90 {
 	 * Initialize all 1of90 blocks
 	 */
 	public static void init() {
-		
+
 		// Steel Beams
 		ntm_steel_beam = new NTMSteelBeam(Material.iron)
 			.setBlockName("ntm_steel_beam")
@@ -34,7 +34,7 @@ public class ModBlocks1of90 {
 			.setHardness(5.0F)
 			.setResistance(200.0F)
 			.setBlockTextureName("hbm:ntm_steel_beam");
-		
+
 		ntm_steel_beam_vertical = new NTMSteelBeamVertical(Material.iron)
 			.setBlockName("ntm_steel_beam_vertical")
 			.setCreativeTab(MainRegistry.blockTab)

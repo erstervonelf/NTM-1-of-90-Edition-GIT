@@ -1,4 +1,4 @@
-package com.oneof90.blocks;
+package com.oneof90.blocks.generic;
 
 import com.hbm.lib.RefStrings;
 import com.oneof90.tileentity.TileEntityNTMSteelBeam;
@@ -20,32 +20,32 @@ public class NTMSteelBeam extends BlockContainer {
 	public NTMSteelBeam(Material material) {
 		super(material);
 	}
-	
+
 	@Override
 	public int getRenderType() {
 		return -1; // Use TESR (TileEntitySpecialRenderer)
 	}
-	
+
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean renderAsNormalBlock() {
 		return false;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconregister) {
 		this.blockIcon = iconregister.registerIcon(RefStrings.MODID + ":1of90_steel_beam");
 	}
-	
+
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack itemStack) {
 		int i = MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-		
+
 		if(i == 0) {
 			world.setBlockMetadataWithNotify(x, y, z, 2, 2); // North
 		}
@@ -59,13 +59,13 @@ public class NTMSteelBeam extends BlockContainer {
 			world.setBlockMetadataWithNotify(x, y, z, 4, 2); // West
 		}
 	}
-	
+
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
 		// Use full 16x16 block bounds
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 	}
-	
+
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		return new TileEntityNTMSteelBeam();
