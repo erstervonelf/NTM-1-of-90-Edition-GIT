@@ -13,6 +13,7 @@ import com.hbm.items.weapon.sedna.factory.XFactoryDrill;
 import com.hbm.packet.PermaSyncHandler;
 import com.hbm.render.item.weapon.sedna.ItemRenderWeaponBase;
 import com.hbm.render.model.ModelMan;
+import com.hbm.render.util.RenderScreenOverlay;
 import com.hbm.util.Clock;
 import com.hbm.world.biome.BiomeGenCraterBase;
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -569,6 +570,11 @@ public class ModEventHandlerRenderer {
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onRenderHUD(RenderGameOverlayEvent.Pre event) {
+		
+		//TODO: using ALL doesn't work as anticipated - still hides in F1. need a different event for this
+		if(event.type == ElementType.ALL) {
+			if(ClientConfig.BADGES_HUD.get()) RenderScreenOverlay.renderBadges(event.resolution, Minecraft.getMinecraft().ingameGUI);
+		}
 
 		if(event.type == ElementType.HOTBAR && (ModEventHandlerClient.shakeTimestamp + ModEventHandlerClient.shakeDuration - System.currentTimeMillis()) > 0 && ClientConfig.NUKE_HUD_SHAKE.get()) {
 			double mult = (ModEventHandlerClient.shakeTimestamp + ModEventHandlerClient.shakeDuration - System.currentTimeMillis()) / (double) ModEventHandlerClient.shakeDuration * 2;
@@ -581,7 +587,7 @@ public class ModEventHandlerRenderer {
 	@SubscribeEvent
 	public void onRenderHand(RenderHandEvent event) {
 
-		//can't use plaxer.getHeldItem() here because the item rendering persists for a few frames after hitting the switch key
+		//can't use player.getHeldItem() here because the item rendering persists for a few frames after hitting the switch key
 		ItemStack toRender = Minecraft.getMinecraft().entityRenderer.itemRenderer.itemToRender;
 
 		if(toRender != null) {
