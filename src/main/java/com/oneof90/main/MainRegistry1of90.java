@@ -10,13 +10,12 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import com.hbm.render.item.ItemRenderNTMSteelBeam;
 import com.hbm.render.item.ItemRenderNTMSteelBeamVertical;
 import net.minecraft.item.Item;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * 1of90 Edition Main Registry
- * 
+ *
  * Central initialization point for the 1of90 mod extension.
  * This allows adding new content independently from HBM's code.
  */
@@ -27,6 +26,7 @@ public class MainRegistry1of90 {
 	 */
 	public static void init() {
 		ModBlocks1of90.init();
+		ModItems1of90.init();
 	}
 
 	/**
