@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 public class CageLadderBase extends BlockContainer {
 	public CageLadderBase(Material material){
 		super(material);
+		setBlockBounds(0F, 0F, 0F, 0.55F, 1F, 1F);
 	}
 
 	@Override
@@ -39,8 +40,5 @@ public class CageLadderBase extends BlockContainer {
 		return true;
 	}
 
-	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-		return null; // allows player inside
-	}
+
 }
