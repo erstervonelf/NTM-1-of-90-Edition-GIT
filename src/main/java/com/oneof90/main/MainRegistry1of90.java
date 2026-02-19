@@ -1,7 +1,11 @@
 package com.oneof90.main;
 
-import com.oneof90.render.RenderNTMSteelBeam;
-import com.oneof90.render.RenderNTMSteelBeamVertical;
+import com.oneof90.render.block.RenderNTMSteelBeam;
+import com.oneof90.render.block.RenderNTMSteelBeamVertical;
+import com.oneof90.render.block.RenderTileEntityCageLadder;
+import com.oneof90.render.block.RenderTileEntityCageLadderBase;
+import com.oneof90.tileentity.TileEntityCageLadder;
+import com.oneof90.tileentity.TileEntityCageLadderBase;
 import com.oneof90.tileentity.TileEntityNTMSteelBeam;
 import com.oneof90.tileentity.TileEntityNTMSteelBeamVertical;
 
@@ -45,6 +49,8 @@ public class MainRegistry1of90 {
 	private static void registerTileEntityRenderers() {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNTMSteelBeam.class, new RenderNTMSteelBeam());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNTMSteelBeamVertical.class, new RenderNTMSteelBeamVertical());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCageLadder.class, new RenderTileEntityCageLadder());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCageLadderBase.class, new RenderTileEntityCageLadderBase());
 		// Marble Saw renderer removed (saw was deleted)
 	}
 

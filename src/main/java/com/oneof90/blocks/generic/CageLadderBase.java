@@ -1,8 +1,7 @@
 package com.oneof90.blocks.generic;
 
-import com.oneof90.tileentity.TileEntityCageLadder;
+import com.oneof90.tileentity.TileEntityCageLadderBase;
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockLadder;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
@@ -10,9 +9,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class CageLadder extends BlockContainer {
-
-	public CageLadder(Material material){
+public class CageLadderBase extends BlockContainer {
+	public CageLadderBase(Material material){
 		super(material);
 	}
 
@@ -33,7 +31,7 @@ public class CageLadder extends BlockContainer {
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileEntityCageLadder();
+		return new TileEntityCageLadderBase();
 	}
 
 	@Override

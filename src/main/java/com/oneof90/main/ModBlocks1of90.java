@@ -2,8 +2,11 @@ package com.oneof90.main;
 
 import com.hbm.main.MainRegistry;
 import com.oneof90.blocks.generic.CageLadder;
+import com.oneof90.blocks.generic.CageLadderBase;
 import com.oneof90.blocks.generic.NTMSteelBeam;
 import com.oneof90.blocks.generic.NTMSteelBeamVertical;
+import com.oneof90.tileentity.TileEntityCageLadder;
+import com.oneof90.tileentity.TileEntityCageLadderBase;
 import com.oneof90.tileentity.TileEntityNTMSteelBeam;
 import com.oneof90.tileentity.TileEntityNTMSteelBeamVertical;
 
@@ -23,6 +26,7 @@ public class ModBlocks1of90 {
 	public static Block ntm_steel_beam;
 	public static Block ntm_steel_beam_vertical;
 	public static Block cage_ladder;
+	public static Block cage_ladder_base;
 
 	/**
 	 * Initialize all 1of90 blocks
@@ -49,6 +53,12 @@ public class ModBlocks1of90 {
 			.setHardness(2.0F)
 			.setResistance(10.0F)
 			.setBlockTextureName("hbm:cage_ladder");
+		cage_ladder_base = new CageLadderBase(Material.iron)
+			.setBlockName("cage_ladder_base")
+			.setCreativeTab(MainRegistry.blockTab)
+			.setHardness(2.0F)
+			.setResistance(10.0F)
+			.setBlockTextureName("hbm:cage_ladder_base");
 
 		registerBlocks();
 		registerTileEntities();
@@ -61,6 +71,7 @@ public class ModBlocks1of90 {
 		GameRegistry.registerBlock(ntm_steel_beam, ntm_steel_beam.getUnlocalizedName());
 		GameRegistry.registerBlock(ntm_steel_beam_vertical, ntm_steel_beam_vertical.getUnlocalizedName());
 		GameRegistry.registerBlock(cage_ladder, cage_ladder.getUnlocalizedName());
+		GameRegistry.registerBlock(cage_ladder_base, cage_ladder_base.getUnlocalizedName());
 	}
 
 	/**
@@ -69,5 +80,7 @@ public class ModBlocks1of90 {
 	private static void registerTileEntities() {
 		GameRegistry.registerTileEntity(TileEntityNTMSteelBeam.class, "tileentity_ntmsteelbeam");
 		GameRegistry.registerTileEntity(TileEntityNTMSteelBeamVertical.class, "tileentity_ntmsteelbeamvertical");
+		GameRegistry.registerTileEntity(TileEntityCageLadder.class, "tileentity_cageladder");
+		GameRegistry.registerTileEntity(TileEntityCageLadderBase.class, "tileentity_cageladderbase");
 	}
 }
