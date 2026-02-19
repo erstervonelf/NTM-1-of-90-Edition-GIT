@@ -24,7 +24,7 @@ public class RenderNTMSteelBeamVertical extends TileEntitySpecialRenderer {
 		GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
 
 		// Bind texture - 1of90 steel beam texture
-		bindTexture(new ResourceLocation("hbm", "textures/models/ntm_steel_beam.png"));
+		bindTexture(new ResourceLocation("oneof90", "textures/models/ntm_steel_beam.png"));
 
 		// Render the OBJ model if available (reuse the same model, just rotated)
 		if(ResourceManager.ntm_steel_beam != null) {
