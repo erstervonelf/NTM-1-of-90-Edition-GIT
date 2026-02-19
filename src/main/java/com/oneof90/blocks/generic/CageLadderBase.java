@@ -39,6 +39,4 @@ public class CageLadderBase extends BlockContainer {
 	public boolean isLadder(IBlockAccess world, int x, int y, int z, EntityLivingBase entity) {
 		return true;
 	}
-
-
 }
