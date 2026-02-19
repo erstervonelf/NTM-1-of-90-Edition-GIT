@@ -390,7 +390,7 @@ public abstract class BlockDummyable extends BlockContainer implements ICustomBl
 		return false;
 	}
 
-	public abstract int[] getDimensions();
+	public abstract int[] getDimensions(); // @Override public int[] getDimensions() { return new int[] {height, 0, x, y, z, 2}; }
 
 	public abstract int getOffset();
 

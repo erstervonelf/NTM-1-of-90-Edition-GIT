@@ -46,6 +46,8 @@ import com.hbm.world.feature.OreCave;
 import com.hbm.world.feature.OreLayer3D;
 import com.hbm.world.feature.SchistStratum;
 import com.hbm.world.generator.CellularDungeonFactory;
+import com.oneof90.main.MainRegistry1of90;
+import com.oneof90.main.ModBlocks1of90;
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -278,9 +280,14 @@ public class MainRegistry {
 		// Initialize the adapter registry and capability hook
 		api.ntm1of90.compat.fluid.registry.ForgeFluidAdapterRegistry.initialize();
 		api.ntm1of90.compat.fluid.ForgeFluidCapabilityHook.initialize();
+		// init hbm
 		proxy.registerPreRenderInfo();
 		ModBlocks.mainRegistry();
 		ModItems.mainRegistry();
+		// init 1of90
+		MainRegistry1of90.init();
+		MainRegistry1of90.initClient();
+		//
 		proxy.registerRenderInfo();
 		HbmWorld.mainRegistry();
 		GameRegistry.registerFuelHandler(new FuelHandler());
@@ -370,7 +377,7 @@ public class MainRegistry {
 				}
 			}
 		});
-		
+
 		DispenserBehaviorHandler.init();
 		MicroBlocksCompatHandler.preInit();
 	}
@@ -560,7 +567,7 @@ public class MainRegistry {
 		// IMPORTANT: fluids have to load before recipes. weird shit happens if not.
 		Fluids.reloadFluids();
 		FluidContainerRegistry.register();
-		
+
 		MagicRecipes.register();
 		LemegetonRecipes.register();
 		SILEXRecipes.register();

@@ -26,7 +26,7 @@ public class MachinePUREX extends BlockDummyable implements ITooltipProvider {
 		if(meta >= 6) return new TileEntityProxyCombo().inventory().power().fluid();
 		return null;
 	}
-	
+
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		return this.standardOpenBehavior(world, x, y, z, player, 0);
@@ -38,10 +38,10 @@ public class MachinePUREX extends BlockDummyable implements ITooltipProvider {
 	@Override
 	public void fillSpace(World world, int x, int y, int z, ForgeDirection dir, int o) {
 		super.fillSpace(world, x, y, z, dir, o);
-		
+
 		x += dir.offsetX * o;
 		z += dir.offsetZ * o;
-		
+
 		for(int i = -2; i <= 2; i++) for(int j = -2; j <= 2; j++) {
 			if(Math.abs(i) == 2 || Math.abs(j) == 2) this.makeExtra(world, x + i, y, z + j);
 		}
