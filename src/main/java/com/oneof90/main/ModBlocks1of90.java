@@ -1,6 +1,7 @@
 package com.oneof90.main;
 
 import com.hbm.main.MainRegistry;
+import com.oneof90.blocks.generic.CageLadder;
 import com.oneof90.blocks.generic.NTMSteelBeam;
 import com.oneof90.blocks.generic.NTMSteelBeamVertical;
 import com.oneof90.tileentity.TileEntityNTMSteelBeam;
@@ -18,9 +19,10 @@ import net.minecraft.block.material.Material;
  */
 public class ModBlocks1of90 {
 
-	// Steel Beams
+	// Define Block instances for 1of90 content
 	public static Block ntm_steel_beam;
 	public static Block ntm_steel_beam_vertical;
+	public static Block cage_ladder;
 
 	/**
 	 * Initialize all 1of90 blocks
@@ -41,6 +43,12 @@ public class ModBlocks1of90 {
 			.setHardness(5.0F)
 			.setResistance(200.0F)
 			.setBlockTextureName("hbm:ntm_steel_beam_vertical");
+		cage_ladder = new CageLadder(Material.iron)
+			.setBlockName("cage_ladder")
+			.setCreativeTab(MainRegistry.blockTab)
+			.setHardness(2.0F)
+			.setResistance(10.0F)
+			.setBlockTextureName("hbm:cage_ladder");
 
 		registerBlocks();
 		registerTileEntities();
@@ -52,6 +60,7 @@ public class ModBlocks1of90 {
 	private static void registerBlocks() {
 		GameRegistry.registerBlock(ntm_steel_beam, ntm_steel_beam.getUnlocalizedName());
 		GameRegistry.registerBlock(ntm_steel_beam_vertical, ntm_steel_beam_vertical.getUnlocalizedName());
+		GameRegistry.registerBlock(cage_ladder, cage_ladder.getUnlocalizedName());
 	}
 
 	/**
