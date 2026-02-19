@@ -71,7 +71,7 @@ public class ItemRenderNTMSteelBeamVertical implements IItemRenderer {
 		GL11.glDisable(GL11.GL_CULL_FACE);
 
 		// Use the vertical beam's texture
-		ResourceLocation texture = new ResourceLocation("hbm", "textures/models/ntm_steel_beam.png");
+		ResourceLocation texture = new ResourceLocation("oneof90", "textures/models/ntm_steel_beam.png");
 		net.minecraft.client.Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 
 		// Render the OBJ model if available (same model, just rotated)
