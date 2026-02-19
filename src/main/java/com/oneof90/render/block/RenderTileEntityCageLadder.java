@@ -1,7 +1,7 @@
 package com.oneof90.render.block;
 
+import com.oneof90.main.ResourceManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import com.hbm.main.ResourceManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
