@@ -20,7 +20,28 @@ public class RenderTileEntityCageLadder extends TileEntitySpecialRenderer {
 		GL11.glTranslated(x + 0.5, y, z + 0.5);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_CULL_FACE);
-		GL11.glRotatef(90.0f, 1.0f, 0.0f, 0.0f); // Rotate model 90° around X-axis to make it vertical
+
+		// Get rotation from metadata
+		int metadata = tileEntity.getBlockMetadata();
+		float rotation = 0.0F;
+
+		switch(metadata) {
+			case 2: // North
+				rotation = 0.0F;
+				break;
+			case 3: // South
+				rotation = 180.0F;
+				break;
+			case 4: // West
+				rotation = 90.0F;
+				break;
+			case 5: // East
+				rotation = 270.0F;
+				break;
+		}
+
+		GL11.glRotatef(rotation - 270.0F, 0.0F, 1.0F, 0.0F);
+		GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
 
 		// Render the OBJ model if available (reuse the same model, just rotated)
 		if (ResourceManager.cage_ladder != null) {

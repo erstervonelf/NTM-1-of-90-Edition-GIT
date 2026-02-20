@@ -1,13 +1,7 @@
 package com.oneof90.main;
 
-import com.oneof90.render.block.RenderNTMSteelBeam;
-import com.oneof90.render.block.RenderNTMSteelBeamVertical;
-import com.oneof90.render.block.RenderTileEntityCageLadder;
-import com.oneof90.render.block.RenderTileEntityCageLadderBase;
-import com.oneof90.tileentity.TileEntityCageLadder;
-import com.oneof90.tileentity.TileEntityCageLadderBase;
-import com.oneof90.tileentity.TileEntityNTMSteelBeam;
-import com.oneof90.tileentity.TileEntityNTMSteelBeamVertical;
+import com.oneof90.render.block.*;
+import com.oneof90.tileentity.*;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -51,6 +45,7 @@ public class MainRegistry1of90 {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNTMSteelBeamVertical.class, new RenderNTMSteelBeamVertical());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCageLadder.class, new RenderTileEntityCageLadder());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCageLadderBase.class, new RenderTileEntityCageLadderBase());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDieselGen.class, new RenderDieselGen());
 		// Marble Saw renderer removed (saw was deleted)
 	}
 
