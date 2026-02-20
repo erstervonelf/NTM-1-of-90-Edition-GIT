@@ -17,7 +17,7 @@ public class RenderDieselGen extends TileEntitySpecialRenderer {
 		bindTexture(new ResourceLocation("oneof90", "textures/models/dieselgen.png"));
 
 		GL11.glPushMatrix();
-		GL11.glTranslated(x + 0.5, y, z + 0.5);
+		GL11.glTranslated(x , y, z + 1);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glRotatef(0.0f, 1.0f, 0.0f, 0.0f); // Rotate model 90° around X-axis to make it vertical
