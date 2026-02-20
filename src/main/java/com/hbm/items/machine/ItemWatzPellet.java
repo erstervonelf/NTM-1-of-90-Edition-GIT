@@ -67,24 +67,27 @@ public class ItemWatzPellet extends ItemEnumMulti {
 		BER(			0x50C878, 0x2E8B57, 2_400,	32D,	0.0010D,		new FunctionLinear(2.8D), new FunctionSqrtFalling(15D), null), // Berkelium fuel
 		NP237(			0x008080, 0x004040, 1_900,	26D,	0.0008D,		new FunctionLinear(2.1D), new FunctionSqrtFalling(21D), null), // Neptunium fuel
 		TPO(			0x4B0082, 0x00008B, 2_600,	34D,	0.0011D,		new FunctionLinear(3.2D), new FunctionSqrtFalling(32D), null), // Triple-phase osmium
-		
+
+		// TRIGA U-ZrH pellet: strong negative temperature coefficient (self-limiting)
+		TRIGA(          0x8B8B7A, 0x4F4F40, 0,       0.5D,   0.0005D,        new FunctionLinear(0.8D), new FunctionQuadratic(0.002D), null),
+
 		// New Non-Self-Igniting Advanced Pellets
 		PU239_NSI(		0xFF4500, 0xB22222, 0,		20D,	0.0007D,	new FunctionLinear(1.8D), new FunctionSqrtFalling(40D), null), // Plutonium-239, weapons grade
 		U235_NSI(		0x98FB98, 0x228B22, 0,		18D,	0.0006D,	new FunctionLinear(1.6D), new FunctionSqrtFalling(36D), null), // Uranium-235, enriched
 		U233_NSI(		0x7CFC00, 0x32CD32, 0,		16D,	0.0005D,	new FunctionLinear(1.4D), new FunctionSqrtFalling(32D), null), // Uranium-233, thorium cycle
 		AM243_NSI(		0x9370DB, 0x6A5ACD, 0,		22D,	0.0008D,	new FunctionLinear(2.0D), new FunctionSqrtFalling(30D), null), // Americium-243
 		CM245_NSI(		0xFFA500, 0xFF8C00, 0,		24D,	0.0009D,	new FunctionLinear(2.2D), new FunctionSqrtFalling(34D), null), // Curium-245
-		
+
 		// New Non-Self-Igniting Research Pellets
 		BK247_NSI(		0x48D1CC, 0x20B2AA, 0,		26D,	0.0010D,	new FunctionSqrt(2.4D), new FunctionSqrtFalling(26D), null),   // Berkelium-247
 		ES253_NSI(		0xE6E6FA, 0x9370DB, 0,		28D,	0.0011D,	new FunctionSqrt(2.6D), new FunctionSqrtFalling(28D), null),   // Einsteinium-253
 		FM257_NSI(		0x9932CC, 0x8B008B, 0,		30D,	0.0012D,	new FunctionSqrt(2.8D), new FunctionSqrtFalling(30D), null),   // Fermium-257
-		
+
 		// New Non-Self-Igniting Experimental Pellets
 		TIBERIUM_NSI(	0x7FFF00, 0x32CD32, 0,		32D,	0.0013D,	new FunctionLinear(3.0D), new FunctionSqrtFalling(32D), null), // Tiberium-based
 		EUPHEMIUM_NSI(	0xFF1493, 0xC71585, 0,		34D,	0.0014D,	new FunctionSqrt(3.2D), new FunctionSqrtFalling(34D), null),   // Euphemium-based
 		STARSTONE_NSI(	0x4169E1, 0x0000CD, 0,		36D,	0.0015D,	new FunctionLinear(3.4D), new FunctionSqrtFalling(36D), null); // Starstone alloy
-		
+
 		public double yield = 500_000_000;
 		public int colorLight;
 		public int colorDark;
@@ -94,7 +97,7 @@ public class ItemWatzPellet extends ItemEnumMulti {
 		public Function burnFunc;	//flux to reactivity(0) (classic reactivity)
 		public Function heatDiv;	//reactivity(0) to reactivity(1) based on heat (temperature coefficient)
 		public Function absorbFunc;	//flux to heat (flux absobtion for non-active component)
-		
+
 		private EnumWatzType(int colorLight, int colorDark, double passive, double heatEmission, double mudContent, Function burnFunction, Function heatDivisor, Function absorbFunction) {
 			this.colorLight = colorLight;
 			this.colorDark = colorDark;
@@ -109,13 +112,13 @@ public class ItemWatzPellet extends ItemEnumMulti {
 
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister reg) {
-		
+
 		Enum[] enums = theEnum.getEnumConstants();
 		this.icons = new IIcon[enums.length];
-		
+
 		if(reg instanceof TextureMap) {
 			TextureMap map = (TextureMap) reg;
-			
+
 			for(int i = 0; i < EnumWatzType.values().length; i++) {
 				EnumWatzType type = EnumWatzType.values()[i];
 				String placeholderName = this.getIconString() + "-" + (type.name() + this.getUnlocalizedName());
@@ -126,15 +129,15 @@ public class ItemWatzPellet extends ItemEnumMulti {
 				icons[i] = mutableIcon;
 			}
 		}
-		
+
 		this.itemIcon = reg.registerIcon(this.getIconString());
 	}
-	
+
 	public static int desaturate(int color) {
 		int r = (color & 0xff0000) >> 16;
 		int g = (color & 0x00ff00) >> 8;
 		int b = (color & 0x0000ff);
-		
+
 		int avg = (r + g + b) / 3;
 		double approach = 0.9;
 		double mult = 0.75;
@@ -146,7 +149,7 @@ public class ItemWatzPellet extends ItemEnumMulti {
 		r *= mult;
 		g *= mult;
 		b *= mult;
-		
+
 		return (r << 16) | (g << 8) | b;
 	}
 
@@ -156,16 +159,16 @@ public class ItemWatzPellet extends ItemEnumMulti {
 		IIcon icon = super.getIconFromDamage(meta);
 		return icon == null ? this.itemIcon : icon; //fallback if TextureMap fails during register
 	}
-	
+
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool) {
-		
+
 		if(this != ModItems.watz_pellet) return;
-		
+
 		EnumWatzType num = EnumUtil.grabEnumSafely(EnumWatzType.class, stack.getItemDamage());
-		
+
 		list.add(EnumChatFormatting.GREEN + "Depletion: " + String.format(Locale.US, "%.1f", getDurabilityForDisplay(stack) * 100D) + "%");
-		
+
 		String color = EnumChatFormatting.GOLD + "";
 		String reset = EnumChatFormatting.RESET + "";
 
@@ -191,37 +194,37 @@ public class ItemWatzPellet extends ItemEnumMulti {
 	public double getDurabilityForDisplay(ItemStack stack) {
 		return 1D - getEnrichment(stack);
 	}
-	
+
 	public static double getEnrichment(ItemStack stack) {
 		EnumWatzType num = EnumUtil.grabEnumSafely(EnumWatzType.class, stack.getItemDamage());
 		return getYield(stack) / num.yield;
 	}
-	
+
 
 	public static double getYield(ItemStack stack) {
 		return getDouble(stack, "yield");
 	}
-	
+
 	public static void setYield(ItemStack stack, double yield) {
 		setDouble(stack, "yield", yield);
 	}
-	
+
 	public static void setDouble(ItemStack stack, String key, double yield) {
 		if(!stack.hasTagCompound()) setNBTDefaults(stack);
 		stack.stackTagCompound.setDouble(key, yield);
 	}
-	
+
 	public static double getDouble(ItemStack stack, String key) {
 		if(!stack.hasTagCompound()) setNBTDefaults(stack);
 		return stack.stackTagCompound.getDouble(key);
 	}
-	
+
 	private static void setNBTDefaults(ItemStack stack) {
 		EnumWatzType num = EnumUtil.grabEnumSafely(EnumWatzType.class, stack.getItemDamage());
 		stack.stackTagCompound = new NBTTagCompound();
 		setYield(stack, num.yield);
 	}
-	
+
 	@Override
 	public void onCreated(ItemStack stack, World world, EntityPlayer player) {
 		if(this != ModItems.watz_pellet) return;

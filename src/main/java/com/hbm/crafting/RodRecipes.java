@@ -20,9 +20,9 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
  * @author hbm
  */
 public class RodRecipes {
-	
+
 	public static void register() {
-		
+
 		//Zirnox Fuel
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.rod_zirnox_empty, 4), new Object[] { "Z Z", "ZBZ", "Z Z", 'Z', ZR.nugget(), 'B', BE.ingot() }));
 		addZIRNOXRod(U, EnumZirnoxType.NATURAL_URANIUM_FUEL);
@@ -46,7 +46,7 @@ public class RodRecipes {
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.waste_u235, 2, 1), new Object[] { ModItems.rod_zirnox_u235_fuel_depleted });
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.waste_schrabidium, 2, 1), new Object[] { ModItems.rod_zirnox_les_fuel_depleted });
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.waste_zfb_mox, 2, 1), new Object[] { ModItems.rod_zirnox_zfb_mox_depleted });
-		
+
 		//Breeding Rods
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.rod_empty, 16), new Object[] { "SSS", "L L", "SSS", 'S', STEEL.plate(), 'L', PB.plate() });
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.rod_empty, 2), new Object[] { ModItems.rod_dual_empty });
@@ -54,14 +54,14 @@ public class RodRecipes {
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.rod_empty, 4), new Object[] { ModItems.rod_quad_empty });
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.rod_quad_empty, 1), new Object[] { ModItems.rod_empty, ModItems.rod_empty, ModItems.rod_empty, ModItems.rod_empty });
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.rod_quad_empty, 1), new Object[] { ModItems.rod_dual_empty, ModItems.rod_dual_empty });
-		
+
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.rod, 1, BreedingRodType.LITHIUM.ordinal()), new Object[] { ModItems.rod_empty, LI.ingot() });
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.lithium, 1), new Object[] { new ItemStack(ModItems.rod, 1, BreedingRodType.LITHIUM.ordinal()) });
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.rod_dual, 1, BreedingRodType.LITHIUM.ordinal()), new Object[] { ModItems.rod_dual_empty, LI.ingot(), LI.ingot() });
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.lithium, 2), new Object[] { new ItemStack(ModItems.rod_dual, 1, BreedingRodType.LITHIUM.ordinal()) });
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.rod_quad, 1, BreedingRodType.LITHIUM.ordinal()), new Object[] { ModItems.rod_quad_empty, LI.ingot(), LI.ingot(), LI.ingot(), LI.ingot() });
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.lithium, 4), new Object[] { new ItemStack(ModItems.rod_quad, 1, BreedingRodType.LITHIUM.ordinal()) });
-		
+
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.cell_tritium, 1), new Object[] { new ItemStack(ModItems.rod, 1, BreedingRodType.TRITIUM.ordinal()), ModItems.cell_empty });
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.cell_tritium, 2), new Object[] { new ItemStack(ModItems.rod_dual, 1, BreedingRodType.TRITIUM.ordinal()), ModItems.cell_empty, ModItems.cell_empty });
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.cell_tritium, 4), new Object[] { new ItemStack(ModItems.rod_quad, 1, BreedingRodType.TRITIUM.ordinal()), ModItems.cell_empty, ModItems.cell_empty, ModItems.cell_empty, ModItems.cell_empty });
@@ -107,159 +107,166 @@ public class RodRecipes {
 		addPellet(PB,								EnumWatzType.LEAD);
 		addPellet(B,								EnumWatzType.BORON);
 		addPellet(U238,								EnumWatzType.DU);
-		
+
 		// New Advanced Watz Pellets - Base Materials
 		addPellet(ModItems.billet_am241,				EnumWatzType.AM241);
 		addPellet(ModItems.billet_th232,				EnumWatzType.TH232);
 		addPellet(ModItems.billet_neptunium,			EnumWatzType.NP237);
 		addPellet(ModItems.ingot_osmiridium,			EnumWatzType.LEO);
-		
+
 		// Special Watz Pellets
 		// Test Object FOE (111) - Experimental pellet with unique behavior
-		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.TESTOBJFOE.ordinal()), new Object[] { 
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.TESTOBJFOE.ordinal()), new Object[] {
 			ModItems.ingot_schrabidium_fuel,
 			ModItems.particle_amat,
 			ModItems.egg_balefire_shard,
 			BE.nugget(),
 			ModItems.powder_nitan_mix
 		});
-		
-		// Non-Self-Igniting Advanced Pellets
-		addPellet(PU239,							EnumWatzType.PU239_NSI);  // Plutonium-239
-		addPellet(U235,							EnumWatzType.U235_NSI);   // Uranium-235
-		addPellet(U233,							EnumWatzType.U233_NSI);   // Uranium-233
-		addPellet(ModItems.ingot_am242,			EnumWatzType.AM243_NSI); // Americium-243 (using AM242 as base)
-		addPellet(ModItems.ingot_neptunium,		EnumWatzType.CM245_NSI); // Curium-245 (using neptunium as base)
-		
+
+		// TRIGA U-ZrH pellet: uranium + zirconium billet + hydrogen/tritium cell (models ZrH fuel, strong negative temp. coefficient)
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.TRIGA.ordinal()), new Object[] {
+			ModItems.ingot_uranium_fuel,
+			ModItems.billet_zirconium,
+			ModItems.cell_tritium
+		});
+
+ 		// Non-Self-Igniting Advanced Pellets
+ 		addPellet(PU239,							EnumWatzType.PU239_NSI);  // Plutonium-239
+ 		addPellet(U235,							EnumWatzType.U235_NSI);   // Uranium-235
+ 		addPellet(U233,							EnumWatzType.U233_NSI);   // Uranium-233
+ 		addPellet(ModItems.ingot_am242,			EnumWatzType.AM243_NSI); // Americium-243 (using AM242 as base)
+ 		addPellet(ModItems.ingot_neptunium,		EnumWatzType.CM245_NSI); // Curium-245 (using neptunium as base)
+
 		// Non-Self-Igniting Research Pellets
 		addPellet(ModItems.ingot_schrabidium,	EnumWatzType.BK247_NSI); // Berkelium-247 (using schrabidium)
 		addPellet(ModItems.ingot_solinium,		EnumWatzType.ES253_NSI); // Einsteinium-253 (using solinium)
 		addPellet(ModItems.ingot_gh336,			EnumWatzType.FM257_NSI); // Fermium-257 (using gh336)
-		
+
 		// Non-Self-Igniting Experimental Pellets
-		CraftingManager.addRecipeAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.TIBERIUM_NSI.ordinal()), new Object[] { 
-			" T ", "TGT", " T ", 
+		CraftingManager.addRecipeAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.TIBERIUM_NSI.ordinal()), new Object[] {
+			" T ", "TGT", " T ",
 			'T', ModItems.ingot_schrabidium_fuel,
 			'G', GRAPHITE.ingot()
 		});
-		
-		CraftingManager.addRecipeAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.EUPHEMIUM_NSI.ordinal()), new Object[] { 
-			" E ", "EGE", " E ", 
+
+		CraftingManager.addRecipeAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.EUPHEMIUM_NSI.ordinal()), new Object[] {
+			" E ", "EGE", " E ",
 			'E', ModItems.nugget_euphemium,
 			'G', GRAPHITE.ingot()
 		});
-		
-		CraftingManager.addRecipeAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.STARSTONE_NSI.ordinal()), new Object[] { 
-			" S ", "SGS", " S ", 
+
+		CraftingManager.addRecipeAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.STARSTONE_NSI.ordinal()), new Object[] {
+			" S ", "SGS", " S ",
 			'S', ModItems.ingot_starmetal,
 			'G', GRAPHITE.ingot()
 		});
-		
+
 		// Digamma - Extremely powerful with massive yield (2000D) and contamination
-		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.DIGAMMA.ordinal()), new Object[] { 
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.DIGAMMA.ordinal()), new Object[] {
 			new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.SCHRABIDIUM.ordinal()),
 			ModItems.particle_digamma,
 			ModItems.particle_digamma,
 			ModItems.ingot_starmetal,
 			ModItems.powder_power
 		});
-		
+
 		// XFE - Experimental Fusion pellet for early-mid game
-		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.XFE.ordinal()), new Object[] { 
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.XFE.ordinal()), new Object[] {
 			ModItems.ingot_advanced_alloy,
 			ModItems.powder_power,
 			BE.nugget(),
 			ModItems.powder_lithium,
 			ModItems.powder_boron
 		});
-		
+
 		// Gold Series - Progressive power levels
 		// GLDONE - Basic gold pellet (10D, sqrt function)
-		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.GLDONE.ordinal()), new Object[] { 
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.GLDONE.ordinal()), new Object[] {
 			ModItems.ingot_au198,
 			ModItems.ingot_au198,
 			BE.nugget(),
 			ModItems.powder_lithium,
 			ModItems.powder_boron
 		});
-		
+
 		// GLDTWO - Improved gold pellet (6.2D, linear function)
-		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.GLDTWO.ordinal()), new Object[] { 
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.GLDTWO.ordinal()), new Object[] {
 			new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.GLDONE.ordinal()),
 			ModItems.ingot_au198,
 			ModItems.powder_power,
 			BE.nugget(),
 			ModItems.powder_lithium
 		});
-		
+
 		// GLDSX - Enhanced gold pellet (3.1D, 3100 heat)
-		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.GLDSX.ordinal()), new Object[] { 
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.GLDSX.ordinal()), new Object[] {
 			new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.GLDTWO.ordinal()),
 			ModItems.ingot_au198,
 			ModItems.ingot_starmetal,
 			BE.nugget(),
 			ModItems.powder_lithium
 		});
-		
+
 		// GLDSY - Maximum gold pellet (10D, 5000 heat)
-		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.GLDSY.ordinal()), new Object[] { 
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.GLDSY.ordinal()), new Object[] {
 			new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.GLDSX.ordinal()),
 			ModItems.ingot_au198,
 			ModItems.ingot_starmetal,
 			BE.nugget(),
 			ModItems.powder_power
 		});
-		
+
 		// Antimatter - Ultimate absorption pellet (100D falling function)
-		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.ANTIMATTER.ordinal()), new Object[] { 
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.ANTIMATTER.ordinal()), new Object[] {
 			ModItems.particle_amat,
 			ModItems.particle_amat,
 			ModItems.ingot_starmetal,
 			BE.nugget(),
 			ModItems.powder_power
 		});
-		
+
 		// Advanced Pellet Special Recipes
-		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.CM244.ordinal()), new Object[] { 
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.CM244.ordinal()), new Object[] {
 			ModItems.billet_plutonium,
 			BE.nugget(),
 			BE.nugget(),
 			ModItems.powder_lithium,
 			ModItems.powder_boron
 		});
-		
-		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.CF252.ordinal()), new Object[] { 
+
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.CF252.ordinal()), new Object[] {
 			ModItems.billet_plutonium_fuel,
 			BE.nugget(),
 			BE.nugget(),
 			ModItems.powder_lithium,
 			ModItems.powder_boron
 		});
-		
-		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.MOX.ordinal()), new Object[] { 
+
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.MOX.ordinal()), new Object[] {
 			ModItems.billet_mox_fuel,
 			BE.nugget(),
 			BE.nugget(),
 			ModItems.powder_lithium,
 			ModItems.powder_boron
 		});
-		
-		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.HEO.ordinal()), new Object[] { 
+
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.HEO.ordinal()), new Object[] {
 			new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.LEO.ordinal()),
 			ModItems.ingot_osmiridium,
 			BE.nugget(),
 			ModItems.powder_lithium
 		});
-		
-		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.BER.ordinal()), new Object[] { 
+
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.BER.ordinal()), new Object[] {
 			ModItems.billet_plutonium,
 			BE.nugget(),
 			BE.nugget(),
 			ModItems.powder_lithium,
 			ModItems.powder_boron
 		});
-		
-		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.TPO.ordinal()), new Object[] { 
+
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.TPO.ordinal()), new Object[] {
 			new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.HEO.ordinal()),
 			ModItems.ingot_osmiridium,
 			BE.nugget(),
@@ -267,7 +274,7 @@ public class RodRecipes {
 			ModItems.powder_boron
 		});
 
-		
+
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.rbmk_fuel_empty, 1), new Object[] { "ZRZ", "Z Z", "ZRZ", 'Z', ZR.ingot(), 'R', ModItems.rod_quad_empty });
 		addRBMKRod(U, ModItems.rbmk_fuel_ueu);
 		addRBMKRod(ModItems.billet_uranium_fuel, ModItems.rbmk_fuel_meu);
@@ -311,7 +318,7 @@ public class RodRecipes {
 		addPellet(PB,								EnumWatzType.LEAD);
 		addPellet(B,								EnumWatzType.BORON);
 		addPellet(U238,								EnumWatzType.DU);
-		
+
 		//PWR fuel
 		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.MEU), new Object[] { "F", "I", "F", 'F', ModItems.billet_uranium_fuel, 'I', ModItems.plate_polymer });
 		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.HEU233), new Object[] { "F", "I", "F", 'F', U233.billet(), 'I', ModItems.plate_polymer });
@@ -362,7 +369,7 @@ public class RodRecipes {
 		CraftingManager.addShapelessAuto(new ItemStack(out), new Object[] { ModItems.rod_empty, mat.billet() });
 		CraftingManager.addShapelessAuto(new ItemStack(billet, 1), new Object[] { out });
 	}
-	
+
 	//Fill rods with two billets + unload
 	public static void addDualRodBilletUnload(Item billet, Item out) {
 		CraftingManager.addShapelessAuto(new ItemStack(out), new Object[] { ModItems.rod_dual_empty, billet, billet });
@@ -372,7 +379,7 @@ public class RodRecipes {
 		CraftingManager.addShapelessAuto(new ItemStack(out), new Object[] { ModItems.rod_dual_empty, mat.billet(), mat.billet() });
 		CraftingManager.addShapelessAuto(new ItemStack(billet, 2), new Object[] { out });
 	}
-	
+
 	//Fill rods with three billets + unload
 	public static void addQuadRodBilletUnload(Item billet, Item out) {
 		CraftingManager.addShapelessAuto(new ItemStack(out), new Object[] { ModItems.rod_quad_empty, billet, billet, billet, billet });
@@ -382,7 +389,7 @@ public class RodRecipes {
 		CraftingManager.addShapelessAuto(new ItemStack(out), new Object[] { ModItems.rod_quad_empty, mat.billet(), mat.billet(), mat.billet(), mat.billet() });
 		CraftingManager.addShapelessAuto(new ItemStack(billet, 4), new Object[] { out });
 	}
-	
+
 	/** Single, dual, quad rod loading + unloading **/
 	public static void addBreedingRod(Item billet, BreedingRodType type) {
 		addBreedingRodLoad(billet, type);
@@ -393,7 +400,7 @@ public class RodRecipes {
 		addBreedingRodLoad(mat, billet, type);
 		addBreedingRodUnload(mat, billet, type);
 	}
-	
+
 	/** Single, dual, quad rod loading **/
 	public static void addBreedingRodLoad(Item billet, BreedingRodType type) {
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.rod, 1, type.ordinal()), new Object[] { ModItems.rod_empty, billet});
@@ -418,7 +425,7 @@ public class RodRecipes {
 		CraftingManager.addShapelessAuto(new ItemStack(billet, 2), new Object[] { new ItemStack(ModItems.rod_dual, 1, type.ordinal()) });
 		CraftingManager.addShapelessAuto(new ItemStack(billet, 4), new Object[] { new ItemStack(ModItems.rod_quad, 1, type.ordinal()) });
 	}
-	
+
 	//Fill rods with 8 billets
 	public static void addRBMKRod(DictFrame mat, Item out) {
 		CraftingManager.addShapelessAuto(new ItemStack(out), new Object[] { ModItems.rbmk_fuel_empty, mat.billet(), mat.billet(), mat.billet(), mat.billet(), mat.billet(), mat.billet(), mat.billet(), mat.billet() });
@@ -426,17 +433,17 @@ public class RodRecipes {
 	public static void addRBMKRod(Item billet, Item out) {
 		CraftingManager.addShapelessAuto(new ItemStack(out), new Object[] { ModItems.rbmk_fuel_empty, billet, billet, billet, billet, billet, billet, billet, billet });
 	}
-	
+
 	/** Fill ZIRNOX rod with two billets **/
 	public static void addZIRNOXRod(Item billet, EnumZirnoxType num) {
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.rod_zirnox, 1, num.ordinal()), new Object[] { ModItems.rod_zirnox_empty, billet, billet });
 	}
-	
+
 	/** Fill ZIRNOX rod with two billets with OreDict **/
 	public static void addZIRNOXRod(DictFrame mat, EnumZirnoxType num) {
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.rod_zirnox, 1, num.ordinal()), new Object[] { ModItems.rod_zirnox_empty, mat.billet(), mat.billet() });
 	}
-	
+
 	/** Watz pellet crafting **/
 	public static void addPellet(DictFrame mat, EnumWatzType num) {
 		CraftingManager.addRecipeAuto(new ItemStack(ModItems.watz_pellet, 1, num.ordinal()), new Object[] { " I ", "IGI", " I ", 'I', mat.ingot(), 'G', GRAPHITE.ingot() });

@@ -19,27 +19,41 @@ public class ParticleRBMKMush extends EntityFX {
 	private TextureManager theRenderEngine;
 	private int age;
 	private int maxAge;
+	private float baseScale;
+	private float alpha;
 
 	public ParticleRBMKMush(TextureManager p_i1213_1_, World p_i1218_1_, double p_i1218_2_, double p_i1218_4_, double p_i1218_6_, float scale) {
 		super(p_i1218_1_, p_i1218_2_, p_i1218_4_, p_i1218_6_);
 		theRenderEngine = p_i1213_1_;
-		maxAge = 50;
+		maxAge = (int) Math.max(20, 50 * scale);
 
-		this.particleRed = this.particleGreen = this.particleBlue = 0;
-		
+		this.particleRed = this.particleGreen = this.particleBlue = 1.0F;
+		this.baseScale = scale;
 		this.particleScale = scale;
+		this.alpha = 1.0F;
+
+		// give a bit of outward velocity and upward lift for mushroom cloud
+		this.motionX = (worldObj.rand.nextDouble() - 0.5D) * 0.15D * scale;
+		this.motionY = 0.05D + worldObj.rand.nextDouble() * 0.05D * scale;
+		this.motionZ = (worldObj.rand.nextDouble() - 0.5D) * 0.15D * scale;
 	}
 
 	public ParticleRBMKMush(TextureManager p_i1213_1_, World p_i1218_1_, double p_i1218_2_, double p_i1218_4_, double p_i1218_6_, float red, float green, float blue, float scale) {
 		super(p_i1218_1_, p_i1218_2_, p_i1218_4_, p_i1218_6_);
 		theRenderEngine = p_i1213_1_;
-		maxAge = 50;
+		maxAge = (int) Math.max(20, 50 * scale);
 
 		this.particleRed = red;
 		this.particleGreen = green;
 		this.particleBlue = blue;
 
+		this.baseScale = scale;
 		this.particleScale = scale;
+		this.alpha = 1.0F;
+
+		this.motionX = (worldObj.rand.nextDouble() - 0.5D) * 0.15D * scale;
+		this.motionY = 0.05D + worldObj.rand.nextDouble() * 0.05D * scale;
+		this.motionZ = (worldObj.rand.nextDouble() - 0.5D) * 0.15D * scale;
 	}
 
 	public void onUpdate() {
@@ -51,7 +65,25 @@ public class ParticleRBMKMush extends EntityFX {
 
 		if(this.age == this.maxAge) {
 			this.setDead();
+			return;
 		}
+
+		// simple motion integration with slight drag and upward acceleration
+		this.motionX *= 0.98D;
+		this.motionY += 0.0025D; // gentle rise over time
+		this.motionY *= 0.995D;
+		this.motionZ *= 0.98D;
+
+		this.posX += this.motionX;
+		this.posY += this.motionY;
+		this.posZ += this.motionZ;
+
+		// grow over lifetime for a puffing effect
+		float life = this.age / (float) this.maxAge;
+		this.particleScale = this.baseScale * (1.0F + life * 2.0F);
+
+		// fade out smoothly
+		this.alpha = 1.0F - life;
 	}
 
 	public int getFXLayer() {
@@ -69,14 +101,14 @@ public class ParticleRBMKMush extends EntityFX {
 		// how many frames we're in
 		int prog = age * segs / maxAge;
 
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glColor4f(this.particleRed, this.particleGreen, this.particleBlue, this.alpha);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		GL11.glAlphaFunc(GL11.GL_GREATER, 0);
 		GL11.glDepthMask(false);
 		RenderHelper.disableStandardItemLighting();
-		
+
 		boolean fog = GL11.glIsEnabled(GL11.GL_FOG);
 		if(fog) GL11.glDisable(GL11.GL_FOG);
 
