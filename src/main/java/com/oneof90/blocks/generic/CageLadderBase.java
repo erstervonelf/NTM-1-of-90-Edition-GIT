@@ -39,4 +39,12 @@ public class CageLadderBase extends BlockContainer {
 	public boolean isLadder(IBlockAccess world, int x, int y, int z, EntityLivingBase entity) {
 		return true;
 	}
+
+	@Override
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+		return AxisAlignedBB.getBoundingBox(
+			x, y, z,
+			x + 0.25, y + 1, z + 1
+		);
+	}
 }

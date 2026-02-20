@@ -1,11 +1,11 @@
 package com.oneof90.main;
 
 import com.hbm.main.MainRegistry;
+import com.oneof90.blocks.InvBlock;
 import com.oneof90.blocks.generic.CageLadder;
 import com.oneof90.blocks.generic.CageLadderBase;
 import com.oneof90.blocks.generic.NTMSteelBeam;
 import com.oneof90.blocks.generic.NTMSteelBeamVertical;
-import com.oneof90.blocks.generic.Test;
 import com.oneof90.tileentity.TileEntityCageLadder;
 import com.oneof90.tileentity.TileEntityCageLadderBase;
 import com.oneof90.tileentity.TileEntityNTMSteelBeam;
@@ -28,7 +28,7 @@ public class ModBlocks1of90 {
 	public static Block ntm_steel_beam_vertical;
 	public static Block cage_ladder;
 	public static Block cage_ladder_base;
-	public static Block test1of90;
+	public static Block inv_block;
 
 	/**
 	 * Initialize all 1of90 blocks
@@ -61,14 +61,9 @@ public class ModBlocks1of90 {
 			.setHardness(2.0F)
 			.setResistance(10.0F)
 			.setBlockTextureName("hbm:cage_ladder_base");
-
-		// Test block (1of90)
-		test1of90 = new Test(Material.rock)
-			.setBlockName("test1of90")
-			.setCreativeTab(MainRegistry.blockTab)
-			.setHardness(2.0F)
-			.setResistance(10.0F)
-			.setBlockTextureName("hbm:test1of90");
+		inv_block = new InvBlock(Material.air)
+			.setBlockName("inv_block")
+			.setBlockTextureName("hbm:inv_block");
 
 		registerBlocks();
 		registerTileEntities();
@@ -82,7 +77,7 @@ public class ModBlocks1of90 {
 		GameRegistry.registerBlock(ntm_steel_beam_vertical, ntm_steel_beam_vertical.getUnlocalizedName());
 		GameRegistry.registerBlock(cage_ladder, cage_ladder.getUnlocalizedName());
 		GameRegistry.registerBlock(cage_ladder_base, cage_ladder_base.getUnlocalizedName());
-		GameRegistry.registerBlock(test1of90, test1of90.getUnlocalizedName());
+		GameRegistry.registerBlock(inv_block, inv_block.getUnlocalizedName());
 	}
 
 	/**
