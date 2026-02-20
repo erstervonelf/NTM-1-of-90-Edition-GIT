@@ -2,7 +2,7 @@ package com.hbm.render.item;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.main.ResourceManager;
+import com.oneof90.main.ResourceManager;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;

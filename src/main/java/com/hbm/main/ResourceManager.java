@@ -1590,11 +1590,6 @@ public class ResourceManager {
 
 	public static final IModelCustom deco_computer = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/blocks/puter.obj"));
 
-	//1of90
-	public static final IModelCustom ntm_steel_beam = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/blocks/ntm_steel_beam.obj"));
-	public static final IModelCustom cage_ladder = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/blocks/cage_ladder.obj"));
-	public static final IModelCustom cage_ladder_base = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/blocks/cage_ladder_base.obj"));
-
 	// Some RBMK elements are loaded twice due to VBOs not supporting tessellation
 	public static final IModelCustom rbmk_element = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/rbmk/rbmk_element.obj"));
 	public static final IModelCustom rbmk_element_vbo = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/rbmk/rbmk_element.obj")).asVBO();
