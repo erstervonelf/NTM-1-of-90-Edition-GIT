@@ -6,10 +6,8 @@ import com.oneof90.blocks.generic.CageLadder;
 import com.oneof90.blocks.generic.CageLadderBase;
 import com.oneof90.blocks.generic.NTMSteelBeam;
 import com.oneof90.blocks.generic.NTMSteelBeamVertical;
-import com.oneof90.tileentity.TileEntityCageLadder;
-import com.oneof90.tileentity.TileEntityCageLadderBase;
-import com.oneof90.tileentity.TileEntityNTMSteelBeam;
-import com.oneof90.tileentity.TileEntityNTMSteelBeamVertical;
+import com.oneof90.blocks.Machines.DieselGen;
+import com.oneof90.tileentity.*;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
@@ -29,6 +27,7 @@ public class ModBlocks1of90 {
 	public static Block cage_ladder;
 	public static Block cage_ladder_base;
 	public static Block inv_block;
+	public static Block dieselgen;
 
 	/**
 	 * Initialize all 1of90 blocks
@@ -61,6 +60,12 @@ public class ModBlocks1of90 {
 			.setHardness(2.0F)
 			.setResistance(10.0F)
 			.setBlockTextureName("hbm:cage_ladder_base");
+		dieselgen = new DieselGen(Material.iron)
+			.setBlockName("dieselgen")
+			.setCreativeTab(MainRegistry.blockTab)
+			.setHardness(2.0F)
+			.setResistance(10.0F)
+			.setBlockTextureName("hbm:dieselgen");
 		inv_block = new InvBlock(Material.air)
 			.setBlockName("inv_block")
 			.setBlockTextureName("hbm:inv_block");
@@ -78,6 +83,7 @@ public class ModBlocks1of90 {
 		GameRegistry.registerBlock(cage_ladder, cage_ladder.getUnlocalizedName());
 		GameRegistry.registerBlock(cage_ladder_base, cage_ladder_base.getUnlocalizedName());
 		GameRegistry.registerBlock(inv_block, inv_block.getUnlocalizedName());
+		GameRegistry.registerBlock(dieselgen, dieselgen.getUnlocalizedName());
 	}
 
 	/**
@@ -88,5 +94,6 @@ public class ModBlocks1of90 {
 		GameRegistry.registerTileEntity(TileEntityNTMSteelBeamVertical.class, "tileentity_ntmsteelbeamvertical");
 		GameRegistry.registerTileEntity(TileEntityCageLadder.class, "tileentity_cageladder");
 		GameRegistry.registerTileEntity(TileEntityCageLadderBase.class, "tileentity_cageladderbase");
+		GameRegistry.registerTileEntity(TileEntityDieselGen.class, "tileentity_dieselgen");
 	}
 }
