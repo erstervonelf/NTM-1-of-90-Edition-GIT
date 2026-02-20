@@ -1,12 +1,9 @@
-package com.oneof90.blocks.Machines;
+package com.oneof90.blocks.machine;
 
 import com.oneof90.tileentity.TileEntityDieselGen;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class DieselGen extends BlockContainer {

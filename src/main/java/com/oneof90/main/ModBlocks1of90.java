@@ -6,7 +6,7 @@ import com.oneof90.blocks.generic.CageLadder;
 import com.oneof90.blocks.generic.CageLadderBase;
 import com.oneof90.blocks.generic.NTMSteelBeam;
 import com.oneof90.blocks.generic.NTMSteelBeamVertical;
-import com.oneof90.blocks.Machines.DieselGen;
+import com.oneof90.blocks.machine.DieselGen;
 import com.oneof90.tileentity.*;
 
 import cpw.mods.fml.common.registry.GameRegistry;
