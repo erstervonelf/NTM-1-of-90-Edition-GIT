@@ -25,6 +25,7 @@ import com.hbm.inventory.recipes.*;
 import com.hbm.inventory.recipes.anvil.AnvilRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
+import com.hbm.util.ItemStackUtil;
 import com.hbm.util.Tuple.Pair;
 
 import api.hbm.recipe.IRecipeRegisterListener;
@@ -299,7 +300,7 @@ public abstract class SerializableRecipe {
 			writer.value(comp.nbt != null ? "nbt" : "item");							//NBT  identifier
 			writer.value(Item.itemRegistry.getNameForObject(comp.toStack().getItem()));	//item name
 			if(comp.stacksize != 1 || comp.meta > 0) writer.value(comp.stacksize);		//stack size
-			if(comp.meta > 0) writer.value(comp.meta);									//metadata
+			if(comp.meta > 0 || comp.nbt != null) writer.value(comp.meta);				//metadata
 			if(comp.nbt != null) writer.value(comp.nbt.toString());						//NBT
 		} else if(astack instanceof ComparableStack) {
 			ComparableStack comp = (ComparableStack) astack;
@@ -322,7 +323,11 @@ public abstract class SerializableRecipe {
 			Item item = (Item) Item.itemRegistry.getObject(array.get(0).getAsString());
 			int stacksize = array.size() > 1 ? array.get(1).getAsInt() : 1;
 			int meta = array.size() > 2 ? array.get(2).getAsInt() : 0;
-			if(item != null) return new ItemStack(item, stacksize, meta);
+			if(item != null) {
+				ItemStack stack = new ItemStack(item, stacksize, meta);
+				if(array.size() > 3) ItemStackUtil.addNBTFromString(stack, array.get(3).getAsString());
+				return stack;
+			}
 		} catch(Exception ex) { }
 		MainRegistry.logger.error("Error reading stack array " + array.toString() + " - defaulting to NOTHING item!");
 		return new ItemStack(ModItems.nothing);
@@ -333,8 +338,12 @@ public abstract class SerializableRecipe {
 			Item item = (Item) Item.itemRegistry.getObject(array.get(0).getAsString());
 			int stacksize = array.size() > 2 ? array.get(1).getAsInt() : 1;
 			int meta = array.size() > 3 ? array.get(2).getAsInt() : 0;
-			float chance = array.get(array.size() - 1).getAsFloat();
-			if(item != null) return new Pair(new ItemStack(item, stacksize, meta), chance);
+			if(item != null) {
+				ItemStack stack = new ItemStack(item, stacksize, meta);
+				if(array.size() > 4) ItemStackUtil.addNBTFromString(stack, array.get(3).getAsString());
+				float chance = array.get(array.size() - 1).getAsFloat();
+				return new Pair(stack, chance);
+			}
 		} catch(Exception ex) { }
 		MainRegistry.logger.error("Error reading stack array " + array.toString() + " - defaulting to NOTHING item!");
 		return new Pair(new ItemStack(ModItems.nothing), 1F);
@@ -363,9 +372,10 @@ public abstract class SerializableRecipe {
 	public static void writeItemStack(ItemStack stack, JsonWriter writer) throws IOException {
 		writer.beginArray();
 		writer.setIndent("");
-		writer.value(Item.itemRegistry.getNameForObject(stack.getItem()));						//item name
-		if(stack.stackSize != 1 || stack.getItemDamage() != 0) writer.value(stack.stackSize);	//stack size
-		if(stack.getItemDamage() != 0) writer.value(stack.getItemDamage());						//metadata
+		writer.value(Item.itemRegistry.getNameForObject(stack.getItem()));													//item name
+		if(stack.stackSize != 1 || stack.getItemDamage() != 0 || stack.hasTagCompound()) writer.value(stack.stackSize);		//stack size
+		if(stack.getItemDamage() != 0 || stack.hasTagCompound()) writer.value(stack.getItemDamage());						//metadata
+		if(stack.hasTagCompound()) writer.value(stack.stackTagCompound.toString());											//nbt
 		writer.endArray();
 		writer.setIndent("  ");
 	}
@@ -373,10 +383,11 @@ public abstract class SerializableRecipe {
 	public static void writeItemStackChance(Pair<ItemStack, Float> stack, JsonWriter writer) throws IOException {
 		writer.beginArray();
 		writer.setIndent("");
-		writer.value(Item.itemRegistry.getNameForObject(stack.getKey().getItem()));											//item name
-		if(stack.getKey().stackSize != 1 || stack.getKey().getItemDamage() != 0) writer.value(stack.getKey().stackSize);	//stack size
-		if(stack.getKey().getItemDamage() != 0) writer.value(stack.getKey().getItemDamage());								//metadata
-		writer.value(stack.value);																							//chance
+		writer.value(Item.itemRegistry.getNameForObject(stack.getKey().getItem()));																			//item name
+		if(stack.getKey().stackSize != 1 || stack.getKey().getItemDamage() != 0 || stack.getKey().hasTagCompound()) writer.value(stack.getKey().stackSize);	//stack size
+		if(stack.getKey().getItemDamage() != 0 || stack.getKey().hasTagCompound()) writer.value(stack.getKey().getItemDamage());							//metadata
+		if(stack.getKey().hasTagCompound()) writer.value(stack.getKey().stackTagCompound.toString());														//nbt
+		writer.value(stack.value);																															//chance
 		writer.endArray();
 		writer.setIndent("  ");
 	}
