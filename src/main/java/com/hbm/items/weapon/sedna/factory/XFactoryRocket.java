@@ -26,6 +26,7 @@ import com.hbm.items.weapon.sedna.mags.MagazineFullReload;
 import com.hbm.items.weapon.sedna.mags.MagazineSingleReload;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
+import com.hbm.main.NTMSounds;
 import com.hbm.render.anim.AnimationEnums.GunAnimation;
 import com.hbm.render.anim.BusAnimation;
 import com.hbm.render.anim.BusAnimationSequence;
@@ -50,6 +51,8 @@ public class XFactoryRocket {
 	public static BulletConfig[] rocket_rpzb;
 	public static BulletConfig[] rocket_qd;
 	public static BulletConfig[] rocket_ml;
+	public static BulletConfig[] rocket_ncrpa;
+	public static BulletConfig[] rocket_ncrpa_steer;
 
 	// FLYING
 	public static Consumer<Entity> LAMBDA_STANDARD_ACCELERATE = (entity) -> {
@@ -58,12 +61,24 @@ public class XFactoryRocket {
 	};
 	public static Consumer<Entity> LAMBDA_STEERING_ACCELERATE = (entity) -> {
 		EntityBulletBaseMK4 bullet = (EntityBulletBaseMK4) entity;
+		if(!(bullet.getThrower() instanceof EntityPlayer)) {
+			if(bullet.accel < 7) bullet.accel += 0.4D;
+			return;
+		}
+		EntityPlayer player = (EntityPlayer) bullet.getThrower();
+		steeringAccelerate(entity, player.getHeldItem() == null || !(player.getHeldItem().getItem() instanceof ItemGunBaseNT) || !ItemGunBaseNT.getIsAiming(player.getHeldItem()));
+	};
+	public static Consumer<Entity> LAMBDA_NCR_ACCELERATE = (entity) -> {
+		steeringAccelerate(entity, false);
+	};
+	public static void steeringAccelerate(Entity entity, boolean noSteer) {
+		EntityBulletBaseMK4 bullet = (EntityBulletBaseMK4) entity;
 		if(bullet.accel < 4) bullet.accel += 0.4D;
 		if(bullet.getThrower() == null || !(bullet.getThrower() instanceof EntityPlayer)) return;
 
 		EntityPlayer player = (EntityPlayer) bullet.getThrower();
 		if(Vec3.createVectorHelper(bullet.posX - player.posX, bullet.posY - player.posY, bullet.posZ - player.posZ).lengthVector() > 100) return;
-		if(player.getHeldItem() == null || !(player.getHeldItem().getItem() instanceof ItemGunBaseNT) || !ItemGunBaseNT.getIsAiming(player.getHeldItem())) return;
+		if(noSteer) return;
 
 		MovingObjectPosition mop = Library.rayTrace(player, 200, 1);
 		if(mop == null || mop.hitVec == null) return;
@@ -76,7 +91,7 @@ public class XFactoryRocket {
 		bullet.motionX = vec.xCoord * speed;
 		bullet.motionY = vec.yCoord * speed;
 		bullet.motionZ = vec.zCoord * speed;
-	};
+	}
 
 	// IMPACT
 	public static BiConsumer<EntityBulletBaseMK4, MovingObjectPosition> LAMBDA_STANDARD_EXPLODE = (bullet, mop) -> {
@@ -138,6 +153,7 @@ public class XFactoryRocket {
 
 	public static BulletConfig makeRPZB(BulletConfig original) { return original.clone(); }
 	public static BulletConfig makeQD(BulletConfig original) { return original.clone().setLife(400).setOnUpdate(LAMBDA_STEERING_ACCELERATE); }
+	public static BulletConfig makeNCR(BulletConfig original) { return original.clone().setLife(400).setOnUpdate(LAMBDA_NCR_ACCELERATE); }
 	public static BulletConfig makeML(BulletConfig original) { return original.clone(); }
 
 	//this is starting to get messy but we need to put this crap *somewhere* and fragmenting it into a billion classes with two methods each just isn't gonna help
@@ -156,17 +172,21 @@ public class XFactoryRocket {
 		rocket_rpzb = new BulletConfig[rocket_template.length];
 		rocket_qd = new BulletConfig[rocket_template.length];
 		rocket_ml = new BulletConfig[rocket_template.length];
+		rocket_ncrpa_steer = new BulletConfig[rocket_template.length];
+		rocket_ncrpa = new BulletConfig[rocket_template.length];
 
 		for(int i = 0; i < rocket_template.length; i++) {
 			rocket_rpzb[i] = makeRPZB(rocket_template[i]);
 			rocket_qd[i] = makeQD(rocket_template[i]);
 			rocket_ml[i] = makeML(rocket_template[i]);
+			rocket_ncrpa_steer[i] = makeNCR(rocket_template[i]);
+			rocket_ncrpa[i] = makeRPZB(rocket_template[i]);
 		}
 
 		ModItems.gun_panzerschreck = new ItemGunBaseNT(WeaponQuality.A_SIDE, new GunConfig()
 				.dura(300).draw(7).inspect(40).crosshair(Crosshair.L_CIRCUMFLEX)
 				.rec(new Receiver(0)
-						.dmg(25F).delay(5).reload(50).jam(40).sound("hbm:weapon.rpgShoot", 1.0F, 1.0F)
+						.dmg(25F).delay(5).reload(50).jam(40).sound(NTMSounds.GUN_ROCKET_FIRE, 1.0F, 1.0F)
 						.mag(new MagazineSingleReload(0, 1).addConfigs(rocket_rpzb))
 						.offset(1, -0.0625 * 1.5, -0.1875D)
 						.setupStandardFire().recoil(LAMBDA_RECOIL_ROCKET))
@@ -177,7 +197,7 @@ public class XFactoryRocket {
 		ModItems.gun_stinger = new ItemGunStinger(WeaponQuality.A_SIDE, new GunConfig()
 				.dura(300).draw(7).inspect(40).crosshair(Crosshair.L_BOX_OUTLINE)
 				.rec(new Receiver(0)
-						.dmg(35F).delay(5).reload(50).jam(40).sound("hbm:weapon.rpgShoot", 1.0F, 1.0F)
+						.dmg(35F).delay(5).reload(50).jam(40).sound(NTMSounds.GUN_ROCKET_FIRE, 1.0F, 1.0F)
 						.mag(new MagazineSingleReload(0, 1).addConfigs(rocket_rpzb))
 						.offset(1, -0.0625 * 1.5, -0.1875D)
 						.setupLockonFire().recoil(LAMBDA_RECOIL_ROCKET))
@@ -188,7 +208,7 @@ public class XFactoryRocket {
 		ModItems.gun_quadro = new ItemGunBaseNT(WeaponQuality.A_SIDE, new GunConfig()
 				.dura(400).draw(7).inspect(40).crosshair(Crosshair.L_CIRCUMFLEX).hideCrosshair(false)
 				.rec(new Receiver(0)
-						.dmg(40F).spreadHipfire(0F).delay(10).reload(55).jam(40).sound("hbm:weapon.rpgShoot", 1.0F, 1.0F)
+						.dmg(40F).spreadHipfire(0F).delay(10).reload(55).jam(40).sound(NTMSounds.GUN_ROCKET_FIRE, 1.0F, 1.0F)
 						.mag(new MagazineFullReload(0, 4).addConfigs(rocket_qd))
 						.offset(1, -0.0625 * 1.5, -0.1875D)
 						.setupStandardFire().recoil(LAMBDA_RECOIL_ROCKET))
@@ -199,7 +219,7 @@ public class XFactoryRocket {
 		ModItems.gun_missile_launcher = new ItemGunBaseNT(WeaponQuality.A_SIDE, new GunConfig()
 				.dura(500).draw(20).inspect(40).crosshair(Crosshair.L_CIRCUMFLEX).hideCrosshair(false)
 				.rec(new Receiver(0)
-						.dmg(50F).spreadHipfire(0F).delay(5).reload(48).jam(33).sound("hbm:weapon.rpgShoot", 1.0F, 1.0F)
+						.dmg(50F).spreadHipfire(0F).delay(5).reload(48).jam(33).sound(NTMSounds.GUN_ROCKET_FIRE, 1.0F, 1.0F)
 						.mag(new MagazineSingleReload(0, 1).addConfigs(rocket_ml))
 						.offset(1, -0.0625 * 1.5, -0.1875D)
 						.setupStandardFire().recoil(LAMBDA_RECOIL_ROCKET))

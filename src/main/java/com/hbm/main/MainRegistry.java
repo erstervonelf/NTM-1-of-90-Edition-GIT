@@ -260,7 +260,6 @@ public class MainRegistry {
 				polaroidID = rand.nextInt(18) + 1;
 		}
 
-		ShadyUtil.test();
 		loadConfig(PreEvent);
 		HbmPotion.init();
 
@@ -662,6 +661,10 @@ public class MainRegistry {
 		NeutronHandler neutronHandler = new NeutronHandler();
 		MinecraftForge.EVENT_BUS.register(neutronHandler);
 		FMLCommonHandler.instance().bus().register(neutronHandler);
+
+		BlockMigrations migrations = new BlockMigrations();
+		MinecraftForge.EVENT_BUS.register(migrations);
+		FMLCommonHandler.instance().bus().register(migrations);
 
 		if(event.getSide() == Side.CLIENT) {
 			HbmKeybinds.register();
@@ -1504,14 +1507,95 @@ public class MainRegistry {
 		ignoreMappings.add("hbm:item.ams_focus_booster");
 		ignoreMappings.add("hbm:item.ams_muzzle");
 		ignoreMappings.add("hbm:tile.machine_transformer_dnt");
-
+		ignoreMappings.add("hbm:tile.hadron_plating");
+		ignoreMappings.add("hbm:tile.hadron_plating_blue");
+		ignoreMappings.add("hbm:tile.hadron_plating_black");
+		ignoreMappings.add("hbm:tile.hadron_plating_yellow");
+		ignoreMappings.add("hbm:tile.hadron_plating_striped");
+		ignoreMappings.add("hbm:tile.hadron_plating_voltz");
+		ignoreMappings.add("hbm:tile.hadron_plating_glass");
+		ignoreMappings.add("hbm:tile.hadron_power");
+		ignoreMappings.add("hbm:tile.hadron_diode");
+		ignoreMappings.add("hbm:tile.hadron_analysis");
+		ignoreMappings.add("hbm:tile.hadron_analysis_glass");
+		ignoreMappings.add("hbm:tile.hadron_access");
+		ignoreMappings.add("hbm:tile.hadron_core");
+		ignoreMappings.add("hbm:tile.machine_assembler");
+		ignoreMappings.add("hbm:tile.machine_assemfac");
+		ignoreMappings.add("hbm:tile.machine_chemplant");
+		ignoreMappings.add("hbm:tile.machine_chemfac");
+		ignoreMappings.add("hbm:item.assembly_template");
+		ignoreMappings.add("hbm:item.chemistry_template");
+		ignoreMappings.add("hbm:item.chemistry_icon");
+		ignoreMappings.add("hbm:item.particle_aproton");
+		ignoreMappings.add("hbm:item.particle_aelectron");
+		ignoreMappings.add("hbm:tile.test_core");
+		ignoreMappings.add("hbm:tile.test_charge");
+		ignoreMappings.add("hbm:item.t45_helmet");
+		ignoreMappings.add("hbm:item.t45_plate");
+		ignoreMappings.add("hbm:item.t45_legs");
+		ignoreMappings.add("hbm:item.t45_boots");
+		ignoreMappings.add("hbm:item.tritium_deuterium_cake");
+		ignoreMappings.add("hbm:item.redcoil_capacitor");
+		ignoreMappings.add("hbm:item.euphemium_capacitor");
+		ignoreMappings.add("hbm:item.toolbox_legacy");
+		ignoreMappings.add("hbm:item.crucible_template");
+		ignoreMappings.add("hbm:tile.absorber");
+		ignoreMappings.add("hbm:tile.absorber_red");
+		ignoreMappings.add("hbm:tile.absorber_green");
+		ignoreMappings.add("hbm:tile.absorber_pink");
+		ignoreMappings.add("hbm:item.grenade_generic");
+		ignoreMappings.add("hbm:item.grenade_strong");
+		ignoreMappings.add("hbm:item.grenade_frag");
+		ignoreMappings.add("hbm:item.grenade_fire");
+		ignoreMappings.add("hbm:item.grenade_shrapnel");
+		ignoreMappings.add("hbm:item.grenade_cluster");
+		ignoreMappings.add("hbm:item.grenade_flare");
+		ignoreMappings.add("hbm:item.grenade_electric");
+		ignoreMappings.add("hbm:item.grenade_poison");
+		ignoreMappings.add("hbm:item.grenade_gas");
+		ignoreMappings.add("hbm:item.grenade_cloud");
+		ignoreMappings.add("hbm:item.grenade_pink_cloud");
+		ignoreMappings.add("hbm:item.grenade_smart");
+		ignoreMappings.add("hbm:item.grenade_mirv");
+		ignoreMappings.add("hbm:item.grenade_breach");
+		ignoreMappings.add("hbm:item.grenade_burst");
+		ignoreMappings.add("hbm:item.grenade_pulse");
+		ignoreMappings.add("hbm:item.grenade_plasma");
+		ignoreMappings.add("hbm:item.grenade_tau");
+		ignoreMappings.add("hbm:item.grenade_schrabidium");
+		ignoreMappings.add("hbm:item.grenade_nuke");
+		ignoreMappings.add("hbm:item.grenade_lemon");
+		ignoreMappings.add("hbm:item.grenade_gascan");
+		ignoreMappings.add("hbm:item.grenade_kyiv");
+		ignoreMappings.add("hbm:item.grenade_mk2");
+		ignoreMappings.add("hbm:item.grenade_aschrab");
+		ignoreMappings.add("hbm:item.grenade_nuclear");
+		ignoreMappings.add("hbm:item.grenade_zomg");
+		ignoreMappings.add("hbm:item.grenade_black_hole");
+		ignoreMappings.add("hbm:item.grenade_if_generic");
+		ignoreMappings.add("hbm:item.grenade_if_he");
+		ignoreMappings.add("hbm:item.grenade_if_bouncy");
+		ignoreMappings.add("hbm:item.grenade_if_sticky");
+		ignoreMappings.add("hbm:item.grenade_if_impact");
+		ignoreMappings.add("hbm:item.grenade_if_incendiary");
+		ignoreMappings.add("hbm:item.grenade_if_toxic");
+		ignoreMappings.add("hbm:item.grenade_if_concussion");
+		ignoreMappings.add("hbm:item.grenade_if_brimstone");
+		ignoreMappings.add("hbm:item.grenade_if_mystery");
+		ignoreMappings.add("hbm:item.grenade_if_spark");
+		ignoreMappings.add("hbm:item.grenade_if_hopwire");
+		ignoreMappings.add("hbm:item.grenade_if_null");
+		ignoreMappings.add("hbm:item.grenade_kit");
+		ignoreMappings.add("hbm:item.nuclear_waste_pearl");
+		ignoreMappings.add("hbm:tile.plasma");
+		
 		/// REMAP ///
 		remapItems.put("hbm:item.gadget_explosive8", ModItems.early_explosive_lenses);
 		remapItems.put("hbm:item.man_explosive8", ModItems.explosive_lenses);
 		remapItems.put("hbm:item.briquette_lignite", ModItems.briquette);
 		remapItems.put("hbm:item.antiknock", ModItems.fuel_additive);
 		remapItems.put("hbm:item.kit_toolbox_empty", ModItems.toolbox);
-		remapItems.put("hbm:item.kit_toolbox", ModItems.legacy_toolbox);
 
 		for(MissingMapping mapping : event.get()) {
 

@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.CompatHandler;
 import com.hbm.interfaces.IControlReceiver;
+import com.hbm.interfaces.NotableComments;
 import com.hbm.inventory.container.ContainerPWR;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.tank.FluidTank;
@@ -19,6 +20,7 @@ import com.hbm.inventory.gui.GUIPWR;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemPWRFuel.EnumPWRFuel;
 import com.hbm.main.MainRegistry;
+import com.hbm.main.NTMSounds;
 import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
@@ -45,6 +47,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+@NotableComments
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")})
 public class TileEntityPWRController extends TileEntityMachineBase implements IGUIProvider, IControlReceiver, SimpleComponent, IFluidStandardTransceiverMK2, CompatHandler.OCComponent, IRORValueProvider, IRORInteractive {
 
@@ -190,7 +193,7 @@ public class TileEntityPWRController extends TileEntityMachineBase implements IG
 						BlockPos portPos = pos.offset(dir);
 
 						if(tanks[1].getFill() > 0) this.tryProvide(tanks[1], worldObj, portPos.getX(), portPos.getY(), portPos.getZ(), dir);
-						if(worldObj.getTotalWorldTime() % 20 == 0) this.trySubscribe(tanks[0].getTankType(), worldObj, portPos.getX(), portPos.getY(), portPos.getZ(), dir);
+						this.trySubscribe(tanks[0].getTankType(), worldObj, portPos.getX(), portPos.getY(), portPos.getZ(), dir);
 					}
 				}
 
@@ -327,7 +330,7 @@ public class TileEntityPWRController extends TileEntityMachineBase implements IG
 
 	@Override
 	public AudioWrapper createAudioLoop() {
-		return MainRegistry.proxy.getLoopedSound("hbm:block.reactorLoop", xCoord, yCoord, zCoord, 1F, 10F, 1.0F, 20);
+		return MainRegistry.proxy.getLoopedSound(NTMSounds.REACTOR_GEIGER_LOOP, xCoord, yCoord, zCoord, 1F, 10F, 1.0F, 20);
 	}
 
 	@Override
@@ -619,21 +622,25 @@ public class TileEntityPWRController extends TileEntityMachineBase implements IG
 	@Override public FluidTank[] getAllTanks() { return tanks; }
 	@Override public FluidTank[] getSendingTanks() { return new FluidTank[] { tanks[1] }; }
 	@Override public FluidTank[] getReceivingTanks() { return new FluidTank[] { tanks[0] }; }
+	
+	public static final String[] ROR = new String[] { // not to be confused with RUR
+		PREFIX_VALUE + "rods",
+		PREFIX_VALUE + "coreheat",
+		PREFIX_VALUE + "hullheat",
+		PREFIX_VALUE + "flux",
+		PREFIX_VALUE + "depletion",
+		PREFIX_FUNCTION + "setrods" + NAME_SEPARATOR + "percent",
+		PREFIX_FUNCTION + "jettison",
+	};
 
 	@Override
 	public String[] getFunctionInfo() {
-		return new String[] {
-				PREFIX_VALUE + "coreheat",
-				PREFIX_VALUE + "hullheat",
-				PREFIX_VALUE + "flux",
-				PREFIX_VALUE + "depletion",
-				PREFIX_FUNCTION + "setrods" + NAME_SEPARATOR + "percent",
-				PREFIX_FUNCTION + "jettison",
-		};
+		return ROR;
 	}
 
 	@Override
 	public String provideRORValue(String name) {
+		if((PREFIX_VALUE + "rods").equals(name))		return "" + (int) (100 - this.rodLevel); // why the fuck did i invert this again?
 		if((PREFIX_VALUE + "coreheat").equals(name))	return "" + this.coreHeat;
 		if((PREFIX_VALUE + "hullheat").equals(name))	return "" + this.hullHeat;
 		if((PREFIX_VALUE + "flux").equals(name))		return "" + (int) this.flux;

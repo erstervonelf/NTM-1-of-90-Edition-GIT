@@ -12,6 +12,7 @@ import com.hbm.inventory.fluid.tank.FluidTank;
 import com.hbm.inventory.fluid.trait.FT_Coolable;
 import com.hbm.inventory.fluid.trait.FT_Coolable.CoolingType;
 import com.hbm.main.MainRegistry;
+import com.hbm.main.NTMSounds;
 import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.IConfigurableMachine;
 import com.hbm.util.fauxpointtwelve.DirPos;
@@ -23,8 +24,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityMachineIndustrialTurbine extends TileEntityTurbineBase implements IConfigurableMachine {
 
-	public static int inputTankSize = 512_000;
-	public static int outputTankSize = 2_048_000;
+	public static int inputTankSize = 750_000;
+	public static int outputTankSize = 3_000_000;
 	public static double efficiency = 1D;
 
 	public float rotor;
@@ -39,7 +40,7 @@ public class TileEntityMachineIndustrialTurbine extends TileEntityTurbineBase im
 
 	@Override
 	public String getConfigName() {
-		return "steamturbineIndustrial";
+		return "steamturbineIndustrialMk2";
 	}
 
 	@Override
@@ -116,7 +117,7 @@ public class TileEntityMachineIndustrialTurbine extends TileEntityTurbineBase im
 			float pitch = 0.5F + spinNum * 0.5F + this.audioDesync;
 
 			if(audio == null) {
-				audio = MainRegistry.proxy.getLoopedSound("hbm:block.largeTurbineRunning", xCoord + 0.5F, yCoord + 0.5F, zCoord + 0.5F, volume, 20F, pitch, 20);
+				audio = MainRegistry.proxy.getLoopedSound(NTMSounds.TURBINE_LARGE_LOOP, xCoord + 0.5F, yCoord + 0.5F, zCoord + 0.5F, volume, 20F, pitch, 20);
 				audio.startSound();
 			}
 			
@@ -140,7 +141,7 @@ public class TileEntityMachineIndustrialTurbine extends TileEntityTurbineBase im
 	
 	@Override
 	public boolean canConnect(FluidType type, ForgeDirection dir) {
-		if(!type.hasTrait(FT_Coolable.class)) return false;
+		if(!type.hasTrait(FT_Coolable.class) && type != Fluids.SPENTSTEAM) return false;
 		ForgeDirection myDir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
 		return dir != myDir && dir != myDir.getOpposite();
 	}
@@ -234,5 +235,20 @@ public class TileEntityMachineIndustrialTurbine extends TileEntityTurbineBase im
 		}
 		
 		return bb;
+	}
+
+	@Override
+	public String[] getFunctionInfo() {
+		return new String[] {
+				PREFIX_VALUE + "output",
+				PREFIX_VALUE + "flywheel"
+		};
+	}
+	
+	@Override
+	public String provideRORValue(String name) {
+		if((PREFIX_VALUE + "output").equals(name))		return "" + (int) this.powerBuffer;
+		if((PREFIX_VALUE + "flywheel").equals(name))	return "" + (int) (spin * 100);
+		return null;
 	}
 }

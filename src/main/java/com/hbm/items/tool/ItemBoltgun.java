@@ -6,6 +6,7 @@ import com.hbm.items.IAnimatedItem;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
+import com.hbm.main.NTMSounds;
 import com.hbm.packet.toclient.AuxParticlePacketNT;
 import com.hbm.render.anim.BusAnimation;
 import com.hbm.render.anim.BusAnimationSequence;
@@ -58,7 +59,7 @@ public class ItemBoltgun extends Item implements IAnimatedItem {
 				if(slot != null) {
 					if(slot.getItem() == bolt.getItem() && slot.getItemDamage() == bolt.getItemDamage()) {
 						if(!world.isRemote) {
-							world.playSoundAtEntity(entity, "hbm:item.boltgun", 1.0F, 1.0F);
+							world.playSoundAtEntity(entity, NTMSounds.RIVET_GUN, 1.0F, 1.0F);
 							player.inventory.decrStackSize(i, 1);
 							player.inventoryContainer.detectAndSendChanges();
 							EntityDamageUtil.attackEntityFromIgnoreIFrame(entity, DamageSource.causePlayerDamage(player).setDamageBypassesArmor(), 10F);
@@ -98,7 +99,7 @@ public class ItemBoltgun extends Item implements IAnimatedItem {
 
 			if(!world.isRemote) {
 
-				world.playSoundAtEntity(player, "hbm:item.boltgun", 1.0F, 1.0F);
+				world.playSoundAtEntity(player, NTMSounds.RIVET_GUN, 1.0F, 1.0F);
 				player.inventoryContainer.detectAndSendChanges();
 				ForgeDirection dir = ForgeDirection.getOrientation(side);
 				double off = 0.25;

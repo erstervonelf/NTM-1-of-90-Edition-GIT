@@ -353,6 +353,8 @@ public class RBMKNeutronHandler {
 					((TileEntityRBMKRod) originTE).receiveFlux(this);
 					return;
 				} else if(type == RBMKType.ABSORBER) {
+					((TileEntityRBMKAbsorber) nodeTE).heat += RBMKDials.getAbsorberHeatConversion(worldObj) * this.fluxQuantity;
+					
 					if(absorberEfficiency == 1)
 						return;
 

@@ -11,6 +11,7 @@ import com.hbm.inventory.fluid.trait.FT_Heatable.HeatingStep;
 import com.hbm.inventory.fluid.trait.FT_Heatable.HeatingType;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
+import com.hbm.main.NTMSounds;
 import com.hbm.saveddata.TomSaveData;
 import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.IBufPacketReceiver;
@@ -19,7 +20,7 @@ import com.hbm.tileentity.IFluidCopiable;
 import com.hbm.tileentity.TileEntityLoadedBase;
 import com.hbm.util.fauxpointtwelve.DirPos;
 
-import api.hbm.fluid.IFluidStandardTransceiver;
+import api.hbm.fluidmk2.IFluidStandardTransceiverMK2;
 import api.hbm.tile.IHeatSource;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -30,7 +31,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.EnumSkyBlock;
 
-public class TileEntityHeatBoilerIndustrial extends TileEntityLoadedBase implements IBufPacketReceiver, IFluidStandardTransceiver, IConfigurableMachine, IFluidCopiable {
+public class TileEntityHeatBoilerIndustrial extends TileEntityLoadedBase implements IBufPacketReceiver, IFluidStandardTransceiverMK2, IConfigurableMachine, IFluidCopiable {
 
 	public int heat;
 	public FluidTank[] tanks;
@@ -116,7 +117,7 @@ public class TileEntityHeatBoilerIndustrial extends TileEntityLoadedBase impleme
 
 	@Override
 	public AudioWrapper createAudioLoop() {
-		return MainRegistry.proxy.getLoopedSound("hbm:block.boiler", xCoord, yCoord, zCoord, 0.125F, 10F, 1.0F, 20);
+		return MainRegistry.proxy.getLoopedSound(NTMSounds.BOILER_LOOP, xCoord, yCoord, zCoord, 0.125F, 10F, 1.0F, 20);
 	}
 
 	@Override
@@ -201,18 +202,19 @@ public class TileEntityHeatBoilerIndustrial extends TileEntityLoadedBase impleme
 			if(trait.getEfficiency(HeatingType.BOILER) > 0) {
 
 				HeatingStep entry = trait.getFirstStep();
+				int heatReq = (int) Math.max(entry.heatReq / trait.getEfficiency(HeatingType.BOILER), 1);
 				int inputOps = this.tanks[0].getFill() / entry.amountReq;
 				int outputOps = (this.tanks[1].getMaxFill() - this.tanks[1].getFill()) / entry.amountProduced;
-				int heatOps = this.heat / entry.heatReq;
+				int heatOps = this.heat / heatReq;
 
 				int ops = Math.min(inputOps, Math.min(outputOps, heatOps));
 
 				this.tanks[0].setFill(this.tanks[0].getFill() - entry.amountReq * ops);
 				this.tanks[1].setFill(this.tanks[1].getFill() + entry.amountProduced * ops);
-				this.heat -= entry.heatReq * ops;
+				this.heat -= heatReq * ops;
 
 				if(ops > 0 && worldObj.rand.nextInt(400) == 0) {
-					worldObj.playSoundEffect(xCoord + 0.5, yCoord + 2, zCoord + 0.5, "hbm:block.boilerGroan", 0.5F, 1.0F);
+					worldObj.playSoundEffect(xCoord + 0.5, yCoord + 2, zCoord + 0.5, NTMSounds.BOILER_GROAN, 0.5F, 1.0F);
 				}
 
 				if(ops > 0) {
@@ -232,7 +234,7 @@ public class TileEntityHeatBoilerIndustrial extends TileEntityLoadedBase impleme
 	private void sendFluid() {
 
 		for(DirPos pos : getConPos()) {
-			this.sendFluid(tanks[1], worldObj, pos.getX(), pos.getY(), pos.getZ(), pos.getDir().getOpposite());
+			this.tryProvide(tanks[1], worldObj, pos.getX(), pos.getY(), pos.getZ(), pos.getDir());
 		}
 	}
 

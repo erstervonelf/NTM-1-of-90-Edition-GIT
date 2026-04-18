@@ -36,7 +36,7 @@ public abstract class ItemRenderWeaponBase implements IItemRenderer {
 	public static float interp;
 	public static HashMap<EntityLivingBase, Long> flashMap = new HashMap<EntityLivingBase, Long>();
 
-	public boolean isAkimbo() { return false; }
+	public boolean isAkimbo(EntityLivingBase entity) { return false; }
 	public boolean isLeftHanded() { return false; }
 
 	@Override

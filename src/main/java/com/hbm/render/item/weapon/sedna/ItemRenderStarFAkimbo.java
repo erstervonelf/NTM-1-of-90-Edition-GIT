@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 
 public class ItemRenderStarFAkimbo extends ItemRenderWeaponBase {
 	
-	@Override public boolean isAkimbo() { return true; }
+	@Override public boolean isAkimbo(EntityLivingBase entity) { return true; }
 
 	@Override
 	protected float getTurnMagnitude(ItemStack stack) { return ItemGunBaseNT.getIsAiming(stack) ? 2.5F : -0.25F; }

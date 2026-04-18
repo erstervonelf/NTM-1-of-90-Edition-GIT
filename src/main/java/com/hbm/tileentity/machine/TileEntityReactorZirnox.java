@@ -29,6 +29,7 @@ import com.hbm.util.EnumUtil;
 import com.hbm.util.fauxpointtwelve.DirPos;
 
 import api.hbm.fluid.IFluidStandardTransceiver;
+import api.hbm.redstoneoverradio.IRORValueProvider;
 import api.hbm.tile.IInfoProviderEC;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
@@ -49,10 +50,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")})
-public class TileEntityReactorZirnox extends TileEntityMachineBase implements IControlReceiver, IFluidStandardTransceiver, SimpleComponent, IGUIProvider, IInfoProviderEC, CompatHandler.OCComponent {
+public class TileEntityReactorZirnox extends TileEntityMachineBase implements IControlReceiver, IFluidStandardTransceiver, SimpleComponent, IGUIProvider, IInfoProviderEC, CompatHandler.OCComponent, IRORValueProvider {
 
 	public int heat;
 	public static final int maxHeat = 100000;
+	public boolean redstonePowered = false;
 	public int pressure;
 	public static final int maxPressure = 100000;
 	public boolean isOn = false;
@@ -85,6 +87,12 @@ public class TileEntityReactorZirnox extends TileEntityMachineBase implements IC
 		carbonDioxide = new FluidTank(Fluids.CARBONDIOXIDE, 16000);
 		water = new FluidTank(Fluids.WATER, 32000);
 	}
+	public void setRedstonePowered(boolean powered) {
+		if (!powered && this.redstonePowered) {
+			isOn = false;
+		}
+		this.redstonePowered = powered;
+	}
 
 	@Override
 	public String getName() {
@@ -115,6 +123,7 @@ public class TileEntityReactorZirnox extends TileEntityMachineBase implements IC
 		steam.readFromNBT(nbt, "steam");
 		carbonDioxide.readFromNBT(nbt, "carbondioxide");
 		water.readFromNBT(nbt, "water");
+		redstonePowered = nbt.getBoolean("redstonePowered");
 	}
 
 	@Override
@@ -126,6 +135,7 @@ public class TileEntityReactorZirnox extends TileEntityMachineBase implements IC
 		steam.writeToNBT(nbt, "steam");
 		carbonDioxide.writeToNBT(nbt, "carbondioxide");
 		water.writeToNBT(nbt, "water");
+		nbt.setBoolean("redstonePowered", redstonePowered);
 
 	}
 
@@ -176,7 +186,9 @@ public class TileEntityReactorZirnox extends TileEntityMachineBase implements IC
 	public void updateEntity() {
 
 		if(!worldObj.isRemote) {
-
+			if (redstonePowered) {
+				isOn = true;
+			}
 			this.output = 0;
 
 			if(worldObj.getTotalWorldTime() % 20 == 0) {
@@ -228,6 +240,7 @@ public class TileEntityReactorZirnox extends TileEntityMachineBase implements IC
 		buf.writeInt(this.heat);
 		buf.writeInt(this.pressure);
 		buf.writeBoolean(this.isOn);
+		buf.writeBoolean(this.redstonePowered);
 		steam.serialize(buf);
 		carbonDioxide.serialize(buf);
 		water.serialize(buf);
@@ -239,6 +252,7 @@ public class TileEntityReactorZirnox extends TileEntityMachineBase implements IC
 		this.heat = buf.readInt();
 		this.pressure = buf.readInt();
 		this.isOn = buf.readBoolean();
+		this.redstonePowered = buf.readBoolean();
 		steam.deserialize(buf);
 		carbonDioxide.deserialize(buf);
 		water.deserialize(buf);
@@ -429,7 +443,7 @@ public class TileEntityReactorZirnox extends TileEntityMachineBase implements IC
 
 	@Override
 	public void receiveControl(NBTTagCompound data) {
-		if(data.hasKey("control")) {
+		if(data.hasKey("control") && !redstonePowered) {
 			this.isOn = !this.isOn;
 		}
 
@@ -583,5 +597,20 @@ public class TileEntityReactorZirnox extends TileEntityMachineBase implements IC
 		data.setLong(CompatEnergyControl.L_PRESSURE_BAR, Math.round(pressure * 1.0E-5D * 30.0D));
 		data.setDouble(CompatEnergyControl.D_CONSUMPTION_MB, output);
 		data.setDouble(CompatEnergyControl.D_OUTPUT_MB, output);
+	}
+
+	@Override
+	public String[] getFunctionInfo() {
+		return new String[] {
+				PREFIX_VALUE + "heat",
+				PREFIX_VALUE + "pressure"
+		};
+	}
+	
+	@Override
+	public String provideRORValue(String name) {
+		if((PREFIX_VALUE + "heat").equals(name))		return	"" + (int) Math.round(heat * 1.0E-5D * 780.0D + 20.0D);
+		if((PREFIX_VALUE + "pressure").equals(name))	return	"" + (int) Math.round(pressure * 1.0E-5D * 30.0D);
+		return null;
 	}
 }

@@ -191,52 +191,6 @@ public class ItemRenderLibrary {
 		        GL11.glShadeModel(GL11.GL_FLAT);
 			}});
 
-		renderers.put(Item.getItemFromBlock(ModBlocks.machine_assembler), new ItemRenderBase() {
-			public void renderInventory() {
-				GL11.glScaled(3.5, 3.5, 3.5);
-			}
-			public void renderCommon() {
-		        bindTexture(ResourceManager.assembler_body_tex); ResourceManager.assembler_body.renderAll();
-		        bindTexture(ResourceManager.assembler_slider_tex); ResourceManager.assembler_slider.renderAll();
-		        bindTexture(ResourceManager.assembler_arm_tex); ResourceManager.assembler_arm.renderAll();
-		        bindTexture(ResourceManager.assembler_cog_tex);
-		        GL11.glPushMatrix();
-				GL11.glTranslated(-0.6, 0.75, 1.0625);
-				ResourceManager.assembler_cog.renderAll();
-		        GL11.glPopMatrix();
-		        GL11.glPushMatrix();
-				GL11.glTranslated(0.6, 0.75, 1.0625);
-				ResourceManager.assembler_cog.renderAll();
-		        GL11.glPopMatrix();
-		        GL11.glPushMatrix();
-				GL11.glTranslated(-0.6, 0.75, -1.0625);
-				ResourceManager.assembler_cog.renderAll();
-		        GL11.glPopMatrix();
-		        GL11.glPushMatrix();
-				GL11.glTranslated(0.6, 0.75, -1.0625);
-				ResourceManager.assembler_cog.renderAll();
-		        GL11.glPopMatrix();
-			}});
-
-		renderers.put(Item.getItemFromBlock(ModBlocks.machine_chemplant), new ItemRenderBase() {
-			public void renderInventory() {
-				GL11.glTranslated(0, -2, 0);
-				GL11.glScaled(3.5, 3.5, 3.5);
-			}
-			public void renderCommon() {
-		        GL11.glDisable(GL11.GL_CULL_FACE);
-		        GL11.glShadeModel(GL11.GL_SMOOTH);
-		        bindTexture(ResourceManager.chemplant_body_tex); ResourceManager.chemplant_body.renderAll();
-		        GL11.glShadeModel(GL11.GL_FLAT);
-		        bindTexture(ResourceManager.chemplant_piston_tex); ResourceManager.chemplant_piston.renderAll();
-		        bindTexture(ResourceManager.chemplant_spinner_tex);
-				GL11.glTranslated(-0.625, 0, 0.625);
-		        ResourceManager.chemplant_spinner.renderAll();
-				GL11.glTranslated(1.25, 0, 0);
-		        ResourceManager.chemplant_spinner.renderAll();
-		        GL11.glEnable(GL11.GL_CULL_FACE);
-			}});
-
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_well), new ItemRenderBase() {
 			public void renderInventory() {
 				GL11.glTranslated(0, -4, 0);
@@ -1025,17 +979,6 @@ public class ItemRenderLibrary {
 			GL11.glShadeModel(GL11.GL_FLAT);
 		}});
 
-		renderers.put(Item.getItemFromBlock(ModBlocks.machine_chemfac), new ItemRenderBase( ) {
-		public void renderInventory() {
-			GL11.glScaled(2.5, 2.5, 2.5);
-		}
-		public void renderCommon() {
-			GL11.glScaled(0.5, 0.5, 0.5);
-			GL11.glShadeModel(GL11.GL_SMOOTH);
-			bindTexture(ResourceManager.chemfac_tex); ResourceManager.chemfac.renderPart("Main");
-			GL11.glShadeModel(GL11.GL_FLAT);
-		}});
-
 		renderers.put(Item.getItemFromBlock(ModBlocks.red_pylon_large), new ItemRenderBase( ) {
 		public void renderInventory() {
 			GL11.glTranslated(0, -5, 0);
@@ -1072,23 +1015,6 @@ public class ItemRenderLibrary {
 			ResourceManager.charger.renderPart("Slide");
 			GL11.glShadeModel(GL11.GL_FLAT);
 		}});
-
-		renderers.put(Item.getItemFromBlock(ModBlocks.machine_assemfac), new ItemRenderBase( ) {
-			public void renderInventory() {
-				GL11.glScaled(2.5, 2.5, 2.5);
-			}
-			public void renderCommon() {
-				GL11.glScaled(0.5, 0.5, 0.5);
-				GL11.glShadeModel(GL11.GL_SMOOTH);
-				bindTexture(ResourceManager.assemfac_tex); ResourceManager.assemfac.renderPart("Factory");
-				for(int i = 1; i < 7; i++) {
-					ResourceManager.assemfac.renderPart("Pivot" + i);
-					ResourceManager.assemfac.renderPart("Arm" + i);
-					ResourceManager.assemfac.renderPart("Piston" + i);
-					ResourceManager.assemfac.renderPart("Striker" + i);
-				}
-				GL11.glShadeModel(GL11.GL_FLAT);
-			}});
 
 		renderers.put(Item.getItemFromBlock(ModBlocks.furnace_iron), new ItemRenderBase( ) {
 			public void renderInventory() {

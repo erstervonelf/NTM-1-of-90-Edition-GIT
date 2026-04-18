@@ -15,6 +15,8 @@ public class NEIRegistry {
 
 		if(!handlers.isEmpty()) return handlers;
 
+		handlers.add(new ToolingHandler());
+		handlers.add(new ConstructionHandler());
 		handlers.add(new AnnihilatorHandler());
 		handlers.add(new AnvilRecipeHandler());
 		handlers.add(new SmithingRecipeHandler());
@@ -42,13 +44,13 @@ public class NEIRegistry {
 		handlers.add(new CrystallizerRecipeHandler());
 		handlers.add(new BookRecipeHandler());
 		handlers.add(new FusionRecipeHandler());
+		handlers.add(new PlasmaForgeRecipeHandler());
 		handlers.add(new SILEXRecipeHandler());
 		handlers.add(new FuelPoolHandler());
 		handlers.add(new RBMKRodDisassemblyHandler());
 		handlers.add(new RBMKWasteDecayHandler());
-		handlers.add(new ToolingHandler());
-		handlers.add(new ConstructionHandler());
 		handlers.add(new SatelliteHandler());
+		handlers.add(new GrenadeRecipeHandler());
 
 		//universal boyes
 		handlers.add(new ZirnoxRecipeHandler());

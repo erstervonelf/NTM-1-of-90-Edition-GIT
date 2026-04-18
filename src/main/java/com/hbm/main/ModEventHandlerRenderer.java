@@ -88,7 +88,7 @@ public class ModEventHandlerRenderer {
 			IItemRenderer customRenderer = MinecraftForgeClient.getItemRenderer(held, IItemRenderer.ItemRenderType.EQUIPPED);
 			if(customRenderer instanceof ItemRenderWeaponBase) {
 				ItemRenderWeaponBase renderGun = (ItemRenderWeaponBase) customRenderer;
-				if(renderGun.isAkimbo()) {
+				if(renderGun.isAkimbo(player)) {
 					partsHidden[EnumPlayerPart.LEFT_ARM.ordinal()] = true;
 					ModelRenderer box = getBoxFromType(renderer, EnumPlayerPart.LEFT_ARM);
 					box.isHidden = true;
@@ -139,7 +139,7 @@ public class ModEventHandlerRenderer {
 			IItemRenderer customRenderer = MinecraftForgeClient.getItemRenderer(held, IItemRenderer.ItemRenderType.EQUIPPED);
 			if(customRenderer instanceof ItemRenderWeaponBase) {
 				ItemRenderWeaponBase renderGun = (ItemRenderWeaponBase) customRenderer;
-				if(renderGun.isAkimbo()) akimbo = true;
+				if(renderGun.isAkimbo(player)) akimbo = true;
 				if(renderGun.isLeftHanded()) leftHand = true;
 			}
 		}
@@ -233,7 +233,7 @@ public class ModEventHandlerRenderer {
 			IItemRenderer customRenderer = MinecraftForgeClient.getItemRenderer(held, IItemRenderer.ItemRenderType.EQUIPPED);
 			if(customRenderer instanceof ItemRenderWeaponBase) {
 				ItemRenderWeaponBase renderGun = (ItemRenderWeaponBase) customRenderer;
-				if(renderGun.isAkimbo()) {
+				if(renderGun.isAkimbo(player)) {
 					ModelBiped biped = renderer.modelBipedMain;
 					renderer.modelArmorChestplate.bipedLeftArm.rotateAngleY = renderer.modelArmor.bipedLeftArm.rotateAngleY = biped.bipedLeftArm.rotateAngleY = 0.1F + biped.bipedHead.rotateAngleY;
 				}
@@ -258,7 +258,7 @@ public class ModEventHandlerRenderer {
 
 		if(customRenderer instanceof ItemRenderWeaponBase) {
 			ItemRenderWeaponBase renderWeapon = (ItemRenderWeaponBase) customRenderer;
-			if(renderWeapon.isAkimbo() || renderWeapon.isLeftHanded()) {
+			if(renderWeapon.isAkimbo(player) || renderWeapon.isLeftHanded()) {
 				GL11.glPushMatrix();
 				renderer.modelBipedMain.bipedLeftArm.isHidden = false;
 				renderer.modelBipedMain.bipedLeftArm.postRender(0.0625F);

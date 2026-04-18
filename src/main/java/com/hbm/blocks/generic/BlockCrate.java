@@ -5,6 +5,12 @@ import java.util.List;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.interfaces.Spaghetti;
+import com.hbm.items.weapon.grenade.ItemGrenadeUniversal;
+import com.hbm.items.weapon.grenade.ItemGrenadeExtra.EnumGrenadeExtra;
+import com.hbm.items.weapon.grenade.ItemGrenadeFilling.EnumGrenadeFilling;
+import com.hbm.items.weapon.grenade.ItemGrenadeFuze.EnumGrenadeFuze;
+import com.hbm.items.weapon.grenade.ItemGrenadeShell.EnumGrenadeShell;
 import com.hbm.items.weapon.sedna.factory.GunFactory.EnumAmmoSecret;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemBatteryPack.EnumBatteryPack;
@@ -17,6 +23,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+@Spaghetti("this is implemented in the most braindead fucking way imaginable") // TODO: rework this unholy abomination using configurable loot pools
 public class BlockCrate extends BlockFalling {
 
 	List<ItemStack> crateList;
@@ -53,10 +60,9 @@ public class BlockCrate extends BlockFalling {
 		// Supply Crate
 		BlockCrate.addToListWithWeight(crateList, ModItems.syringe_metal_stimpak, 10);
 		BlockCrate.addToListWithWeight(crateList, ModItems.syringe_antidote, 5);
-		BlockCrate.addToListWithWeight(crateList, ModItems.grenade_generic, 8);
-		BlockCrate.addToListWithWeight(crateList, ModItems.grenade_strong, 6);
-		BlockCrate.addToListWithWeight(crateList, ModItems.grenade_mk2, 4);
-		BlockCrate.addToListWithWeight(crateList, ModItems.grenade_flare, 4);
+		BlockCrate.addToListWithWeight(crateList, ItemGrenadeUniversal.make(EnumGrenadeShell.FRAG, EnumGrenadeFilling.HE, EnumGrenadeFuze.S3, EnumGrenadeExtra.FRAG_SLEEVE), 8);
+		BlockCrate.addToListWithWeight(crateList, ItemGrenadeUniversal.make(EnumGrenadeShell.STICK, EnumGrenadeFilling.HE, EnumGrenadeFuze.IMPACT), 6);
+		BlockCrate.addToListWithWeight(crateList, ItemGrenadeUniversal.make(EnumGrenadeShell.FRAG, EnumGrenadeFilling.INC, EnumGrenadeFuze.S7), 4);
 		BlockCrate.addToListWithWeight(crateList, ModItems.ammo_container, 2);
 
 		// Weapon Crate
@@ -70,22 +76,16 @@ public class BlockCrate extends BlockFalling {
 
 		// Lead Crate
 		BlockCrate.addToListWithWeight(leadList, ModItems.ingot_uranium, 10);
-		// BlockCrate.addToListWithWeight(leadList, ModItems.ingot_u235, 5);
 		BlockCrate.addToListWithWeight(leadList, ModItems.ingot_u238, 8);
 		BlockCrate.addToListWithWeight(leadList, ModItems.ingot_plutonium, 7);
-		// BlockCrate.addToListWithWeight(leadList, ModItems.ingot_pu238, 5);
-		// BlockCrate.addToListWithWeight(leadList, ModItems.ingot_pu239, 4);
 		BlockCrate.addToListWithWeight(leadList, ModItems.ingot_pu240, 6);
 		BlockCrate.addToListWithWeight(leadList, ModItems.ingot_neptunium, 7);
 		BlockCrate.addToListWithWeight(leadList, ModItems.ingot_uranium_fuel, 8);
 		BlockCrate.addToListWithWeight(leadList, ModItems.ingot_plutonium_fuel, 7);
 		BlockCrate.addToListWithWeight(leadList, ModItems.ingot_mox_fuel, 6);
 		BlockCrate.addToListWithWeight(leadList, ModItems.nugget_uranium, 10);
-		// BlockCrate.addToListWithWeight(leadList, ModItems.nugget_u235, 5);
 		BlockCrate.addToListWithWeight(leadList, ModItems.nugget_u238, 8);
 		BlockCrate.addToListWithWeight(leadList, ModItems.nugget_plutonium, 7);
-		// BlockCrate.addToListWithWeight(leadList, ModItems.nugget_pu238, 5);
-		// BlockCrate.addToListWithWeight(leadList, ModItems.nugget_pu239, 4);
 		BlockCrate.addToListWithWeight(leadList, ModItems.nugget_pu240, 6);
 		BlockCrate.addToListWithWeight(leadList, ModItems.nugget_neptunium, 7);
 		BlockCrate.addToListWithWeight(leadList, ModItems.nugget_uranium_fuel, 8);
@@ -97,7 +97,6 @@ public class BlockCrate extends BlockFalling {
 		BlockCrate.addToListWithWeight(leadList, ModItems.cell_puf6, 8);
 		BlockCrate.addToListWithWeight(leadList, ModItems.pellet_rtg, 6);
 		BlockCrate.addToListWithWeight(leadList, ModItems.pellet_rtg_weak, 7);
-		BlockCrate.addToListWithWeight(leadList, ModItems.tritium_deuterium_cake, 5);
 		BlockCrate.addToListWithWeight(leadList, ModItems.powder_yellowcake, 10);
 
 		// Metal Crate
@@ -110,14 +109,13 @@ public class BlockCrate extends BlockFalling {
 		BlockCrate.addToListWithWeight(metalList, Item.getItemFromBlock(ModBlocks.red_pylon), 9);
 		BlockCrate.addToListWithWeight(metalList, new ItemStack(ModItems.battery_pack, 1, EnumBatteryPack.BATTERY_LEAD.ordinal()), 10);
 		BlockCrate.addToListWithWeight(metalList, Item.getItemFromBlock(ModBlocks.machine_electric_furnace_off), 8);
-		BlockCrate.addToListWithWeight(metalList, Item.getItemFromBlock(ModBlocks.machine_assembler), 10);
+		BlockCrate.addToListWithWeight(metalList, Item.getItemFromBlock(ModBlocks.machine_assembly_machine), 10);
 		BlockCrate.addToListWithWeight(metalList, Item.getItemFromBlock(ModBlocks.machine_fluidtank), 7);
 		BlockCrate.addToListWithWeight(metalList, ModItems.centrifuge_element, 6);
 		BlockCrate.addToListWithWeight(metalList, ModItems.motor, 8);
 		BlockCrate.addToListWithWeight(metalList, ModItems.coil_tungsten, 7);
 		BlockCrate.addToListWithWeight(metalList, ModItems.photo_panel, 3);
 		BlockCrate.addToListWithWeight(metalList, ModItems.coil_copper, 10);
-		BlockCrate.addToListWithWeight(metalList, ModItems.tank_steel, 9);
 		BlockCrate.addToListWithWeight(metalList, ModItems.blade_titanium, 3);
 		BlockCrate.addToListWithWeight(metalList, ModItems.piston_selenium, 6);
 

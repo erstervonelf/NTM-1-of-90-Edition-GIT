@@ -9,10 +9,16 @@ import java.util.List;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.extprop.HbmLivingProps;
+import com.hbm.handler.HazmatRegistry;
 import com.hbm.handler.radiation.ChunkRadiationManager;
+import com.hbm.interfaces.NotableComments;
 import com.hbm.items.ModItems;
+import com.hbm.lib.RefStrings;
+import com.hbm.util.ArmorRegistry.HazardClass;
+import com.hbm.util.ArmorUtil;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ShadyUtil;
+import com.hbm.util.Tuple.Pair;
 import com.hbm.util.i18n.I18nUtil;
 
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -39,10 +45,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.model.IModelCustom;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 //Armor with full set bonus
+@NotableComments
 public class ArmorFSB extends ItemArmor implements IArmorDisableModel {
 
 	private String texture = "";
@@ -59,10 +67,12 @@ public class ArmorFSB extends ItemArmor implements IArmorDisableModel {
 	public String step;
 	public String jump;
 	public String fall;
+	public double radResist = 0;
 
 	public ArmorFSB(ArmorMaterial material, int slot, String texture) {
 		super(material, 0, slot);
 		this.texture = texture;
+		this.setTextureName(RefStrings.MODID + ":armor");
 	}
 
 	public ArmorFSB addEffect(PotionEffect effect) {
@@ -130,6 +140,22 @@ public class ArmorFSB extends ItemArmor implements IArmorDisableModel {
 		return this;
 	}
 
+	public ArmorFSB setHazardClass(HazardClass... classes) {
+		ArmorUtil.external.add(new Pair(this, classes));
+		return this;
+	}
+
+	public ArmorFSB setRadResist(double fullSet) {
+		this.radResist = fullSet;
+		if(fullSet > 0) {
+			double mult = armorType == 0 ? HazmatRegistry.helmet :
+				armorType == 1 ? HazmatRegistry.chest : 
+				armorType == 2 ? HazmatRegistry.legs : HazmatRegistry.boots;
+			HazmatRegistry.external.add(new Pair(this, fullSet * mult));
+		}
+		return this;
+	}
+
 	public ArmorFSB cloneStats(ArmorFSB original) {
 
 		//lists aren't being modified after instantiation, so there's no need to dereference
@@ -145,6 +171,7 @@ public class ArmorFSB extends ItemArmor implements IArmorDisableModel {
 		this.step = original.step;
 		this.jump = original.jump;
 		this.fall = original.fall;
+		this.setRadResist(original.radResist);
 		//overlay doesn't need to be copied because it's helmet exclusive
 		return this;
 	}
@@ -283,7 +310,7 @@ public class ArmorFSB extends ItemArmor implements IArmorDisableModel {
 			Block block = player.worldObj.getBlock(px, py, pz);
 
 			if(block.getMaterial() != Material.air && player.getEntityData().getFloat("hfr_nextStepDistance") <= distanceWalkedOnStepModified.getFloat(player))
-				player.playSound(sound, 1.0F, 1.0F);
+				player.playSound(sound, 0.25F, 1.0F);
 
 			player.getEntityData().setFloat("hfr_nextStepDistance", nextStepDistance.getFloat(player));
 
@@ -298,7 +325,7 @@ public class ArmorFSB extends ItemArmor implements IArmorDisableModel {
 			ArmorFSB chestplate = (ArmorFSB) player.inventory.armorInventory[2].getItem();
 
 			if(chestplate.jump != null)
-				player.playSound(chestplate.jump, 1.0F, 1.0F);
+				player.playSound(chestplate.jump, 0.5F, 1.0F);
 		}
 	}
 
@@ -309,9 +336,6 @@ public class ArmorFSB extends ItemArmor implements IArmorDisableModel {
 			ArmorFSB chestplate = (ArmorFSB) player.inventory.armorInventory[2].getItem();
 
 			if(chestplate.hardLanding && player.fallDistance > 10) {
-
-				// player.playSound(Block.soundTypeAnvil.func_150496_b(), 2.0F,
-				// 0.5F);
 
 				List<Entity> entities = player.worldObj.getEntitiesWithinAABBExcludingEntity(player, player.boundingBox.expand(3, 0, 3));
 
@@ -332,11 +356,10 @@ public class ArmorFSB extends ItemArmor implements IArmorDisableModel {
 						e.attackEntityFrom(DamageSource.causePlayerDamage(player).setDamageBypassesArmor(), (float) (intensity * 10));
 					}
 				}
-				// return;
 			}
 
 			if(chestplate.fall != null)
-				player.playSound(chestplate.fall, 1.0F, 1.0F);
+				player.playSound(chestplate.fall, 0.5F, 1.0F);
 		}
 	}
 
@@ -428,4 +451,63 @@ public class ArmorFSB extends ItemArmor implements IArmorDisableModel {
 
 	public void handleAttack(LivingAttackEvent event) { }
 	public void handleHurt(LivingHurtEvent event) { }
+	
+	public static void setupRenderInv() {
+		GL11.glTranslated(0, -1.5, 0);
+		GL11.glScaled(3.25, 3.25, 3.25);
+		GL11.glRotated(180, 1, 0, 0);
+		GL11.glRotated(-135, 0, 1, 0);
+		GL11.glRotated(-20, 1, 0, 0);
+	}
+	
+	public static void setupRenderNonInv() {
+		GL11.glRotated(180, 1, 0, 0);
+		GL11.glScaled(0.75, 0.75, 0.75);
+		GL11.glRotated(-90, 0, 1, 0);
+	}
+	
+	// if it's the same vomit every time, why not make a method that does it for us?
+	public static void renderStandard(IModelCustom model, int armorType,
+			ResourceLocation helmetTex, ResourceLocation chestTex, ResourceLocation armTex, ResourceLocation legTex,
+			String helmet, String chest, String leftArm, String rightArm, String leftLeg, String rightLeg, String leftBoot, String rightBoot) {
+		
+		GL11.glShadeModel(GL11.GL_SMOOTH);
+		if(armorType == 0) {
+			GL11.glScaled(0.3125, 0.3125, 0.3125);
+			GL11.glTranslated(0, 1, 0);
+			Minecraft.getMinecraft().getTextureManager().bindTexture(helmetTex);
+			for(String s : helmet.split(",")) model.renderPart(s);
+		}
+		if(armorType == 1) {
+			GL11.glScaled(0.225, 0.225, 0.225);
+			GL11.glTranslated(0, -10, 0);
+			Minecraft.getMinecraft().getTextureManager().bindTexture(chestTex);
+			for(String s : chest.split(",")) model.renderPart(s);
+			GL11.glTranslated(0, 0, 0.1);
+			Minecraft.getMinecraft().getTextureManager().bindTexture(armTex);
+			for(String s : leftArm.split(",")) model.renderPart(s);
+			for(String s : rightArm.split(",")) model.renderPart(s);
+		}
+		if(armorType == 2) {
+			GL11.glScaled(0.25, 0.25, 0.25);
+			GL11.glTranslated(0, -20, 0);
+			Minecraft.getMinecraft().getTextureManager().bindTexture(legTex);
+			GL11.glDisable(GL11.GL_CULL_FACE);
+			for(String s : leftLeg.split(",")) model.renderPart(s);
+			GL11.glTranslated(0, 0, 0.1);
+			for(String s : rightLeg.split(",")) model.renderPart(s);
+			GL11.glEnable(GL11.GL_CULL_FACE);
+		}
+		if(armorType == 3) {
+			GL11.glScaled(0.25, 0.25, 0.25);
+			GL11.glTranslated(0, -22, 0);
+			Minecraft.getMinecraft().getTextureManager().bindTexture(legTex);
+			GL11.glDisable(GL11.GL_CULL_FACE);
+			for(String s : leftBoot.split(",")) model.renderPart(s);
+			GL11.glTranslated(0, 0, 0.1);
+			for(String s : rightBoot.split(",")) model.renderPart(s);
+			GL11.glEnable(GL11.GL_CULL_FACE);
+		}
+		GL11.glShadeModel(GL11.GL_FLAT);
+	}
 }

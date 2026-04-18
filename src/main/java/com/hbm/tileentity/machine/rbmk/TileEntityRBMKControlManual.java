@@ -2,10 +2,13 @@ package com.hbm.tileentity.machine.rbmk;
 
 import com.hbm.blocks.machine.rbmk.RBMKControl;
 import com.hbm.interfaces.IControlReceiver;
+import com.hbm.interfaces.ICopiable;
 import com.hbm.inventory.container.ContainerRBMKControl;
 import com.hbm.inventory.gui.GUIRBMKControl;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
+import com.hbm.util.EnumUtil;
 
+import api.hbm.redstoneoverradio.IRORInteractive;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -20,7 +23,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-public class TileEntityRBMKControlManual extends TileEntityRBMKControl implements IControlReceiver {
+public class TileEntityRBMKControlManual extends TileEntityRBMKControl implements IControlReceiver, ICopiable, IRORInteractive {
 
 	public RBMKColor color;
 	public double startingLevel;
@@ -115,16 +118,17 @@ public class TileEntityRBMKControlManual extends TileEntityRBMKControl implement
 		buf.writeDouble(this.startingLevel);
 		if(this.color != null)
 			buf.writeInt(this.color.ordinal());
+		else
+			buf.writeInt(-1);
 	}
 
 	@Override
 	public void deserialize(ByteBuf buf) {
 		super.deserialize(buf);
 		this.startingLevel = buf.readDouble();
-		if(buf.isReadable(1)) {
-			int color = buf.readInt();
-			this.color = RBMKColor.values()[MathHelper.clamp_int(color, 0, RBMKColor.values().length)];
-		}
+		int color = buf.readInt();
+		this.color = RBMKColor.values()[MathHelper.clamp_int(color, 0, RBMKColor.values().length)];
+		if(color == -1) this.color = null;
 	}
 	
 	public static enum RBMKColor {
@@ -177,5 +181,46 @@ public class TileEntityRBMKControlManual extends TileEntityRBMKControl implement
 	@SideOnly(Side.CLIENT)
 	public Object provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		return new GUIRBMKControl(player.inventory, this);
-	}	
+	}
+
+	@Override
+	public NBTTagCompound getSettings(World world, int x, int y, int z) {
+		NBTTagCompound data = new NBTTagCompound();
+		data.setInteger("color", color.ordinal());
+		return data;
+	}
+
+	@Override
+	public void pasteSettings(NBTTagCompound nbt, int index, World world, EntityPlayer player, int x, int y, int z) {
+		if(nbt.hasKey("color")) color = EnumUtil.grabEnumSafely(RBMKColor.class, nbt.getInteger("color"));
+	}
+
+	@Override
+	public String[] getFunctionInfo() {
+		return new String[] {
+				PREFIX_VALUE + "extraction",
+				PREFIX_FUNCTION + "setrods" + NAME_SEPARATOR + "percent",
+				PREFIX_FUNCTION + "extendrods" + NAME_SEPARATOR + "percent"
+		};
+	}
+
+	@Override
+	public String runRORFunction(String name, String[] params) {
+
+		if((PREFIX_FUNCTION + "setrods").equals(name) && params.length > 0) {
+			int percent = IRORInteractive.parseInt(params[0], 0, 100);
+			this.setTarget(percent / 100D);
+			this.markDirty();
+			return null;
+		}
+
+		if((PREFIX_FUNCTION + "extendrods").equals(name) && params.length > 0) {
+			int percent = IRORInteractive.parseInt(params[0], -100, 100);
+			this.setTarget(MathHelper.clamp_double(this.targetLevel + percent / 100D, 0D, 1D));
+			this.markDirty();
+			return null;
+		}
+
+		return null;
+	}
 }

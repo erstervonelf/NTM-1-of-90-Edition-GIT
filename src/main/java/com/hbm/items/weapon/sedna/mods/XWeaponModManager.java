@@ -268,6 +268,7 @@ public class XWeaponModManager {
 	/** Saves the state on receiver 0 so that if the mag changes through upgrading, the state may potentially be restored, if compatible */
 	private static void saveMagState(ItemStack stack, int cfg) {
 		IMagazine mag = ((ItemGunBaseNT) stack.getItem()).getConfig(stack, cfg).getReceivers(stack)[0].getMagazine(stack);
+		if(mag == null) return;
 		prevMagType = mag.getType(stack, null);
 		prevMagCount = mag.getAmount(stack, null);
 	}
@@ -285,6 +286,7 @@ public class XWeaponModManager {
 		changedMagState = false;
 
 		IMagazine mag = ((ItemGunBaseNT) stack.getItem()).getConfig(stack, cfg).getReceivers(stack)[0].getMagazine(stack);
+		if(mag == null) return;
 		if(mag.getType(stack, null) == prevMagType) {
 			mag.setAmount(stack, MathHelper.clamp_int(prevMagCount, 0, mag.getCapacity(stack)));
 		} else {

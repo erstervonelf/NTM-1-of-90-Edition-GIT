@@ -13,6 +13,7 @@ import com.hbm.util.fauxpointtwelve.DirPos;
 
 import api.hbm.energymk2.IEnergyProviderMK2;
 import api.hbm.fluidmk2.IFluidStandardTransceiverMK2;
+import api.hbm.redstoneoverradio.IRORValueProvider;
 import api.hbm.tile.IInfoProviderEC;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -20,7 +21,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.nbt.NBTTagCompound;
 
-public abstract class TileEntityTurbineBase extends TileEntityLoadedBase implements IEnergyProviderMK2, IFluidStandardTransceiverMK2, IInfoProviderEC, IBufPacketReceiver, IFluidCopiable {
+public abstract class TileEntityTurbineBase extends TileEntityLoadedBase implements IEnergyProviderMK2, IFluidStandardTransceiverMK2, IInfoProviderEC, IBufPacketReceiver, IFluidCopiable, IRORValueProvider {
 
 	protected ByteBuf buf;
 	public long powerBuffer;
@@ -59,7 +60,7 @@ public abstract class TileEntityTurbineBase extends TileEntityLoadedBase impleme
 				double eff = trait.getEfficiency(CoolingType.TURBINE) * getEfficiency();
 				if(eff > 0) {
 					tanks[1].setTankType(trait.coolsTo);
-					int inputOps = (int) Math.ceil((tanks[0].getFill() * consumptionPercent()) / trait.amountReq);
+					int inputOps = (int) (Math.min(Math.ceil(tanks[0].getFill() * consumptionPercent()), tanks[0].getFill()) / trait.amountReq);
 					int outputOps = (tanks[1].getMaxFill() - tanks[1].getFill()) / trait.amountProduced;
 					int ops = Math.min(inputOps, outputOps);
 					if(ops > 0) {

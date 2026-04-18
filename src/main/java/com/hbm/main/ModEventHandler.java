@@ -37,7 +37,6 @@ import com.hbm.handler.threading.PacketThreading;
 import com.hbm.items.IEquipReceiver;
 import com.hbm.items.ModItems;
 import com.hbm.items.armor.*;
-import com.hbm.items.tool.ItemGuideBook.BookType;
 import com.hbm.items.weapon.sedna.BulletConfig;
 import com.hbm.items.weapon.sedna.ItemGunBaseNT;
 import com.hbm.items.weapon.sedna.factory.XFactory12ga;
@@ -166,7 +165,7 @@ public class ModEventHandler {
 				PacketDispatcher.wrapper.sendTo(new PlayerInformPacket("Press O to Duck!", MainRegistry.proxy.ID_DUCK, 30_000), (EntityPlayerMP) event.player);
 
 
-			if(GeneralConfig.enableGuideBook) {
+			/*if(GeneralConfig.enableGuideBook) {
 				HbmPlayerProps props = HbmPlayerProps.getData(event.player);
 
 				if(!props.hasReceivedBook) {
@@ -174,7 +173,7 @@ public class ModEventHandler {
 					event.player.inventoryContainer.detectAndSendChanges();
 					props.hasReceivedBook = true;
 				}
-			}
+			}*/
 
 			if(GeneralConfig.enableServerRecipeSync && FMLCommonHandler.instance().getSide() == Side.SERVER && event.player instanceof EntityPlayerMP) {
 				File recDir = new File(MainRegistry.configDir.getAbsolutePath() + File.separatorChar + "hbmRecipes");
@@ -320,31 +319,39 @@ public class ModEventHandler {
 			}
 		}
 
-		if(!event.entityLiving.worldObj.isRemote) {
+		if(!event.entityLiving.worldObj.isRemote && event.entityLiving.worldObj.getGameRules().getGameRuleBooleanValue("doMobLoot")) {
 
 			if(event.source instanceof EntityDamageSource && ((EntityDamageSource)event.source).getEntity() instanceof EntityPlayer
 					 && !(((EntityDamageSource)event.source).getEntity() instanceof FakePlayer)) {
 
-				if(event.entityLiving instanceof EntitySpider && event.entityLiving.getRNG().nextInt(500) == 0) {
+				Random rng = event.entityLiving.getRNG();
+				
+				if(event.entityLiving instanceof EntitySpider && rng.nextInt(500) == 0) {
 					event.entityLiving.dropItem(ModItems.spider_milk, 1);
 				}
 
-				if(event.entityLiving instanceof EntityCaveSpider && event.entityLiving.getRNG().nextInt(100) == 0) {
+				if(event.entityLiving instanceof EntityCaveSpider && rng.nextInt(100) == 0) {
 					event.entityLiving.dropItem(ModItems.serum, 1);
 				}
 
-				if(event.entityLiving instanceof EntityAnimal && event.entityLiving.getRNG().nextInt(500) == 0) {
+				if(event.entityLiving instanceof EntityAnimal && rng.nextInt(500) == 0) {
 					event.entityLiving.dropItem(ModItems.bandaid, 1);
 				}
 
 				if(event.entityLiving instanceof IMob) {
-					if(event.entityLiving.getRNG().nextInt(1000) == 0) event.entityLiving.dropItem(ModItems.heart_piece, 1);
-					if(event.entityLiving.getRNG().nextInt(250) == 0) event.entityLiving.dropItem(ModItems.key_red_cracked, 1);
-					if(event.entityLiving.getRNG().nextInt(250) == 0) event.entityLiving.dropItem(ModItems.launch_code_piece, 1);
+					if(rng.nextInt(1000) == 0) event.entityLiving.dropItem(ModItems.heart_piece, 1);
+					if(rng.nextInt(250) == 0) event.entityLiving.dropItem(ModItems.key_red_cracked, 1);
+					if(rng.nextInt(250) == 0) event.entityLiving.dropItem(ModItems.launch_code_piece, 1);
 				}
 
-				if(event.entityLiving instanceof EntityCyberCrab && event.entityLiving.getRNG().nextInt(500) == 0) {
+				if(event.entityLiving instanceof EntityCyberCrab && rng.nextInt(500) == 0) {
 					event.entityLiving.dropItem(ModItems.wd40, 1);
+				}
+				
+				if(event.entityLiving instanceof EntityZombie) {
+					if(rng.nextInt(200) == 0) event.entityLiving.dropItem(ModItems.ingot_copper, 1);
+					if(rng.nextInt(200) == 0) event.entityLiving.dropItem(ModItems.ingot_aluminium, 1);
+					if(rng.nextInt(200) == 0) event.entityLiving.dropItem(ModItems.ingot_titanium, 1);
 				}
 			}
 		}
@@ -1179,21 +1186,6 @@ public class ModEventHandler {
 				event.getChunk().func_150807_a(x, y, z, Blocks.air, 0);
 			}
 		}*/
-
-		for(int x = 0; x < 16; x++) for(int y = 0; y < 255; y++) for(int z = 0; z < 16; z++) {
-			if(event.getChunk().getBlock(x, y, z) == ModBlocks.absorber) {
-				event.getChunk().func_150807_a(x, y, z, ModBlocks.rad_absorber, 0);
-			}
-			else if(event.getChunk().getBlock(x, y, z) == ModBlocks.absorber_red) {
-				event.getChunk().func_150807_a(x, y, z, ModBlocks.rad_absorber, 1);
-			}
-			else if(event.getChunk().getBlock(x, y, z) == ModBlocks.absorber_green) {
-				event.getChunk().func_150807_a(x, y, z, ModBlocks.rad_absorber, 2);
-			}
-			else if(event.getChunk().getBlock(x, y, z) == ModBlocks.absorber_pink) {
-				event.getChunk().func_150807_a(x, y, z, ModBlocks.rad_absorber, 3);
-			}
-		}
 	}
 
 	@SubscribeEvent

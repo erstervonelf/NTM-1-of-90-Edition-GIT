@@ -28,6 +28,7 @@ import java.util.function.BiConsumer;
 import com.hbm.entity.projectile.EntityBulletBaseMK4;
 import com.hbm.entity.projectile.EntityBulletBeamBase;
 import com.hbm.items.ModItems;
+import com.hbm.items.weapon.grenade.ItemGrenadeFilling;
 import com.hbm.items.weapon.sedna.BulletConfig;
 import com.hbm.items.weapon.sedna.ItemGunBaseNT;
 import com.hbm.main.ResourceManager;
@@ -103,9 +104,9 @@ public class GunFactoryClient {
 		MinecraftForgeClient.registerItemRenderer(ModItems.gun_double_barrel,				new ItemRenderDoubleBarrel(ResourceManager.double_barrel_tex));
 		MinecraftForgeClient.registerItemRenderer(ModItems.gun_double_barrel_sacred_dragon,	new ItemRenderDoubleBarrel(ResourceManager.double_barrel_sacred_dragon_tex));
 		MinecraftForgeClient.registerItemRenderer(ModItems.gun_charge_thrower,				new ItemRenderChargeThrower());
-		// ItemRenderDrill and ItemRenderNI4NI are not yet implemented
-		// MinecraftForgeClient.registerItemRenderer(ModItems.gun_drill, new ItemRenderDrill());
-		// MinecraftForgeClient.registerItemRenderer(ModItems.gun_n_i_4_n_i, new ItemRenderNI4NI());
+		MinecraftForgeClient.registerItemRenderer(ModItems.gun_drill,						new ItemRenderDrill());
+		MinecraftForgeClient.registerItemRenderer(ModItems.gun_n_i_4_n_i,					new ItemRenderNI4NI());
+		MinecraftForgeClient.registerItemRenderer(ModItems.gun_pa_melee,					new ItemRenderPAMelee());
 		
 		//PROJECTILES
 		ammo_debug.setRenderer(LegoClient.RENDER_STANDARD_BULLET);
@@ -211,6 +212,8 @@ public class GunFactoryClient {
 		setRendererBulk(LegoClient.RENDER_RPZB, rocket_rpzb);
 		setRendererBulk(LegoClient.RENDER_QD, rocket_qd);
 		setRendererBulk(LegoClient.RENDER_ML, rocket_ml);
+		setRendererBulk(LegoClient.RENDER_RPZB, rocket_ncrpa_steer);
+		setRendererBulk(LegoClient.RENDER_RPZB, rocket_ncrpa);
 		
 		setRendererBulk(LegoClient.RENDER_NUKE, nuke_standard, nuke_demo, nuke_high);
 		nuke_tots.setRenderer(LegoClient.RENDER_GRENADE);
@@ -240,6 +243,9 @@ public class GunFactoryClient {
 		ct_mortar_charge.setRenderer(LegoClient.RENDER_CT_MORTAR_CHARGE);
 		
 		setRendererBulk(LegoClient.RENDER_GRENADE, shell_normal, shell_explosive, shell_ap, shell_du, shell_w9); //TODO: change the sabots
+
+		setRendererBulk(LegoClient.RENDER_FRAGMENTATION, ItemGrenadeFilling.fragmentation, ItemGrenadeFilling.pellets, ItemGrenadeFilling.pellets_heavy);
+		ItemGrenadeFilling.laser.setRendererBeam(LegoClient.RENDER_LASER_RED);
 		
 		//HUDS
 		((ItemGunBaseNT) ModItems.gun_debug)						.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO, LegoClient.HUD_COMPONENT_AMMO_SECOND);

@@ -989,10 +989,6 @@ public class ModEventHandlerClient {
 				MainRegistry.logger.info("Taking a screenshot of ALL items, if you did this by mistake: fucking lmao get rekt nerd");
 
 				List<Item> ignoredItems = Arrays.asList(
-					ModItems.assembly_template,
-					ModItems.crucible_template,
-					ModItems.chemistry_template,
-					ModItems.chemistry_icon,
 					ModItems.achievement_icon,
 					Items.spawn_egg,
 					Item.getItemFromBlock(Blocks.mob_spawner)
@@ -1468,7 +1464,7 @@ public class ModEventHandlerClient {
 			}
 
 			double d = Math.random();
-			if(d < 0.1) main.splashText = "Redditors aren't people!";
+			if(d < 0.025) main.splashText = "Redditors aren't people!";
 		}
 	}
 }
