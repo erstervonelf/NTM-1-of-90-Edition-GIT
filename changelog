@@ -1,24 +1,19 @@
-## Added
-* Redstone-over-radio lever
-  * Big breaker switches
-  * Up to two per module, side by side
-  * Can send different RoR values based on the lever's position
-
 ## Changed
-* All RoR panels now have basic item descriptions informing about the screwdriver requirement for configuration
-* EMP grenades now deal 5x damage against anything with powered armor
-  * Decreased base damage to compensate
-* EMP grenades now destroy machines in a small radius like an EMP missile would
-* Grenades are no longer affected by nuclear blasts or other grenade explosions
-* Players no longer receive the starting guide book on first spawn since it's now very outdated
-* All RoR panels now have QMAW integration
-* Legacy plasma heater and plasma heater hatches which are still found in crashed space ships can now be dismantled into steel pipes, copper pipes and analog circuits
-* Removed legacy plasma block
-* RoR panels now have OpenComputers integration, allowing otherwise fixed parameters like gauge thresholds, channels, and button commands to be adjusted on the fly
-* Solinium blasts now use the new higher poly sphere model and frame interpolation, making the expansion smoother
+* Updated russian and chinese localization
+* Oil bubbles are now 3x more common in deserts (biomes with a temperature value of 2 and rainfall of 0)
+* Oil bubbles now have a 50% chance of spawning a surface indicator (similar to bedrock oil but still distinct)
+* Oil deposits will never drop themselves, they always produce tar when mined
+* Any tar type can now be turned into bitumen in a mixer (with worse efficiency compared to a liquefactor)
+* RoR levers and indicator lights now have OpenComputers integration
+* Alexandrite dropped with fortune is now capped at 2 gems per ore
+* Added a config option for decreasing the soot requirement for skeleton guns (or rather, for the calculation, this number is added to the actual soot value, simulating a higher value)
+* Radioisotope cells and PT cells are now deprecated, and can no longer be crafted
+  * Existing cells will continue to work for now
+* If two pipe anchors are connected, one having a type set and one still being "none", instead of erroring, the "none" pipe will assume the other one's type
+* Self-chargers in battery sockets now produce unreliable power output which constantly fluctuates
+* Self-chargers in battery sockets now cause static discharges in regular intervals
 
 ## Fixed
-* Fixed the grenade crafting handler not checking if a shell/filling combination is even valid, allowing weird combos
-* Fixed dispenser fired laser grenades crashing the game
-* Fixed schrabidium grenade being obscenely powerful for no reason
-* Fixed annihilator recipe config throwing an error about the recipe list being empty, even though the recipe list should indeed be empty on purpose
+* Fixed uncrafting of the nickel RTG pellet not respecting item metadata
+* Tile entities that use fluids should now force the chunk they are in to be written to disk when unloaded
+  * This should fix the issue where systems that constantly move fluids around may not properly save to disk

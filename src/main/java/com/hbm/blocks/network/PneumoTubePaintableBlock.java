@@ -1,7 +1,11 @@
 package com.hbm.blocks.network;
 
 import api.hbm.block.IToolable;
+
+import java.util.List;
+
 import com.hbm.blocks.IBlockMultiPass;
+import com.hbm.blocks.ITooltipProvider;
 import com.hbm.interfaces.ICopiable;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
@@ -30,7 +34,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class PneumoTubePaintableBlock extends BlockContainer implements IToolable, IBlockMultiPass {
+public class PneumoTubePaintableBlock extends BlockContainer implements IToolable, IBlockMultiPass, ITooltipProvider {
 
 	@SideOnly(Side.CLIENT) public IIcon overlay;
 	@SideOnly(Side.CLIENT) public IIcon overlayIn;
@@ -58,7 +62,7 @@ public class PneumoTubePaintableBlock extends BlockContainer implements IToolabl
 		if(tile instanceof TileEntityPneumoTubePaintable) {
 			TileEntityPneumoTubePaintable tube = (TileEntityPneumoTubePaintable) tile;
 
-			if(RenderBlockMultipass.currentPass == 0) {
+			if(RenderBlockMultipass.currentPass == 0 || tube.getBlockMetadata() != 0) {
 				if(tube.block != null) {
 					return tube.block.getIcon(side, tube.meta);
 				} else {
@@ -123,7 +127,14 @@ public class PneumoTubePaintableBlock extends BlockContainer implements IToolabl
 				((WorldServer) world).getPlayerManager().markBlockForUpdate(x, y, z);
 
 			return true;
+			
+		} else if(tool == ToolType.DEFUSER) {
+			int meta = world.getBlockMetadata(x, y, z);
+			if(meta == 0) world.setBlockMetadataWithNotify(x, y, z, 1, 3);
+			else world.setBlockMetadataWithNotify(x, y, z, 0, 3);
+			return true;
 		}
+		
 		return false;
 	}
 
@@ -149,7 +160,7 @@ public class PneumoTubePaintableBlock extends BlockContainer implements IToolabl
 					}
 				}
 			}
-		} else if(ToolType.getType(stack) == ToolType.SCREWDRIVER || ToolType.getType(stack) == ToolType.HAND_DRILL) return false;
+		} else if(ToolType.getType(stack) == ToolType.SCREWDRIVER || ToolType.getType(stack) == ToolType.HAND_DRILL || ToolType.getType(stack) == ToolType.DEFUSER) return false;
 		
 		if(!player.isSneaking()) {
 			TileEntity tile = world.getTileEntity(x, y, z);
@@ -239,5 +250,10 @@ public class PneumoTubePaintableBlock extends BlockContainer implements IToolabl
 				this.meta = nbt.getInteger("paintmeta");
 			}
 		}
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean ext) {
+		this.addStandardInfo(stack, player, list, ext);
 	}
 }
