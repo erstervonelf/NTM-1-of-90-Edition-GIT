@@ -1,85 +1,44 @@
 package com.hbm.tileentity.network;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.inventory.fluid.FluidType;
-import com.hbm.inventory.fluid.Fluids;
 import com.hbm.util.fauxpointtwelve.BlockPos;
+import com.hbm.util.fauxpointtwelve.DirPos;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import api.hbm.fluidmk2.FluidNode;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Vec3;
+import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileEntityPipeAnchor extends TileEntity {
-	
-	private FluidType type = null;
-	private List<int[]> connected = new ArrayList<>();
+public class TileEntityPipeAnchor extends TileEntityPipelineBase {
 
-	public FluidType getType() {
-		return this.type;
-	}
-
-	public void setType(FluidType type) {
-		this.type = type;
-		this.markDirty();
-	}
-
-	public int[][] getConnected() {
-		int[][] result = new int[connected.size()][3];
-		for(int i = 0; i < connected.size(); i++) {
-			result[i] = connected.get(i);
-		}
-		return result;
-	}
-
-	public void addConnection(int x, int y, int z) {
-		connected.add(new int[]{x, y, z});
-	}
-
-	public void clearConnections() {
-		connected.clear();
+	@Override
+	public ConnectionType getConnectionType() {
+		return ConnectionType.SMALL;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
-		
-		// Read fluid type
-		if(nbt.hasKey("fluidType")) {
-			FluidType t = Fluids.fromName(nbt.getString("fluidType"));
-			if(t != null) this.type = t;
-		}
-		
-		// Read connections
-		this.connected.clear();
-		NBTTagList connList = nbt.getTagList("connections", 10);
-		for(int i = 0; i < connList.tagCount(); i++) {
-			NBTTagCompound connTag = connList.getCompoundTagAt(i);
-			this.connected.add(new int[]{connTag.getInteger("x"), connTag.getInteger("y"), connTag.getInteger("z")});
-		}
+	public Vec3 getMountPos() {
+		return Vec3.createVectorHelper(0.5, 0.5, 0.5);
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
-		
-		// Write fluid type
-		if(this.type != null) {
-			nbt.setString("fluidType", this.type.getName());
-		}
-		
-		// Write connections
-		NBTTagList connList = new NBTTagList();
-		for(int[] pos : this.connected) {
-			NBTTagCompound connTag = new NBTTagCompound();
-			connTag.setInteger("x", pos[0]);
-			connTag.setInteger("y", pos[1]);
-			connTag.setInteger("z", pos[2]);
-			connList.appendTag(connTag);
-		}
-		nbt.setTag("connections", connList);
+	public double getMaxPipeLength() {
+		return 10;
 	}
 
+	@Override
+	public FluidNode createNode(FluidType type) {
+		TileEntity tile = (TileEntity) this;
+		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite();
+		FluidNode node = new FluidNode(type.getNetworkProvider(), new BlockPos(tile.xCoord, tile.yCoord, tile.zCoord)).setConnections(
+				new DirPos(xCoord, yCoord, zCoord, ForgeDirection.UNKNOWN),
+				new DirPos(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ, dir));
+		for(int[] pos : this.connected) node.addConnection(new DirPos(pos[0], pos[1], pos[2], ForgeDirection.UNKNOWN));
+		return node;
+	}
+
+	@Override
+	public boolean canConnect(FluidType type, ForgeDirection dir) {
+		return ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite() == dir && type == this.type;
+	}
 }
-
