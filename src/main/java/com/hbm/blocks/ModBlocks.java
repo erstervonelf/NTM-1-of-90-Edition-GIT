@@ -19,6 +19,11 @@ import com.hbm.blocks.machine.fusion.MachineFusionTorus;
 import com.hbm.blocks.machine.pile.*;
 import com.hbm.blocks.machine.rbmk.*;
 import com.hbm.blocks.network.*;
+import com.hbm.blocks.network.pneumatic.PneumoStorageAccess;
+import com.hbm.blocks.network.pneumatic.PneumoStorageClutter;
+import com.hbm.blocks.network.pneumatic.PneumoStorageMono;
+import com.hbm.blocks.network.pneumatic.PneumoTube;
+import com.hbm.blocks.network.pneumatic.PneumoTubePaintableBlock;
 import com.hbm.blocks.rail.*;
 import com.hbm.blocks.test.*;
 import com.hbm.blocks.turret.*;
@@ -583,6 +588,8 @@ public class ModBlocks {
 	public static Block seal_controller;
 	public static Block seal_hatch;
 
+	public static Block cargo_elevator;
+	
 	public static Block vault_door;
 	public static Block blast_door;
 	public static Block sliding_blast_door;
@@ -821,6 +828,9 @@ public class ModBlocks {
 
 	public static Block pneumatic_tube;
 	public static Block pneumatic_tube_paintable;
+	public static Block pneumatic_storage_access;
+	public static Block pneumatic_storage_clutter;
+	public static Block pneumatic_storage_mono;
 
 	public static Block fan;
 	public static Block piston_inserter;
@@ -861,8 +871,8 @@ public class ModBlocks {
 	public static Block struct_watz_core;
 	public static Block struct_icf_core;
 
-	public static Block factory_titanium_hull;
-	public static Block factory_advanced_hull;
+	@Deprecated public static Block factory_titanium_hull;
+	@Deprecated public static Block factory_advanced_hull;
 
 	public static Block cm_block;
 	public static Block cm_sheet;
@@ -889,10 +899,6 @@ public class ModBlocks {
 
 	@Deprecated public static Block fusion_heater;
 	@Deprecated public static Block fusion_hatch;
-	@Deprecated public static Block plasma; // only actually used by the old plasma grenade, will die with the grenade rework
-
-	@Deprecated public static Block iter;
-	@Deprecated public static Block plasma_heater;
 
 	public static Block fusion_component;
 	public static Block fusion_torus;
@@ -1121,6 +1127,7 @@ public class ModBlocks {
 	public static Block rbmk_graph;
 	public static Block rbmk_lever;
 	public static Block rbmk_indicator;
+	public static Block rbmk_terminal;
 	public static Block rbmk_autoloader;
 	public static Block rbmk_loader;
 	public static Block rbmk_steam_inlet;
@@ -1151,8 +1158,6 @@ public class ModBlocks {
 
 	public static Block statue_elb_f;
 
-	public static Block cheater_virus;
-	public static Block cheater_virus_seed;
 	public static Block crystal_virus;
 	public static Block crystal_hardened;
 	public static Block crystal_pulsar;
@@ -1956,6 +1961,9 @@ public class ModBlocks {
 
 		pneumatic_tube = new PneumoTube().setBlockName("pneumatic_tube").setStepSound(ModSoundTypes.pipe).setHardness(0.1F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":pneumatic_tube");
 		pneumatic_tube_paintable = new PneumoTubePaintableBlock().setBlockName("pneumatic_tube_paintable").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+		pneumatic_storage_access = new PneumoStorageAccess().setBlockName("pneumatic_storage_access").setStepSound(ModSoundTypes.pipe).setHardness(0.1F).setResistance(10.0F).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":pneumatic_storage_access");
+		pneumatic_storage_clutter = new PneumoStorageClutter().setBlockName("pneumatic_storage_clutter").setStepSound(ModSoundTypes.pipe).setHardness(0.1F).setResistance(10.0F).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":pneumatic_storage_clutter");
+		pneumatic_storage_mono = new PneumoStorageMono().setBlockName("pneumatic_storage_mono").setStepSound(ModSoundTypes.pipe).setHardness(0.1F).setResistance(10.0F).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":pneumatic_storage_mono");
 
 		chain = new BlockChain(Material.iron).setBlockName("dungeon_chain").setHardness(0.25F).setResistance(2.0F).setCreativeTab(MainRegistry.blockTab).setBlockTextureName(RefStrings.MODID + ":chain");
 
@@ -1998,8 +2006,8 @@ public class ModBlocks {
 		struct_watz_core = new BlockWatzStruct(Material.iron).setBlockName("struct_watz_core").setLightLevel(1F).setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":struct_watz_core");
 		struct_icf_core = new BlockICFStruct(Material.iron).setBlockName("struct_icf_core").setLightLevel(1F).setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":struct_icf_core");
 
-		factory_titanium_hull = new BlockGeneric(Material.iron).setBlockName("factory_titanium_hull").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":factory_titanium_hull");
-		factory_advanced_hull = new BlockGeneric(Material.iron).setBlockName("factory_advanced_hull").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":factory_advanced_hull");
+		factory_titanium_hull = new BlockGeneric(Material.iron).setBlockName("factory_titanium_hull").setHardness(5.0F).setResistance(10.0F).setBlockTextureName(RefStrings.MODID + ":factory_titanium_hull");
+		factory_advanced_hull = new BlockGeneric(Material.iron).setBlockName("factory_advanced_hull").setHardness(5.0F).setResistance(10.0F).setBlockTextureName(RefStrings.MODID + ":factory_advanced_hull");
 
 		cm_block = new BlockCM(Material.iron, EnumCMMaterials.class, true, true).setBlockName("cm_block").setCreativeTab(MainRegistry.machineTab).setHardness(5.0F).setResistance(10.0F).setBlockTextureName(RefStrings.MODID + ":cm_block");
 		cm_sheet = new BlockCM(Material.iron, EnumCMMaterials.class, true, true).setBlockName("cm_sheet").setCreativeTab(MainRegistry.machineTab).setHardness(5.0F).setResistance(10.0F).setBlockTextureName(RefStrings.MODID + ":cm_sheet");
@@ -2026,9 +2034,6 @@ public class ModBlocks {
 
 		fusion_heater = new BlockPillar(Material.iron, RefStrings.MODID + ":fusion_heater_top").setBlockName("fusion_heater").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":fusion_heater_side");
 		fusion_hatch = new FusionHatch(Material.iron).setBlockName("fusion_hatch").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":fusion_hatch");
-		plasma = new BlockPlasma(Material.iron).setBlockName("plasma").setHardness(5.0F).setResistance(6000.0F).setLightLevel(1.0F).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":plasma");
-		iter = new MachineITER().setBlockName("iter").setHardness(5.0F).setResistance(60.0F).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":iter");
-		plasma_heater = new MachinePlasmaHeater().setBlockName("plasma_heater").setHardness(5.0F).setResistance(60.0F).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":plasma_heater");
 
 		fusion_component = new BlockFusionComponent().setBlockName("fusion_component").setHardness(5.0F).setResistance(30.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":fusion_component");
 		fusion_torus = new MachineFusionTorus().setBlockName("fusion_torus").setHardness(5.0F).setResistance(60.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
@@ -2071,7 +2076,9 @@ public class ModBlocks {
 		seal_controller = new BlockSeal(Material.iron).setBlockName("seal_controller").setHardness(10.0F).setResistance(100.0F).setCreativeTab(MainRegistry.machineTab);
 		seal_hatch = new BlockHatch(Material.iron).setBlockName("seal_hatch").setHardness(Float.POSITIVE_INFINITY).setResistance(Float.POSITIVE_INFINITY).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":seal_hatch_3");
 
-		vault_door = new BlockDoorGeneric(Material.iron, DoorDecl.VAULT_DOOR).setBlockName("vault_door").setHardness(10.0F).setResistance(1_000.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":vault_door");
+		cargo_elevator = new BlockCargoElevator().setBlockName("cargo_elevator").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
+		
+		vault_door = new BlockDoorGeneric(Material.iron, DoorDecl.VAULT_DOOR).setBlockName("vault_door").setHardness(10.0F).setResistance(1_000.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":concrete");
 		blast_door = new BlastDoor(Material.iron).setBlockName("blast_door").setHardness(10.0F).setResistance(1_000.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":blast_door");
 
 		sliding_blast_door = new BlockDoorGeneric(Material.iron, DoorDecl.SLIDE_DOOR).setBlockName("sliding_blast_door").setHardness(10.0F).setResistance(750.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":sliding_blast_door");
@@ -2163,6 +2170,7 @@ public class ModBlocks {
 		rbmk_graph = new RBMKGraph().setBlockName("rbmk_graph").setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":rbmk/rbmk_display");
 		rbmk_lever = new RBMKLever().setBlockName("rbmk_lever").setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":rbmk/rbmk_display");
 		rbmk_indicator = new RBMKIndicator().setBlockName("rbmk_indicator").setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":rbmk/rbmk_display");
+		rbmk_terminal = new RBMKTerminal().setBlockName("rbmk_terminal").setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":rbmk/rbmk_display");
 		rbmk_autoloader = new RBMKAutoloader().setBlockName("rbmk_autoloader").setCreativeTab(MainRegistry.machineTab).setHardness(50.0F).setResistance(60.0F).setBlockTextureName(RefStrings.MODID + ":rbmk_autoloader");
 		rbmk_loader = new RBMKLoader(Material.iron).setBlockName("rbmk_loader").setCreativeTab(MainRegistry.machineTab).setHardness(50.0F).setResistance(60.0F).setBlockTextureName(RefStrings.MODID + ":rbmk_loader");
 		rbmk_steam_inlet = new RBMKInlet(Material.iron).setBlockName("rbmk_steam_inlet").setCreativeTab(MainRegistry.machineTab).setHardness(50.0F).setResistance(60.0F).setBlockTextureName(RefStrings.MODID + ":rbmk_steam_inlet");
@@ -2305,8 +2313,6 @@ public class ModBlocks {
 
 		machine_forcefield = new MachineForceField(Material.iron).setBlockName("machine_forcefield").setHardness(5.0F).setResistance(100.0F).setCreativeTab(MainRegistry.missileTab).setBlockTextureName(RefStrings.MODID + ":machine_forcefield");
 
-		cheater_virus = new CheaterVirus(Material.iron).setBlockName("cheater_virus").setHardness(Float.POSITIVE_INFINITY).setResistance(Float.POSITIVE_INFINITY).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":cheater_virus");
-		cheater_virus_seed = new CheaterVirusSeed(Material.iron).setBlockName("cheater_virus_seed").setHardness(Float.POSITIVE_INFINITY).setResistance(Float.POSITIVE_INFINITY).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":cheater_virus_seed");
 		crystal_virus = new CrystalVirus(Material.iron).setBlockName("crystal_virus").setHardness(15.0F).setResistance(Float.POSITIVE_INFINITY).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":crystal_virus");
 		crystal_hardened = new BlockGeneric(Material.iron).setBlockName("crystal_hardened").setHardness(15.0F).setResistance(Float.POSITIVE_INFINITY).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":crystal_hardened");
 		crystal_pulsar = new CrystalPulsar(Material.iron).setBlockName("crystal_pulsar").setHardness(15.0F).setResistance(Float.POSITIVE_INFINITY).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":crystal_pulsar");
@@ -3001,6 +3007,9 @@ public class ModBlocks {
 		GameRegistry.registerBlock(seal_controller, seal_controller.getUnlocalizedName());
 		GameRegistry.registerBlock(seal_hatch, seal_hatch.getUnlocalizedName());
 
+		//Hooh
+		GameRegistry.registerBlock(cargo_elevator, cargo_elevator.getUnlocalizedName());
+		
 		//Vault Door
 		GameRegistry.registerBlock(vault_door, vault_door.getUnlocalizedName());
 		GameRegistry.registerBlock(blast_door, blast_door.getUnlocalizedName());
@@ -3163,6 +3172,7 @@ public class ModBlocks {
 		register(rbmk_gauge);
 		register(rbmk_numitron);
 		register(rbmk_graph);
+		register(rbmk_terminal);
 		register(rbmk_autoloader);
 		register(rbmk_loader);
 		register(rbmk_steam_inlet);
@@ -3237,6 +3247,9 @@ public class ModBlocks {
 		register(drone_crate_requester);
 		register(pneumatic_tube);
 		register(pneumatic_tube_paintable);
+		register(pneumatic_storage_access);
+		register(pneumatic_storage_clutter);
+		register(pneumatic_storage_mono);
 		register(fan);
 		register(piston_inserter);
 
@@ -3402,9 +3415,6 @@ public class ModBlocks {
 		//Multiblock Generators
 		GameRegistry.registerBlock(fusion_heater, fusion_heater.getUnlocalizedName());
 		GameRegistry.registerBlock(fusion_hatch, fusion_hatch.getUnlocalizedName());
-		GameRegistry.registerBlock(plasma, ItemBlockLore.class, plasma.getUnlocalizedName());
-		GameRegistry.registerBlock(iter, iter.getUnlocalizedName());
-		GameRegistry.registerBlock(plasma_heater, plasma_heater.getUnlocalizedName());
 
 		register(fusion_component);
 		register(fusion_torus);
@@ -3539,8 +3549,6 @@ public class ModBlocks {
 		GameRegistry.registerBlock(crystal_hardened, crystal_hardened.getUnlocalizedName());
 		GameRegistry.registerBlock(crystal_pulsar, crystal_pulsar.getUnlocalizedName());
 		register(taint);
-		GameRegistry.registerBlock(cheater_virus, cheater_virus.getUnlocalizedName());
-		GameRegistry.registerBlock(cheater_virus_seed, cheater_virus_seed.getUnlocalizedName());
 		GameRegistry.registerBlock(ntm_dirt, ntm_dirt.getUnlocalizedName());
 		GameRegistry.registerBlock(pink_log, pink_log.getUnlocalizedName());
 		GameRegistry.registerBlock(pink_planks, pink_planks.getUnlocalizedName());

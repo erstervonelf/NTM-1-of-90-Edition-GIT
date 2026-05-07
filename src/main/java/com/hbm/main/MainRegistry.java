@@ -117,11 +117,6 @@ public class MainRegistry {
 	public static ToolMaterial tMatDesh = EnumHelper.addToolMaterial("HBM_DESH", 2, 0, 7.5F, 2.0F, 10);
 	public static ToolMaterial tMatCobalt = EnumHelper.addToolMaterial("HBM_COBALT", 3, 750, 9.0F, 2.5F, 60);
 
-	public static ToolMaterial enumToolMaterialSaw = EnumHelper.addToolMaterial("SAW", 2, 750, 2.0F, 3.5F, 25);
-	public static ToolMaterial enumToolMaterialBat = EnumHelper.addToolMaterial("BAT", 0, 500, 1.5F, 3F, 25);
-	public static ToolMaterial enumToolMaterialBatNail = EnumHelper.addToolMaterial("BATNAIL", 0, 450, 1.0F, 4F, 25);
-	public static ToolMaterial enumToolMaterialGolfClub = EnumHelper.addToolMaterial("GOLFCLUB", 1, 1000, 2.0F, 5F, 25);
-	public static ToolMaterial enumToolMaterialPipeRusty = EnumHelper.addToolMaterial("PIPERUSTY", 1, 350, 1.5F, 4.5F, 25);
 	public static ToolMaterial enumToolMaterialPipeLead = EnumHelper.addToolMaterial("PIPELEAD", 1, 250, 1.5F, 3F, 25);
 
 	public static ToolMaterial enumToolMaterialBottleOpener = EnumHelper.addToolMaterial("OPENER", 1, 250, 1.5F, 0.5F, 200);
@@ -458,7 +453,7 @@ public class MainRegistry {
 		achRBMKBoom = new Achievement("achievement.RBMKBoom", "RBMKBoom", 9, -7, ModItems.debris_fuel, achRBMK).initIndependentStat().setSpecial().registerStat();
 		achBismuth = new Achievement("achievement.bismuth", "bismuth", 11, -6, ModItems.ingot_bismuth, achRBMK).initIndependentStat().registerStat();
 		achBreeding = new Achievement("achievement.breeding", "breeding", 7, -6, ModItems.ingot_am_mix, achRBMK).initIndependentStat().setSpecial().registerStat();
-		achFusion = new Achievement("achievement.fusion", "fusion", 13, -7, new ItemStack(ModBlocks.iter), achBismuth).initIndependentStat().setSpecial().registerStat();
+		achFusion = new Achievement("achievement.fusion", "fusion", 13, -7, new ItemStack(ModBlocks.fusion_torus), achBismuth).initIndependentStat().setSpecial().registerStat();
 		achRedBalloons = new Achievement("achievement.redBalloons", "redBalloons", 11, 0, ModItems.missile_nuclear, achPolymer).initIndependentStat().setSpecial().registerStat();
 		achManhattan = new Achievement("achievement.manhattan", "manhattan", 11, -4, new ItemStack(ModBlocks.nuke_boy), achPolymer).initIndependentStat().setSpecial().registerStat();
 
@@ -1589,6 +1584,46 @@ public class MainRegistry {
 		ignoreMappings.add("hbm:item.grenade_kit");
 		ignoreMappings.add("hbm:item.nuclear_waste_pearl");
 		ignoreMappings.add("hbm:tile.plasma");
+		ignoreMappings.add("hbm:tile.cheater_virus");
+		ignoreMappings.add("hbm:tile.cheater_virus_seed");
+		ignoreMappings.add("hbm:tile.iter");
+		ignoreMappings.add("hbm:tile.plasma_heater");
+		ignoreMappings.add("hbm:item.battery_generic");
+		ignoreMappings.add("hbm:item.battery_advanced");
+		ignoreMappings.add("hbm:item.battery_lithium");
+		ignoreMappings.add("hbm:item.battery_schrabidium");
+		ignoreMappings.add("hbm:item.battery_red_cell");
+		ignoreMappings.add("hbm:item.battery_red_cell_6");
+		ignoreMappings.add("hbm:item.battery_red_cell_24");
+		ignoreMappings.add("hbm:item.battery_advanced_cell");
+		ignoreMappings.add("hbm:item.battery_advanced_cell_4");
+		ignoreMappings.add("hbm:item.battery_advanced_cell_12");
+		ignoreMappings.add("hbm:item.battery_lithium_cell");
+		ignoreMappings.add("hbm:item.battery_lithium_cell_3");
+		ignoreMappings.add("hbm:item.battery_lithium_cell_6");
+		ignoreMappings.add("hbm:item.battery_schrabidium_cell");
+		ignoreMappings.add("hbm:item.battery_schrabidium_cell_2");
+		ignoreMappings.add("hbm:item.battery_schrabidium_cell_4");
+		ignoreMappings.add("hbm:item.battery_spark_cell_6");
+		ignoreMappings.add("hbm:item.battery_spark_cell_25");
+		ignoreMappings.add("hbm:item.battery_spark_cell_100");
+		ignoreMappings.add("hbm:item.battery_spark_cell_1000");
+		ignoreMappings.add("hbm:item.battery_spark_cell_2500");
+		ignoreMappings.add("hbm:item.battery_spark_cell_10000");
+		ignoreMappings.add("hbm:item.battery_spark_cell_power");
+		ignoreMappings.add("hbm:item.battery_sc_uranium");
+		ignoreMappings.add("hbm:item.battery_sc_technetium");
+		ignoreMappings.add("hbm:item.battery_sc_plutonium");
+		ignoreMappings.add("hbm:item.battery_sc_polonium");
+		ignoreMappings.add("hbm:item.battery_sc_gold");
+		ignoreMappings.add("hbm:item.battery_sc_lead");
+		ignoreMappings.add("hbm:item.battery_sc_americium");
+		ignoreMappings.add("hbm:item.overfuse");
+		ignoreMappings.add("hbm:item.weapon_saw");
+		ignoreMappings.add("hbm:item.weapon_bat");
+		ignoreMappings.add("hbm:item.weapon_bat_nail");
+		ignoreMappings.add("hbm:item.weapon_golf_club");
+		ignoreMappings.add("hbm:item.weapon_pipe_rusty");
 		
 		/// REMAP ///
 		remapItems.put("hbm:item.gadget_explosive8", ModItems.early_explosive_lenses);
