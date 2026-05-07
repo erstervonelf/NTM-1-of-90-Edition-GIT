@@ -57,12 +57,12 @@ public class TileEntityRBMKTerminal extends TileEntityLoadedBase implements IGUI
 		
 		if(cmd.startsWith("start ")) {
 			this.repeatCmd = cmd.substring(6);
-			push("Repeating signal on channel " + this.channel);
+			push("Repeating signal on " + this.channel);
 			this.markChanged();
 			return;
 		}
 		
-		if(cmd.startsWith("stop ")) {
+		if(cmd.equals("stop")) {
 			this.repeatCmd = "";
 			push("Stopping repeat signal");
 			this.markChanged();
@@ -75,7 +75,7 @@ public class TileEntityRBMKTerminal extends TileEntityLoadedBase implements IGUI
 				return;
 			}
 			RTTYSystem.broadcast(worldObj, this.channel, cmd.substring(5));
-			push("Sent signal on channel " + this.channel);
+			push("Sent signal on " + this.channel);
 			return;
 		}
 		
@@ -91,6 +91,11 @@ public class TileEntityRBMKTerminal extends TileEntityLoadedBase implements IGUI
 			vnt.setPlayerProcessor(new PlayerProcessorStandard());
 			vnt.setSFX(new ExplosionEffectWeapon(10, 2.5F, 1F));
 			vnt.explode();
+			return;
+		}
+		
+		if(cmd.equals("clear")) {
+			for(int i = 0; i < history.length; i++) history[i] = "";
 			return;
 		}
 		

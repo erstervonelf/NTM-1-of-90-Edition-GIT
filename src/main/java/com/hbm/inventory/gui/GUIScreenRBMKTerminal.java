@@ -47,6 +47,7 @@ public class GUIScreenRBMKTerminal extends GuiScreen {
 		this.fontRendererObj.drawString("send <cmd> - Send single signal over selected channel", 2, 22, 0xffffff);
 		this.fontRendererObj.drawString("start <cmd> - Continuously send signal over selected channel", 2, 32, 0xffffff);
 		this.fontRendererObj.drawString("stop - Stop continuous sending", 2, 42, 0xffffff);
+		this.fontRendererObj.drawString("clear - Delete command history", 2, 52, 0xffffff);
 	}
 	
 	protected void keyTyped(char c, int b) {

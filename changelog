@@ -5,6 +5,8 @@
 ## Changed
 * RoR graphs can now have their min and max bounds set to a fixed number
   * This should make it easier to accurately tell the difference/scale of values when they exist in an expected range (for example, RBMK temperatures)
+* RoR controllers now use polling by default, since state change is unable to actually perform a function unless the state changes, preventing repeated commands
 
 ## Fixed
 * Fixed RoR graph showing the wrong name in the GUI
+* Fixed polling option in RoR controllers reading dead signals

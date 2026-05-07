@@ -53,9 +53,9 @@ public class GUIScreenRBMKGraph extends GuiScreen {
 			rtty[i] = new GuiTextField(this.fontRendererObj, guiLeft + 27 + oX, guiTop + 55 + oY + i * 54, 72 - oX * 2, 14);
 			GUIScreenRBMKKeyPad.setupTextFieldStandard(rtty[i], 10, graph.graphs[i].rtty);
 			min[i] = new GuiTextField(this.fontRendererObj, guiLeft + 175 + oX, guiTop + 55 + oY + i * 54, 72 - oX * 2, 14);
-			GUIScreenRBMKKeyPad.setupTextFieldStandard(rtty[i], 15, graph.graphs[i].minBound ? graph.graphs[i].min + "" : "");
+			GUIScreenRBMKKeyPad.setupTextFieldStandard(min[i], 15, graph.graphs[i].minBound ? graph.graphs[i].min + "" : "");
 			max[i] = new GuiTextField(this.fontRendererObj, guiLeft + 175 + oX, guiTop + 73 + oY + i * 54, 72 - oX * 2, 14);
-			GUIScreenRBMKKeyPad.setupTextFieldStandard(rtty[i], 15, graph.graphs[i].maxBound ? graph.graphs[i].max + "" : "");
+			GUIScreenRBMKKeyPad.setupTextFieldStandard(max[i], 15, graph.graphs[i].maxBound ? graph.graphs[i].max + "" : "");
 
 			active[i] = graph.graphs[i].active;
 			polling[i] = graph.graphs[i].polling;
@@ -82,8 +82,8 @@ public class GUIScreenRBMKGraph extends GuiScreen {
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 		
 		for(int i = 0; i < 2; i++) {
-			if(this.active[i]) drawTexturedModalRect(guiLeft + 111, guiTop + i * 54 + 54, 18, 114, 16, 16);
-			if(this.polling[i]) drawTexturedModalRect(guiLeft + 128, guiTop + i * 54 + 53, 0, 114, 18, 18);
+			if(this.active[i]) drawTexturedModalRect(guiLeft + 111, guiTop + i * 54 + 54, 18, 150, 16, 16);
+			if(this.polling[i]) drawTexturedModalRect(guiLeft + 128, guiTop + i * 54 + 53, 0, 150, 18, 18);
 		}
 		
 		for(int i = 0; i < 2; i++) {
