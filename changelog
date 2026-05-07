@@ -1,22 +1,10 @@
 ## Added
-* Freight elevator
-  * A 3x3 hydraulic platform
-  * Can be stacked
-  * Only supports two floors, the top and the bottom
-  * Hopefully not terribly janky
+* Redstone-over-Radio Terminal
+  * Allows commands to be sent manually, command line style
 
 ## Changed
-* Reduced steam demand of the rotary furnace's hotter fuels by a bit
-* The acidizer now has a sound loop (chemplant sound at 75% pitch)
-* Updated some bomb part recipes, mainly to make use of the new neutron reflectors and some more modern materials (why did ivy mike coolers still use iron?)
-* Updated the fat man igniter and gadget wiring icons
-* The cape items, which haven't actually been used by anyone ever, are now deprecated. Existing capes will still work, but the items are now unobtainable
-* Some long deprecated melee weapons have now been properly removed
+* RoR graphs can now have their min and max bounds set to a fixed number
+  * This should make it easier to accurately tell the difference/scale of values when they exist in an expected range (for example, RBMK temperatures)
 
 ## Fixed
-* Fixed an issue where 40mm grenades that impact entities within three ticks of spawning would never detonate
-* Fixed broken foundry scrap name and tooltip
-* Finally fixed the rotary furnace's steam going into the negatives because 70k was too bald to do it
-* Fixed magnet and HUD toggle popups being incorrect half the time
-* Fixed crash caused by connecting NONE type pipe anchors
-* Fixed color inconsistency with the bedrock ore density scanner
+* Fixed RoR graph showing the wrong name in the GUI

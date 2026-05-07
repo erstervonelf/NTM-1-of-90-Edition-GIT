@@ -4813,6 +4813,7 @@ tile.rbmk_rod_reasim_mod.name=RBMK Moderierte Brennstäbe (ReaSim)
 tile.rbmk_steam_inlet.name=RBMK ReaSim Wassereinlass
 tile.rbmk_steam_outlet.name=RBMK ReaSim Dampfabnehmer
 tile.rbmk_storage.name=RBMK Lagerteil
+tile.rbmk_terminal.name=Redstone-over-Radio Terminal
 tile.reactor_computer.name=Reaktorsteuerung
 tile.reactor_conductor.name=Reaktorboiler
 tile.reactor_control.name=Steuerstäbe
