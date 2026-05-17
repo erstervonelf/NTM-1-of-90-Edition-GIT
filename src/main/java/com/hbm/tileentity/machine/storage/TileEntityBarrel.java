@@ -81,6 +81,7 @@ public class TileEntityBarrel extends TileEntityMachineBase implements SimpleCom
 
 	@Override
 	public long getDemand(FluidType type, int pressure) {
+		if(this.tilted) return 0;
 		if(this.mode == 2 || this.mode == 3) return 0;
 		if(tank.getPressure() != pressure) return 0;
 		return type == tank.getTankType() ? tank.getMaxFill() - tank.getFill() : 0;
@@ -126,7 +127,7 @@ public class TileEntityBarrel extends TileEntityMachineBase implements SimpleCom
 					this.node = null;
 				}
 
-				for(DirPos pos : getConPos()) {
+				if(!this.tilted) for(DirPos pos : getConPos()) {
 					FluidNode dirNode = (FluidNode) UniNodespace.getNode(worldObj, pos.getX(), pos.getY(), pos.getZ(), tank.getTankType().getNetworkProvider());
 
 					if(mode == 2) {
@@ -296,20 +297,9 @@ public class TileEntityBarrel extends TileEntityMachineBase implements SimpleCom
 		return fluid == tank.getTankType();
 	}
 
-	@Override
-	public FluidTank[] getSendingTanks() {
-		return (mode == 1 || mode == 2) ? new FluidTank[] {tank} : new FluidTank[0];
-	}
-
-	@Override
-	public FluidTank[] getReceivingTanks() {
-		return (mode == 0 || mode == 1) ? new FluidTank[] {tank} : new FluidTank[0];
-	}
-
-	@Override
-	public FluidTank[] getAllTanks() {
-		return new FluidTank[] { tank };
-	}
+	@Override public FluidTank[] getSendingTanks() { return (mode == 1 || mode == 2) ? new FluidTank[] {tank} : new FluidTank[0]; }
+	@Override public FluidTank[] getReceivingTanks() { return (mode == 0 || mode == 1) ? new FluidTank[] {tank} : new FluidTank[0]; }
+	@Override public FluidTank[] getAllTanks() { return new FluidTank[] { tank }; }
 
 	@Override
 	public ConnectionPriority getFluidPriority() {
