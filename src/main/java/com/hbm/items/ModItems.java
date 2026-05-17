@@ -1417,6 +1417,7 @@ public class ModItems {
 	public static Item gun_g3;
 	public static Item gun_g3_zebra;
 	public static Item gun_stinger;
+	public static Item gun_mk108;
 	public static Item gun_chemthrower;
 	public static Item gun_amat;
 	public static Item gun_amat_subtlety;
@@ -6171,6 +6172,7 @@ public class ModItems {
 		registerItemSafe(gun_star_f_akimbo);
 		registerItemSafe(gun_g3);
 		registerItemSafe(gun_g3_zebra);
+		registerItemSafe(gun_mk108);
 		registerItemSafe(gun_stinger);
 		registerItemSafe(gun_chemthrower);
 		registerItemSafe(gun_amat);
