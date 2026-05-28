@@ -181,14 +181,11 @@ public class ItemGrenadeUniversal extends Item implements IEquipReceiver, IAnima
 
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean ext) {
-		// DISABLED: grenade component items not initialized
-		/*
 		list.add(EnumChatFormatting.YELLOW + I18nUtil.resolveKey(ModItems.grenade_shell.getUnlocalizedName() + "." + this.getShell(stack).name().toLowerCase(Locale.US) + ".name"));
 		list.add(EnumChatFormatting.YELLOW + I18nUtil.resolveKey(ModItems.grenade_filling.getUnlocalizedName() + "." + this.getFilling(stack).name().toLowerCase(Locale.US) + ".name"));
 		list.add(EnumChatFormatting.YELLOW + I18nUtil.resolveKey(ModItems.grenade_fuze.getUnlocalizedName() + "." + this.getFuze(stack).name().toLowerCase(Locale.US) + ".name"));
 		EnumGrenadeExtra extra = this.getExtra(stack);
-		if(extra != null) list.add(EnumChatFormatting.RED + I18nUtil.resolveKey(ModItems.grenade_extra.getUnlocalizedName() + "." + extra.name().toLowerCase(Locale.US) + ".name"));
-		*/
+		if(extra != null && ModItems.grenade_extra != null) list.add(EnumChatFormatting.RED + I18nUtil.resolveKey(ModItems.grenade_extra.getUnlocalizedName() + "." + extra.name().toLowerCase(Locale.US) + ".name"));
 	}
 
 	public BusAnimation getAnimation(Enum type, ItemStack stack) {

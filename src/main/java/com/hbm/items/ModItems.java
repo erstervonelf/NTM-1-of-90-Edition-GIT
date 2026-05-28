@@ -37,7 +37,12 @@ import com.hbm.items.weapon.ItemCustomMissilePart.*;
 import com.hbm.items.weapon.ItemMissile.MissileFormFactor;
 import com.hbm.items.weapon.ItemMissile.MissileFuel;
 import com.hbm.items.weapon.ItemMissile.MissileTier;
-import com.hbm.items.weapon.grenade.ItemGrenadeKyiv;
+import com.hbm.items.weapon.grenade.ItemGrenadeExtra;
+import com.hbm.items.weapon.grenade.ItemGrenadeFilling;
+import com.hbm.items.weapon.grenade.ItemGrenadeFuze;
+import com.hbm.items.weapon.grenade.ItemGrenadeShell;
+import com.hbm.items.weapon.grenade.ItemGrenadeUniversal;
+import com.hbm.items.weapon.ItemGrenadeKyiv;
 import com.hbm.items.weapon.sedna.factory.GunFactory;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
@@ -1513,20 +1518,6 @@ public class ModItems {
 	public static Item grenade_cloud;
 	public static Item grenade_pink_cloud;
 	public static Item ullapool_caber;
-
-	public static Item grenade_if_generic;
-	public static Item grenade_if_he;
-	public static Item grenade_if_bouncy;
-	public static Item grenade_if_sticky;
-	public static Item grenade_if_impact;
-	public static Item grenade_if_incendiary;
-	public static Item grenade_if_toxic;
-	public static Item grenade_if_concussion;
-	public static Item grenade_if_brimstone;
-	public static Item grenade_if_mystery;
-	public static Item grenade_if_spark;
-	public static Item grenade_if_hopwire;
-	public static Item grenade_if_null;
 
 	public static Item grenade_smart;
 	public static Item grenade_mirv;
@@ -3677,46 +3668,16 @@ public class ModItems {
 		stick_semtex = new Item().setUnlocalizedName("stick_semtex").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":stick_semtex");
 		stick_c4 = new Item().setUnlocalizedName("stick_c4").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":stick_c4");
 
-		grenade_generic = new ItemGrenade(4).setUnlocalizedName("grenade_generic").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_generic");
-		grenade_strong = new ItemGrenade(5).setUnlocalizedName("grenade_strong").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_strong");
-		grenade_frag = new ItemGrenade(4).setUnlocalizedName("grenade_frag").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_frag_alt");
-		grenade_fire = new ItemGrenade(4).setUnlocalizedName("grenade_fire").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_fire_alt");
-		grenade_shrapnel = new ItemGrenade(4).setUnlocalizedName("grenade_shrapnel").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_shrapnel");
-		grenade_cluster = new ItemGrenade(5).setUnlocalizedName("grenade_cluster").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_cluster_alt");
-		grenade_flare = new ItemGrenade(0).setUnlocalizedName("grenade_flare").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_flare_alt");
-		grenade_electric = new ItemGrenade(5).setUnlocalizedName("grenade_electric").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_electric_alt");
-		grenade_poison = new ItemGrenade(4).setUnlocalizedName("grenade_poison").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_poison_alt");
-		grenade_gas = new ItemGrenade(4).setUnlocalizedName("grenade_gas").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_gas_alt");
-		grenade_pulse = new ItemGrenade(4).setUnlocalizedName("grenade_pulse").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_pulse");
-		grenade_plasma = new ItemGrenade(5).setUnlocalizedName("grenade_plasma").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_plasma_alt");
-		grenade_tau = new ItemGrenade(5).setUnlocalizedName("grenade_tau").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_tau_alt");
-		grenade_schrabidium = new ItemGrenade(7).setUnlocalizedName("grenade_schrabidium").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_schrabidium_alt");
-		grenade_lemon = new ItemGrenade(4).setUnlocalizedName("grenade_lemon").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_lemon");
-		grenade_gascan = new ItemGrenade(-1).setUnlocalizedName("grenade_gascan").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_gascan");
-		grenade_kyiv = new ItemGrenadeKyiv(-1).setUnlocalizedName("grenade_kyiv").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_kyiv");
-		grenade_mk2 = new ItemGrenade(5).setUnlocalizedName("grenade_mk2").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_mk2_alt");
-		grenade_aschrab = new ItemGrenade(-1).setUnlocalizedName("grenade_aschrab").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_aschrab");
-		grenade_nuke = new ItemGrenade(-1).setUnlocalizedName("grenade_nuke").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_nuke_alt");
-		grenade_nuclear = new ItemGrenade(7).setUnlocalizedName("grenade_nuclear").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_nuclear");
-		grenade_zomg = new ItemGrenade(7).setUnlocalizedName("grenade_zomg").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_zomg");
-		grenade_black_hole = new ItemGrenade(7).setUnlocalizedName("grenade_black_hole").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_black_hole");
-		grenade_cloud = new ItemGrenade(-1).setUnlocalizedName("grenade_cloud").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_cloud");
+		// Legacy grenade items removed (missing textures)
+
+		grenade_universal = new ItemGrenadeUniversal().setUnlocalizedName("grenade_universal").setCreativeTab(MainRegistry.weaponTab);
+		grenade_shell = new ItemGrenadeShell().setUnlocalizedName("grenade_shell").setCreativeTab(MainRegistry.weaponTab);
+		grenade_filling = new ItemGrenadeFilling().setUnlocalizedName("grenade_filling").setCreativeTab(MainRegistry.weaponTab);
+		grenade_fuze = new ItemGrenadeFuze().setUnlocalizedName("grenade_fuze").setCreativeTab(MainRegistry.weaponTab);
+		grenade_extra = new ItemGrenadeExtra().setUnlocalizedName("grenade_extra").setCreativeTab(MainRegistry.weaponTab);
+
 		grenade_pink_cloud = new ItemGrenade(-1).setUnlocalizedName("grenade_pink_cloud").setCreativeTab(null).setTextureName(RefStrings.MODID + ":grenade_pink_cloud");
 		ullapool_caber = new WeaponSpecial(MainRegistry.tMatSteel).setUnlocalizedName("ullapool_caber").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":ullapool_caber");
-
-		grenade_if_generic = new ItemGrenade(4).setUnlocalizedName("grenade_if_generic").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_if_generic");
-		grenade_if_he = new ItemGrenade(5).setUnlocalizedName("grenade_if_he").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_if_he");
-		grenade_if_bouncy = new ItemGrenade(4).setUnlocalizedName("grenade_if_bouncy").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_if_bouncy");
-		grenade_if_sticky = new ItemGrenade(4).setUnlocalizedName("grenade_if_sticky").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_if_sticky");
-		grenade_if_impact = new ItemGrenade(-1).setUnlocalizedName("grenade_if_impact").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_if_impact");
-		grenade_if_incendiary = new ItemGrenade(4).setUnlocalizedName("grenade_if_incendiary").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_if_incendiary");
-		grenade_if_toxic = new ItemGrenade(4).setUnlocalizedName("grenade_if_toxic").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_if_toxic");
-		grenade_if_concussion = new ItemGrenade(4).setUnlocalizedName("grenade_if_concussion").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_if_concussion");
-		grenade_if_brimstone = new ItemGrenade(5).setUnlocalizedName("grenade_if_brimstone").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_if_brimstone");
-		grenade_if_mystery = new ItemGrenade(5).setUnlocalizedName("grenade_if_mystery").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_if_mystery");
-		grenade_if_spark = new ItemGrenade(7).setUnlocalizedName("grenade_if_spark").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_if_spark");
-		grenade_if_hopwire = new ItemGrenade(7).setUnlocalizedName("grenade_if_hopwire").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_if_hopwire");
-		grenade_if_null = new ItemGrenade(7).setUnlocalizedName("grenade_if_null").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_if_null");
 
 		grenade_smart = new ItemGrenade(-1).setUnlocalizedName("grenade_smart").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_smart");
 		grenade_mirv = new ItemGrenade(1).setUnlocalizedName("grenade_mirv").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_mirv");
@@ -6243,49 +6204,12 @@ public class ModItems {
 		registerItemSafe(stick_tnt);
 		registerItemSafe(stick_semtex);
 		registerItemSafe(stick_c4);
-		registerItemSafe(grenade_generic);
-		registerItemSafe(grenade_strong);
-		registerItemSafe(grenade_frag);
-		registerItemSafe(grenade_fire);
-		registerItemSafe(grenade_shrapnel);
-		registerItemSafe(grenade_cluster);
-		registerItemSafe(grenade_flare);
-		registerItemSafe(grenade_electric);
-		registerItemSafe(grenade_poison);
-		registerItemSafe(grenade_gas);
-		registerItemSafe(grenade_cloud);
-		registerItemSafe(grenade_pink_cloud);
-		registerItemSafe(grenade_smart);
-		registerItemSafe(grenade_mirv);
-		registerItemSafe(grenade_breach);
-		registerItemSafe(grenade_burst);
-		registerItemSafe(grenade_pulse);
-		registerItemSafe(grenade_plasma);
-		registerItemSafe(grenade_tau);
-		registerItemSafe(grenade_schrabidium);
-		registerItemSafe(grenade_nuke);
-		registerItemSafe(grenade_lemon);
-		registerItemSafe(grenade_gascan);
-		registerItemSafe(grenade_kyiv);
-		registerItemSafe(grenade_mk2);
-		registerItemSafe(grenade_aschrab);
-		registerItemSafe(grenade_nuclear);
-		registerItemSafe(grenade_zomg);
-		registerItemSafe(grenade_black_hole);
-
-		registerItemSafe(grenade_if_generic);
-		registerItemSafe(grenade_if_he);
-		registerItemSafe(grenade_if_bouncy);
-		registerItemSafe(grenade_if_sticky);
-		registerItemSafe(grenade_if_impact);
-		registerItemSafe(grenade_if_incendiary);
-		registerItemSafe(grenade_if_toxic);
-		registerItemSafe(grenade_if_concussion);
-		registerItemSafe(grenade_if_brimstone);
-		registerItemSafe(grenade_if_mystery);
-		registerItemSafe(grenade_if_spark);
-		registerItemSafe(grenade_if_hopwire);
-		registerItemSafe(grenade_if_null);
+		// Legacy grenade items removed (missing textures) - keep universal system only
+		registerItemSafe(grenade_universal);
+		registerItemSafe(grenade_shell);
+		registerItemSafe(grenade_filling);
+		registerItemSafe(grenade_fuze);
+		registerItemSafe(grenade_extra);
 		registerItemSafe(nuclear_waste_pearl);
 
 		//Disperser Canister
