@@ -280,7 +280,6 @@ public class MainRegistry {
 		ModItems.mainRegistry();
 		// init 1of90
 		MainRegistry1of90.init();
-		MainRegistry1of90.initClient();
 		//
 		proxy.registerRenderInfo();
 		HbmWorld.mainRegistry();

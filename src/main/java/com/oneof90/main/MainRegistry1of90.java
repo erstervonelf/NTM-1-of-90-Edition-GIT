@@ -11,12 +11,6 @@ import net.minecraft.item.Item;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-/**
- * 1of90 Edition Main Registry
- *
- * Central initialization point for the 1of90 mod extension.
- * This allows adding new content independently from HBM's code.
- */
 public class MainRegistry1of90 {
 
 	/**
