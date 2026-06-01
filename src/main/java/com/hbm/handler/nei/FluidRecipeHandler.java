@@ -106,6 +106,9 @@ public class FluidRecipeHandler extends TemplateRecipeHandler implements ICompat
 	}
 	
 	private boolean compareFluidStacks(ItemStack sta1, ItemStack sta2) {
+		if (sta1 == null || sta2 == null) {
+			return false;
+		}
 		return sta1.getItem() == sta2.getItem() && sta1.getItemDamage() == sta2.getItemDamage();
 	}
 
