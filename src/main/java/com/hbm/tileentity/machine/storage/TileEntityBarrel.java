@@ -242,9 +242,8 @@ public class TileEntityBarrel extends TileEntityMachineBase implements SimpleCom
 			worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "random.fizz", 1.0F, 1.0F);
 		}
 
-		//for when you fill corrosive liquid into an iron tank
-		if((b == ModBlocks.barrel_iron && tank.getTankType().isCorrosive()) ||
-				(b == ModBlocks.barrel_steel && tank.getTankType().hasTrait(FT_Corrosive.class) && tank.getTankType().getTrait(FT_Corrosive.class).getRating() > 50)) {
+		//for when you fill highly corrosive liquid into a steel tank
+		if(b == ModBlocks.barrel_steel && tank.getTankType().hasTrait(FT_Corrosive.class) && tank.getTankType().getTrait(FT_Corrosive.class).getRating() > 50) {
 			ItemStack[] copy = this.slots.clone();
 			this.slots = new ItemStack[6];
 			worldObj.setBlock(xCoord, yCoord, zCoord, ModBlocks.barrel_corroded);

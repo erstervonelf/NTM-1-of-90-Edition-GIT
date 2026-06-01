@@ -80,7 +80,7 @@ public class NBTStructure {
 	private Map<String, List<JigsawConnection>> toTopConnections;
 	private Map<String, List<JigsawConnection>> toBottomConnections;
 	private Map<String, List<JigsawConnection>> toHorizontalConnections;
-
+	
 	// incredibly shitty system for translating legacy block definitions to new ones
 	@Untested // i can't find a god damn factory
 	private static Map<String, String> substitutions = new HashMap() {{
@@ -328,7 +328,7 @@ public class NBTStructure {
 
 				String blockName = p.getString("Name");
 				NBTTagCompound prop = p.getCompoundTag("Properties");
-
+				
 				/// BOB PATCH ///
 				if(substitutions.containsKey(blockName)) blockName = substitutions.get(blockName);
 				/// BOB PATCH ///
@@ -552,13 +552,13 @@ public class NBTStructure {
 	public void build(World world, JigsawPiece piece, int x, int y, int z, int coordBaseMode, String structureName) {
 		StructureBoundingBox bb;
 		switch(coordBaseMode) {
-			case 1:
-			case 3:
-				bb = new StructureBoundingBox(x, y, z, x + piece.structure.size.z - 1, y + piece.structure.size.y - 1, z + piece.structure.size.x - 1);
-				break;
-			default:
-				bb = new StructureBoundingBox(x, y, z, x + piece.structure.size.x - 1, y + piece.structure.size.y - 1, z + piece.structure.size.z - 1);
-				break;
+		case 1:
+		case 3:
+			bb = new StructureBoundingBox(x, y, z, x + piece.structure.size.z - 1, y + piece.structure.size.y - 1, z + piece.structure.size.x - 1);
+			break;
+		default:
+			bb = new StructureBoundingBox(x, y, z, x + piece.structure.size.x - 1, y + piece.structure.size.y - 1, z + piece.structure.size.z - 1);
+			break;
 		}
 
 		build(world, piece, bb, bb, coordBaseMode, structureName);
@@ -732,37 +732,37 @@ public class NBTStructure {
 
 	public int rotateX(int x, int z, int coordBaseMode) {
 		switch(coordBaseMode) {
-			case 1: return size.z - 1 - z;
-			case 2: return size.x - 1 - x;
-			case 3: return z;
-			default: return x;
+		case 1: return size.z - 1 - z;
+		case 2: return size.x - 1 - x;
+		case 3: return z;
+		default: return x;
 		}
 	}
 
 	public int rotateZ(int x, int z, int coordBaseMode) {
 		switch(coordBaseMode) {
-			case 1: return x;
-			case 2: return size.z - 1 - z;
-			case 3: return size.x - 1 - x;
-			default: return z;
+		case 1: return x;
+		case 2: return size.z - 1 - z;
+		case 3: return size.x - 1 - x;
+		default: return z;
 		}
 	}
 
 	private int unrotateX(int x, int z, int coordBaseMode) {
 		switch(coordBaseMode) {
-			case 3: return size.x - 1 - z;
-			case 2: return size.x - 1 - x;
-			case 1: return z;
-			default: return x;
+		case 3: return size.x - 1 - z;
+		case 2: return size.x - 1 - x;
+		case 1: return z;
+		default: return x;
 		}
 	}
 
 	private int unrotateZ(int x, int z, int coordBaseMode) {
 		switch(coordBaseMode) {
-			case 3: return x;
-			case 2: return size.z - 1 - z;
-			case 1: return size.z - 1 - x;
-			default: return z;
+		case 3: return x;
+		case 2: return size.z - 1 - z;
+		case 1: return size.z - 1 - x;
+		default: return z;
 		}
 	}
 
@@ -855,25 +855,15 @@ public class NBTStructure {
 			this.minHeight = spawn.minHeight;
 			this.maxHeight = spawn.maxHeight;
 
-			   if (piece == null) {
-				   MainRegistry.logger.error("[NBTStructure] Tried to create Component with null piece at x=" + x + ", y=" + y + ", z=" + z);
-				   this.boundingBox = null;
-				   return;
-			   }
-			   if (piece.structure == null) {
-				   MainRegistry.logger.error("[NBTStructure] Tried to create Component with null structure in piece '" + piece.name + "' at x=" + x + ", y=" + y + ", z=" + z);
-				   this.boundingBox = null;
-				   return;
-			   }
-			   switch(this.coordBaseMode) {
-			   case 1:
-			   case 3:
-				   this.boundingBox = new StructureBoundingBox(x, y, z, x + piece.structure.size.z - 1, y + piece.structure.size.y - 1, z + piece.structure.size.x - 1);
-				   break;
-			   default:
-				   this.boundingBox = new StructureBoundingBox(x, y, z, x + piece.structure.size.x - 1, y + piece.structure.size.y - 1, z + piece.structure.size.z - 1);
-				   break;
-			   }
+			switch(this.coordBaseMode) {
+			case 1:
+			case 3:
+				this.boundingBox = new StructureBoundingBox(x, y, z, x + piece.structure.size.z - 1, y + piece.structure.size.y - 1, z + piece.structure.size.x - 1);
+				break;
+			default:
+				this.boundingBox = new StructureBoundingBox(x, y, z, x + piece.structure.size.x - 1, y + piece.structure.size.y - 1, z + piece.structure.size.z - 1);
+				break;
+			}
 		}
 
 		public Component connectedFrom(JigsawConnection connection) {
