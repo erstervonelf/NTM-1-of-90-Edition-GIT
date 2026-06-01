@@ -531,7 +531,7 @@ public abstract class TileEntityRBMKBase extends TileEntityLoadedBase {
 						((IOverpressurable) con).explode(worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
 					} else {
 						worldObj.setBlock(tile.xCoord, tile.yCoord, tile.zCoord, Blocks.air);
-						worldObj.newExplosion(null, tile.xCoord + 0.5, tile.yCoord + 0.5, tile.zCoord + 0.5, 5F, false, false);
+						worldObj.newExplosion(null, tile.xCoord + 0.5, tile.yCoord + 0.5, tile.zCoord + 0.5, 40F, false, false);
 					}
 				}
 			}
@@ -547,7 +547,7 @@ public abstract class TileEntityRBMKBase extends TileEntityLoadedBase {
 		PacketThreading.createAllAroundThreadedPacket(new AuxParticlePacketNT(data, avgX + 0.5, yCoord + 1, avgZ + 0.5), new TargetPoint(worldObj.provider.dimensionId,avgX + 0.5, yCoord + 1, avgZ + 0.5, 250));
 		MainRegistry.proxy.effectNT(data);
 
-		worldObj.playSoundEffect(avgX + 0.5, yCoord + 1, avgZ + 0.5, "hbm:block.rbmk_explosion", 50.0F, 1.0F);
+		worldObj.playSoundEffect(avgX + 0.5, yCoord + 1, avgZ + 0.5, "hbm:block.rbmk_explosion", 500.0F, 1.0F);
 
 		List<EntityPlayer> players = worldObj.getEntitiesWithinAABB(EntityPlayer.class,
 				AxisAlignedBB.getBoundingBox(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5).expand(50, 50, 50));
