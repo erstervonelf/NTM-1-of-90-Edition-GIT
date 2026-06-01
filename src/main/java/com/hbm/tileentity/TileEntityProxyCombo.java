@@ -29,12 +29,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 @Optional.InterfaceList({
 		@Optional.Interface(iface = "com.hbm.handler.CompatHandler.OCComponent", modid = "opencomputers"),
 		@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "opencomputers")
 })
-public class TileEntityProxyCombo extends TileEntityProxyBase implements IEnergyReceiverMK2, IEnergyConductorMK2, ISidedInventory, IFluidReceiverMK2, IHeatSource, ICrucibleAcceptor, SimpleComponent, OCComponent, IRORValueProvider, IRORInteractive {
+public class TileEntityProxyCombo extends TileEntityProxyBase implements IEnergyReceiverMK2, IEnergyConductorMK2, ISidedInventory, IFluidReceiverMK2, IHeatSource, ICrucibleAcceptor, SimpleComponent, OCComponent, IRORValueProvider, IRORInteractive, IFluidHandler {
 
 	TileEntity tile;
 	boolean inventory;
@@ -565,5 +569,67 @@ public class TileEntityProxyCombo extends TileEntityProxyBase implements IEnergy
 	public String runRORFunction(String name, String[] params) {
 		if(getCoreObject() instanceof IRORInteractive) return ((IRORInteractive) getCoreObject()).runRORFunction(name, params);
 		return null;
+	}
+
+	// ===== Forge Fluid Handler Implementation =====
+
+	@Override
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		if(!fluid)
+			return 0;
+		if(getCoreObject() instanceof IFluidHandler) {
+			return ((IFluidHandler)getCoreObject()).fill(from, resource, doFill);
+		}
+		return 0;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		if(!fluid)
+			return null;
+		if(getCoreObject() instanceof IFluidHandler) {
+			return ((IFluidHandler)getCoreObject()).drain(from, resource, doDrain);
+		}
+		return null;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		if(!fluid)
+			return null;
+		if(getCoreObject() instanceof IFluidHandler) {
+			return ((IFluidHandler)getCoreObject()).drain(from, maxDrain, doDrain);
+		}
+		return null;
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		if(!this.fluid)
+			return false;
+		if(getCoreObject() instanceof IFluidHandler) {
+			return ((IFluidHandler)getCoreObject()).canFill(from, fluid);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		if(!this.fluid)
+			return false;
+		if(getCoreObject() instanceof IFluidHandler) {
+			return ((IFluidHandler)getCoreObject()).canDrain(from, fluid);
+		}
+		return false;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		if(!fluid)
+			return new FluidTankInfo[0];
+		if(getCoreObject() instanceof IFluidHandler) {
+			return ((IFluidHandler)getCoreObject()).getTankInfo(from);
+		}
+		return new FluidTankInfo[0];
 	}
 }

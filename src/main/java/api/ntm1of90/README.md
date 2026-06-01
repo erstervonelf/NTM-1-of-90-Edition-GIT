@@ -53,7 +53,13 @@ For more information, see the [Applied Energistics 2 Compatibility API README](c
 
 ## Implementation Details
 
-The API uses a non-invasive approach to provide additional functionality for HBM's Nuclear Tech Mod. It does not modify the core mod, but instead provides extensions and utilities that work alongside it.
+The API uses a non-invasive approach to provide additional functionality for HBM's Nuclear Tech Mod. 
+
+Affected classes in com/hbm/tileentity/machine/storage:
+- **TileEntityProxyCombo.java**: Proxy tiles used for multiblock tanks/machines 
+- **TileEntityMachineFluidTank.java**: Proxy forwards to main tank
+- **TileEntityBarrel.java**: Extends other tank types 
+- **TileEntityBAT9000.java**: Extends TileEntityBarrel.java
 
 ### Fluid Registry System
 

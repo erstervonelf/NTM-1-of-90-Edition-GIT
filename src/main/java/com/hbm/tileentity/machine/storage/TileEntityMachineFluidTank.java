@@ -6,6 +6,9 @@ import api.hbm.fluidmk2.IFluidStandardTransceiverMK2;
 import api.hbm.redstoneoverradio.IRORInteractive;
 import api.hbm.redstoneoverradio.IRORValueProvider;
 
+import api.ntm1of90.compat.fluid.adapter.ForgeFluidHandlerAdapter;
+import api.ntm1of90.compat.fluid.registry.FluidMappingRegistry;
+
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.explosion.vanillant.ExplosionVNT;
@@ -49,6 +52,10 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -56,7 +63,7 @@ import java.util.List;
 import java.util.Random;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "opencomputers")})
-public class TileEntityMachineFluidTank extends TileEntityMachineBase implements SimpleComponent, OCComponent, IFluidStandardTransceiverMK2, IPersistentNBT, IOverpressurable, IGUIProvider, IRepairable, IFluidCopiable, IRORValueProvider, IRORInteractive {
+public class TileEntityMachineFluidTank extends TileEntityMachineBase implements SimpleComponent, OCComponent, IFluidStandardTransceiverMK2, IPersistentNBT, IOverpressurable, IGUIProvider, IRepairable, IFluidCopiable, IRORValueProvider, IRORInteractive, IFluidHandler {
 
 	protected FluidNode node;
 	protected FluidType lastType;
@@ -587,5 +594,235 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 			return null;
 		}
 		return null;
+	}
+
+	// ===== Forge Fluid Handler Implementation =====
+	
+	@Override
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		if (resource == null || resource.amount <= 0 || !canFillFrom(from)) {
+			return 0;
+		}
+
+		// Convert Forge fluid to NTM fluid
+		com.hbm.inventory.fluid.FluidType ntmFluid = FluidMappingRegistry.getHbmFluidType(resource.getFluid());
+		if (ntmFluid == com.hbm.inventory.fluid.Fluids.NONE) {
+			return 0; // Unknown fluid
+		}
+
+		// Check if tank accepts this fluid and can accept more
+		int currentFill = tank.getFill();
+		com.hbm.inventory.fluid.FluidType currentType = tank.getTankType();
+
+		if (currentFill > 0 && currentType != ntmFluid) {
+			return 0; // Tank contains a different fluid
+		}
+
+		// Calculate how much can be filled
+		int maxFill = tank.getMaxFill();
+		int fillAmount = Math.min(resource.amount, maxFill - currentFill);
+
+		if (fillAmount <= 0) {
+			return 0; // Tank is full
+		}
+
+		// Fill the tank
+		if (doFill) {
+			if (currentFill == 0) {
+				tank.setTankType(ntmFluid);
+			}
+			tank.setFill(currentFill + fillAmount);
+			this.markDirty();
+		}
+
+		return fillAmount;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		if (resource == null || resource.amount <= 0 || !canDrainFrom(from)) {
+			return null;
+		}
+
+		// Convert Forge fluid to NTM fluid
+		com.hbm.inventory.fluid.FluidType ntmFluid = FluidMappingRegistry.getHbmFluidType(resource.getFluid());
+		if (ntmFluid == com.hbm.inventory.fluid.Fluids.NONE) {
+			return null; // Unknown fluid
+		}
+
+		// Check if tank contains this fluid
+		int currentFill = tank.getFill();
+		com.hbm.inventory.fluid.FluidType currentType = tank.getTankType();
+
+		if (currentFill <= 0 || currentType != ntmFluid) {
+			return null; // Tank is empty or contains a different fluid
+		}
+
+		// Calculate how much can be drained
+		int drainAmount = Math.min(resource.amount, currentFill);
+
+		if (drainAmount <= 0) {
+			return null; // Nothing to drain
+		}
+
+		// Drain the tank
+		if (doDrain) {
+			tank.setFill(currentFill - drainAmount);
+			this.markDirty();
+		}
+
+		// Create a fluid stack for the drained fluid
+		Fluid forgeFluid = FluidMappingRegistry.getForgeFluid(currentType);
+		if (forgeFluid != null) {
+			return new FluidStack(forgeFluid, drainAmount);
+		}
+
+		return null;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		if (maxDrain <= 0 || !canDrainFrom(from)) {
+			return null;
+		}
+
+		// Check if tank contains fluid
+		int currentFill = tank.getFill();
+		com.hbm.inventory.fluid.FluidType currentType = tank.getTankType();
+
+		if (currentFill <= 0 || currentType == com.hbm.inventory.fluid.Fluids.NONE) {
+			return null; // Tank is empty
+		}
+
+		// Get the corresponding Forge fluid
+		Fluid forgeFluid = FluidMappingRegistry.getForgeFluid(currentType);
+		if (forgeFluid == null) {
+			return null; // No Forge fluid mapping
+		}
+
+		// Calculate how much can be drained
+		int drainAmount = Math.min(maxDrain, currentFill);
+
+		if (drainAmount <= 0) {
+			return null; // Nothing to drain
+		}
+
+		// Drain the tank
+		if (doDrain) {
+			tank.setFill(currentFill - drainAmount);
+			this.markDirty();
+		}
+
+		// Create a fluid stack for the drained fluid
+		return new FluidStack(forgeFluid, drainAmount);
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		// If tank is exploded, never allow operations
+		if (this.hasExploded) {
+			return false;
+		}
+
+		// For probe query (fluid is null), always indicate capability if space available
+		// This allows Forge pipes to detect the handler exists
+		if (fluid == null) {
+			return tank.getFill() < tank.getMaxFill();
+		}
+
+		// Check mode restriction only for actual fluid type queries
+		if (!canFillFrom(from)) {
+			return false;
+		}
+
+		// Convert Forge fluid to NTM fluid
+		com.hbm.inventory.fluid.FluidType ntmFluid = FluidMappingRegistry.getHbmFluidType(fluid);
+		if (ntmFluid == com.hbm.inventory.fluid.Fluids.NONE) {
+			return false; // Unknown fluid
+		}
+
+		// Check if tank can accept this specific fluid
+		int currentFill = tank.getFill();
+		com.hbm.inventory.fluid.FluidType currentType = tank.getTankType();
+		int maxFill = tank.getMaxFill();
+
+		return currentFill < maxFill && (currentFill <= 0 || currentType == ntmFluid);
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		// If tank is exploded, never allow operations
+		if (this.hasExploded) {
+			return false;
+		}
+
+		// For probe query (fluid is null), always indicate capability if fluid present
+		// This allows Forge pipes to detect the handler exists
+		if (fluid == null) {
+			return tank.getFill() > 0 && tank.getTankType() != com.hbm.inventory.fluid.Fluids.NONE;
+		}
+
+		// Check mode restriction only for actual fluid type queries
+		if (!canDrainFrom(from)) {
+			return false;
+		}
+
+		// Convert Forge fluid to NTM fluid
+		com.hbm.inventory.fluid.FluidType ntmFluid = FluidMappingRegistry.getHbmFluidType(fluid);
+		if (ntmFluid == com.hbm.inventory.fluid.Fluids.NONE) {
+			return false; // Unknown fluid
+		}
+
+		// Check if tank contains this specific fluid
+		int currentFill = tank.getFill();
+		com.hbm.inventory.fluid.FluidType currentType = tank.getTankType();
+
+		return currentFill > 0 && currentType == ntmFluid;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		// Always provide tank information regardless of mode
+		// Forge pipes use this to detect the handler and determine fluid state
+		int currentFill = tank.getFill();
+		int maxFill = tank.getMaxFill();
+		com.hbm.inventory.fluid.FluidType currentType = tank.getTankType();
+
+		// Create a fluid stack for the current contents
+		FluidStack stack = null;
+		if (currentFill > 0 && currentType != com.hbm.inventory.fluid.Fluids.NONE) {
+			Fluid forgeFluid = FluidMappingRegistry.getForgeFluid(currentType);
+			if (forgeFluid != null) {
+				stack = new FluidStack(forgeFluid, currentFill);
+			}
+		}
+
+		// Create and return the tank info
+		// Note: Even if exploded, still report tank info so pipes can detect and query the handler
+		return new FluidTankInfo[] { new FluidTankInfo(stack, maxFill) };
+	}
+
+	/**
+	 * Determines if fluid can be filled from the given direction.
+	 * Respects the tank's mode settings:
+	 * - Mode 0: Receive only
+	 * - Mode 1: Buffer (both)
+	 * - Mode 2: Provide only
+	 * - Mode 3: Disabled
+	 */
+	private boolean canFillFrom(ForgeDirection from) {
+		return !this.hasExploded && (mode == 0 || mode == 1);
+	}
+
+	/**
+	 * Determines if fluid can be drained from the given direction.
+	 * Respects the tank's mode settings:
+	 * - Mode 0: Receive only
+	 * - Mode 1: Buffer (both)
+	 * - Mode 2: Provide only
+	 * - Mode 3: Disabled
+	 */
+	private boolean canDrainFrom(ForgeDirection from) {
+		return !this.hasExploded && (mode == 1 || mode == 2);
 	}
 }
