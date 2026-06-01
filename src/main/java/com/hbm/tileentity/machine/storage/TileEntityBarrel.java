@@ -424,9 +424,15 @@ public class TileEntityBarrel extends TileEntityMachineBase implements SimpleCom
 		}
 
 		@Override
-		protected boolean isValidDirection(ForgeDirection from) {
-			// Only allow fluid transfer if the barrel is in the right mode
-			return (mode == 0 || mode == 1); // Only allow in input or buffer mode
+		protected boolean isFillAllowed(ForgeDirection from) {
+			// allow filling in input or buffer mode
+			return (mode == 0 || mode == 1);
+		}
+
+		@Override
+		protected boolean isDrainAllowed(ForgeDirection from) {
+			// allow draining in output or buffer mode
+			return (mode == 1 || mode == 2);
 		}
 	};
 
@@ -434,6 +440,18 @@ public class TileEntityBarrel extends TileEntityMachineBase implements SimpleCom
 		// Initialize the fluid mapping registry
 		FluidMappingRegistry.initialize();
 	}
+
+	// Common compatibility helpers that some pipe mods reflectively probe for
+	public boolean canConnectFluid(ForgeDirection from) { return true; }
+	public boolean isConnectable(ForgeDirection from) { return true; }
+	public boolean canInterface(ForgeDirection from) { return true; }
+	public boolean canInputFluid(ForgeDirection from) { return (mode == 0 || mode == 1); }
+	public boolean canOutputFluid(ForgeDirection from) { return (mode == 1 || mode == 2); }
+	public boolean canReceiveFrom(ForgeDirection from) { return (mode == 0 || mode == 1); }
+	public boolean canSendTo(ForgeDirection from) { return (mode == 1 || mode == 2); }
+	public boolean canAcceptFluid(ForgeDirection from) { return (mode == 0 || mode == 1); }
+	public boolean canProvideFluid(ForgeDirection from) { return (mode == 1 || mode == 2); }
+	public boolean isFluidHandler(ForgeDirection from) { return true; }
 
 	@Override
 	public int fill(ForgeDirection from, net.minecraftforge.fluids.FluidStack resource, boolean doFill) {
