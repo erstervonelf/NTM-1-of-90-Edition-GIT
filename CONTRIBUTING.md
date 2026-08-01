@@ -34,6 +34,15 @@ Preferred:
 - Link related issues.
 - Include testing notes and affected environments.
 
+## Merge quality gates
+
+The following checks are expected before merge:
+
+- CI workflow (`CI / build`) is green.
+- Relevant issue/PR templates are completed with actionable detail.
+- Documentation is updated when behavior, workflow, or release process changes.
+- Security-sensitive changes include clear impact notes and mitigation details.
+
 ## Communication
 
 For larger additions, open a feature request first so design and scope can be aligned before implementation.
