@@ -33,6 +33,7 @@ Fork-specific work is centered in `src/main/java/com/oneof90`:
 ## Getting builds
 
 - GitHub Releases: use the release assets published by this fork
+- Nightly prereleases: scheduled `ci.yml` runs publish nightly release assets automatically
 - CI artifacts: available from successful workflow runs for quick validation builds
 
 ## Building from source

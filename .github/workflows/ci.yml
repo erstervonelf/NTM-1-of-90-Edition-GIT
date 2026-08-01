@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
@@ -42,3 +42,29 @@ jobs:
           path: build/libs/*.jar
           retention-days: 14
           if-no-files-found: error
+
+      - name: Generate nightly release metadata
+        id: nightly
+        run: |
+          DATE="$(date -u +%Y%m%d)"
+          TAG="nightly-${DATE}-${GITHUB_RUN_NUMBER}"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "name=Nightly Build ${DATE} #${GITHUB_RUN_NUMBER}" >> "$GITHUB_OUTPUT"
+
+      - name: Publish nightly prerelease
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.nightly.outputs.tag }}
+          name: ${{ steps.nightly.outputs.name }}
+          target_commitish: ${{ github.sha }}
+          prerelease: true
+          generate_release_notes: false
+          body: |
+            Automated nightly build from commit `${{ github.sha }}`.
+            Workflow run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          files: |
+            build/libs/*.jar
+            LICENSE
+            LICENSE.LESSER
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
