@@ -1,11 +1,10 @@
-name: CI
+name: Nightly
+
+run-name: Nightly build #${{ github.run_number }}
 
 on:
-  push:
-    branches:
-      - master
-      - main
-  pull_request:
+  schedule:
+    - cron: '0 2 * * *'
   workflow_dispatch:
 
 permissions:
@@ -39,7 +38,7 @@ jobs:
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: build-libs
+          name: nightly-build-libs-${{ github.run_number }}
           path: build/libs/*.jar
           retention-days: 14
           if-no-files-found: error
