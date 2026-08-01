@@ -28,6 +28,11 @@ Examples:
 4. `release.yml` builds with JDK 8 and publishes GitHub release assets.
 5. Verify JAR artifact and attached license files.
 
+## Nightly flow
+
+- `ci.yml` runs nightly and on manual dispatch.
+- Each run uploads CI artifacts and also publishes a nightly prerelease with build JARs and license files.
+
 ## Pre-release handling
 
 Pre-release status is inferred from tag text containing `-alpha`, `-beta`, or `-rc`.
