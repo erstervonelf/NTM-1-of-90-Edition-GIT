@@ -1,45 +1,54 @@
-# NTM Contribution Guidelines, Version 1
+# Contributing to NTM 1-of-90 Edition
 
-## Keep it concise
+## Scope expectations
 
-The best PRs are the ones that are small and to the point. The entire PR should focus on the thing you're trying to do, whether it's a fix or a feature PR. If your PR adds the Super Weldtronic 9000, there's no reason to include changes and tweaks to other things that have nothing to do with the Super Weldtronic 9000. If you think those changes are still necessary, open a new PR.
+This fork accepts focused, production-ready contributions that improve fork content, tooling, stability, and maintainability.
 
-## Keep it clean
+- Keep PRs small and purpose-driven.
+- Avoid unrelated refactors.
+- Do not introduce new dependencies unless strictly required.
+- Prefer extending `com.oneof90` for fork-exclusive work.
 
-While admittedly my own code isn't the cleanest on earth, please try to keep terrible practices at a minimum. Also avoid things like unused variables and imports, mixed indentation styles or changes that have a high likelihood of breaking things.
+## Required validation
 
-Things you should also avoid include:
-* new libraries (unless your PR absolutely needs it like for special mod compat)
-* duplicate util functions (just use what we have, man)
-* unused or half finished util functions (for obvious reasons)
-* half finished or obviously broken features (à la "bob will fix it, i'm sure of it", please don't do that)
-* updating the changelog (you're guaranteed to cause a merge conflict with that)
-* any use of `I18n`, use `I18nUtil` instead
+Before opening or updating a PR:
 
-## Test your code
+1. Build locally with `./gradlew build`
+2. Verify there are no obvious compile/runtime regressions
+3. For compatibility changes, validate with and without the target mod when possible
 
-This should go without saying, but please don't PR code that was never actually tested or has obvious compiler errors in it.
+## Contribution categories
 
-**Addendum:** Because apparently some people think that testing is somehow optional, it is now **mandatory** to test the code both on a client and on a server. If the PR contains compat code, the game has to work **with and without** the mod that the compat is for.
+Preferred:
 
-## No refactor PRs
-Your refactors suck ass and usually something ends up breaking.
+- Bug fixes
+- Compatibility fixes
+- Performance improvements
+- Documentation and process improvements
+- Fork-scoped gameplay/content additions
+
+## Pull request requirements
+
+- Use the PR template.
+- Describe scope, motivation, and impact clearly.
+- Link related issues.
+- Include testing notes and affected environments.
+
+## Merge quality gates
+
+The following checks are expected before merge:
+
+- CI workflow (`CI / build`) is green.
+- Relevant issue/PR templates are completed with actionable detail.
+- Documentation is updated when behavior, workflow, or release process changes.
+- Security-sensitive changes include clear impact notes and mitigation details.
 
 ## Communication
 
-If you're planning on adding some new thing or doing a grand change, it's best to ask whether that's a good idea before spending 50 hours on a project that won't end up getting merged, due to issues that could have been entirely avoidable with communication.
+For larger additions, open a feature request first so design and scope can be aligned before implementation.
 
-## No guarantees
+## Non-goals
 
-This ties together with the previous point - there's no guarantees that your PR gets merged no matter how hard or long you've worked on it. However, if you follow these guidelines, there's a good chance that your PR will be accepted.
-
-## If you dare send me clanker code, I will rip your limbs off
-
-## I want to help but don't know where to start
-
-If you want to help the project, consider getting involved with the [wiki](https://nucleartech.wiki/) first. Writing an article is the easiest and quickest way of helping, and requires no programming knowledge. If you do know Java and want to help, consider these places first:
-
-* Localization, i.e. translations in different language are always accepted.
-* `IConfigurableMachine`, an interface that allows machines to be added to the `hbmMachines.json` config, is still not used by many machines.
-* F1 Presentations, also known as "Stare" or "Jar Presentations", is a neat system of creating a short movie explaining functionality. All the relevant code can be found in `com.hbm.wiaj`.
-* Adding tooltips to more machines, explaining some of the basics.
+- Drive-by mass formatting changes
+- Broad architecture rewrites without prior agreement
+- Half-finished features
