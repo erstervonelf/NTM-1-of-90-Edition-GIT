@@ -1,0 +1,36 @@
+name: Feature request
+description: Propose an improvement for this fork
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Current version/tag
+      placeholder: v1.0.27-r.11-hotfix.3
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem statement
+      description: What user problem does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe your preferred approach
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: textarea
+    id: impact
+    attributes:
+      label: Compatibility / balance impact
+      description: Note any gameplay, compatibility, or performance concerns
