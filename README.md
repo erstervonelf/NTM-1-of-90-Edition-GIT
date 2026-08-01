@@ -15,6 +15,8 @@ Fork-specific work is centered in `src/main/java/com/oneof90`:
 - Dedicated tile entities and custom renderers for fork content
 - Internal architecture and extension documentation set for maintainers and contributors
 - Active fork changelog with gameplay/content changes managed separately from upstream history
+- Watz Fixes and Pellets
+- Full Native Forge Fluid Compat
 
 ## Upstream vs fork scope
 
