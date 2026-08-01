@@ -1,4 +1,6 @@
-name: CI
+name: Nightly
+
+run-name: Nightly build #${{ github.run_number }}
 
 on:
   schedule:
