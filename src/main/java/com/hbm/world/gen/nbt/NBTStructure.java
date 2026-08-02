@@ -7,8 +7,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import com.hbm.config.ServerConfig;
 import org.apache.commons.io.IOUtils;
 
 import com.hbm.blocks.ModBlocks;
@@ -80,12 +82,28 @@ public class NBTStructure {
 	private Map<String, List<JigsawConnection>> toTopConnections;
 	private Map<String, List<JigsawConnection>> toBottomConnections;
 	private Map<String, List<JigsawConnection>> toHorizontalConnections;
-	
+
 	// incredibly shitty system for translating legacy block definitions to new ones
 	@Untested // i can't find a god damn factory
-	private static Map<String, String> substitutions = new HashMap() {{
-		put("hbm:tile.ore_coal_oil", "coal_ore");
+	private static Map<String, BlockMigration> substitutions = new HashMap() {{
+		put("hbm:tile.ore_coal_oil", new BlockMigration("coal_ore"));
 	}};
+	
+	public static class BlockMigration {
+		public String block;
+		public int meta;
+		// i may have misjudged, migration is only done when the palette is loaded, rendering this basically useless
+		public Consumer<TileEntity> tileEntityTransformerObject;
+		
+		public BlockMigration(String block)											{ this(block, 0, null); }
+		public BlockMigration(String block,	int meta)								{ this(block, meta, null); }
+		public BlockMigration(String block,				Consumer<TileEntity> teto)	{ this(block, 0, teto); }
+		public BlockMigration(String block,	int meta,	Consumer<TileEntity> teto)	{
+			this.block = block;
+			this.meta = meta;
+			this.tileEntityTransformerObject = teto;
+		}
+	}
 
 	public NBTStructure(ResourceLocation resource) {
 		// Can't use regular resource loading, servers don't know how!
@@ -327,13 +345,16 @@ public class NBTStructure {
 				NBTTagCompound p = paletteList.getCompoundTagAt(i);
 
 				String blockName = p.getString("Name");
-				NBTTagCompound prop = p.getCompoundTag("Properties");
-				
-				/// BOB PATCH ///
-				if(substitutions.containsKey(blockName)) blockName = substitutions.get(blockName);
-				/// BOB PATCH ///
-
 				int meta = 0;
+				NBTTagCompound prop = p.getCompoundTag("Properties");
+
+				/// BOB PATCH ///
+				if(substitutions.containsKey(blockName)) {
+					BlockMigration mig = substitutions.get(blockName);
+					blockName = mig.block;
+					meta = mig.meta;
+				}
+				/// BOB PATCH ///
 				try {
 					meta = Integer.parseInt(prop.getString("meta"));
 				} catch(NumberFormatException ex) {
@@ -343,7 +364,7 @@ public class NBTStructure {
 
 				palette[i] = new BlockDefinition(blockName, meta);
 
-				if(StructureConfig.debugStructures && palette[i].block == Blocks.air) {
+				if(ServerConfig.STRUCTURE_DEBUG.get() && palette[i].block == Blocks.air) {
 					palette[i] = new BlockDefinition(ModBlocks.wand_air, meta);
 				}
 			}
@@ -416,7 +437,7 @@ public class NBTStructure {
 						List<JigsawConnection> namedConnections = toConnections.computeIfAbsent(ourName, name -> new ArrayList<>());
 						namedConnections.add(connection);
 
-						if(!StructureConfig.debugStructures) {
+						if(!ServerConfig.STRUCTURE_DEBUG.get()) {
 							blockState = new BlockState(new BlockDefinition(replaceBlock, replaceMeta));
 						}
 					}

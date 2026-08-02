@@ -90,7 +90,7 @@ public class TileEntityMachineIndustrialTurbine extends TileEntityTurbineBase im
 	@Override
 	public void onServerTick() {
 		this.spin = (double) flywheel_energy / FLYWHEEL_MAX_ENERGY; //because dense steams have way lower energy output, turbines running them take a lot longer to spool up
-		this.lastPowerTarget = Math.min((long) (Math.max(this.spin, 0.1) * maxPower), this.flywheel_energy);
+		this.lastPowerTarget = Math.min((long) (Math.max(this.spin, 0.05) * maxPower), this.flywheel_energy);
 		this.flywheel_energy -= this.lastPowerTarget;
 		this.powerBuffer = (long) (this.lastPowerTarget);
 	}
@@ -183,6 +183,8 @@ public class TileEntityMachineIndustrialTurbine extends TileEntityTurbineBase im
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		lastPowerTarget = nbt.getLong("lastPowerTarget");
+		flywheel_energy = nbt.getLong("flywheel_energy");
+		maxPower = nbt.getLong("maxPower");
 		spin = nbt.getDouble("spin");
 	}
 
@@ -190,6 +192,8 @@ public class TileEntityMachineIndustrialTurbine extends TileEntityTurbineBase im
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setLong("lastPowerTarget", lastPowerTarget);
+		nbt.setLong("flywheel_energy", flywheel_energy);
+		nbt.setLong("maxPower", maxPower);
 		nbt.setDouble("spin", spin);
 	}
 

@@ -69,7 +69,7 @@ public class ItemStarterKit extends Item {
 			player.inventory.addItemStackToInventory(new ItemStack(ModItems.ingot_uranium, 32));
 			player.inventory.addItemStackToInventory(new ItemStack(ModItems.powder_yellowcake, 32));
 			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.machine_press, 1));
-			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.machine_difurnace_off, 1));
+			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.machine_blast_furnace, 1));
 			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.machine_gascent, 1));
 			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.machine_reactor_breeding, 1));
 			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.machine_assembly_machine, 1));
@@ -99,7 +99,7 @@ public class ItemStarterKit extends Item {
 			player.inventory.addItemStackToInventory(new ItemStack(ModItems.ingot_tungsten, 64));
 			player.inventory.addItemStackToInventory(new ItemStack(ModItems.ingot_lead, 64));
 			player.inventory.addItemStackToInventory(new ItemStack(ModItems.ingot_polymer, 64));
-			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.machine_difurnace_off, 3));
+			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.machine_blast_furnace, 3));
 			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.machine_gascent, 3));
 			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.machine_centrifuge, 2));
 			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.machine_uf6_tank, 2));
@@ -108,7 +108,7 @@ public class ItemStarterKit extends Item {
 			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.reactor_research, 4));
 			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.machine_turbine, 4));
 			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.machine_radgen, 1));
-			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.machine_rtg_grey, 1));
+			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.machine_rtg, 1));
 			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.machine_assembly_machine, 3));
 			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.machine_chemical_plant, 2));
 			player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.machine_fluidtank, 1));

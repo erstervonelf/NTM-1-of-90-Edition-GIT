@@ -7,6 +7,7 @@ import codechicken.nei.api.INEIGuiHandler;
 import codechicken.nei.api.TaggedInventoryArea;
 import com.hbm.inventory.SlotPattern;
 import com.hbm.inventory.container.ContainerBase;
+import com.hbm.inventory.gui.element.GUIElements;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.toserver.NBTControlPacket;
 
@@ -59,6 +60,11 @@ public abstract class GuiInfoContainer extends GuiContainer implements INEIGuiHa
 
 	public void drawInfo(String[] text, int x, int y) {
 		this.func_146283_a(Arrays.asList(text), x, y);
+	}
+
+	@Override
+	protected void func_146283_a(List lines, int x, int y) {
+		GUIElements.drawHoveringText(lines, x, y, fontRendererObj, itemRender, width, height);
 	}
 
 	/** Automatically grabs upgrade info out of the tile entity if it's a IUpgradeInfoProvider and crams the available info into a list for display. Automation, yeah! */
@@ -176,14 +182,14 @@ public abstract class GuiInfoContainer extends GuiContainer implements INEIGuiHa
 		this.zLevel = 0.0F;
 		itemRender.zLevel = 0.0F;
 	}
-	
+
 	public static final ItemStack TEMPLATE_FOLDER = new ItemStack(ModItems.template_folder);
-	
+
 	/** Standardsized item rendering from GUIScreenRecipeSelector */
 	public void renderItem(ItemStack stack, int x, int y) {
 		renderItem(stack, x, y, 100F);
 	}
-	
+
 	public void renderItem(ItemStack stack, int x, int y, float layer) {
 		FontRenderer font = stack.getItem().getFontRenderer(stack);
 		if(font == null) font = fontRendererObj;
@@ -317,15 +323,26 @@ public abstract class GuiInfoContainer extends GuiContainer implements INEIGuiHa
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		}
 	}
-	
+
 	public void click() {
 		mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
 	}
-	
+
+	public void clickSendFlag(TileEntity tile, int x, int y, int left, int top, int sizeX, int sizeY, String name) {
+		if(checkClick(x, y, left, top, sizeX, sizeY)) {
+			mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
+			NBTTagCompound data = new NBTTagCompound();
+			data.setBoolean(name, true);
+			PacketDispatcher.wrapper.sendToServer(new NBTControlPacket(data, tile.xCoord, tile.yCoord, tile.zCoord));
+		}
+	}
+
 	///NEI drag and drop support
 	@Override
 	@Optional.Method(modid = "NotEnoughItems")
 	public boolean handleDragNDrop(GuiContainer gui, int x, int y, ItemStack stack, int button) {
+		// BALD! BALD! BALD! BALD! BALD! BALD! BALD! BALD! BALD! BALD! BALD! BALD! BALD! BALD! BALD! BALD!
+
 		if(gui instanceof GuiInfoContainer && stack != null){
 			Slot slot = getSlotAtPosition(x,y);
 			if(slot instanceof SlotPattern){

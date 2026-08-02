@@ -45,7 +45,10 @@ public class ItemWrench extends ItemSword {
 
 			if(te != null && te instanceof TileEntityPipelineBase) {
 
-				if(stack.stackTagCompound == null) {
+				if(stack.stackTagCompound == null)
+					stack.stackTagCompound = new NBTTagCompound();
+
+				if(!stack.stackTagCompound.hasKey("x")) {
 					stack.stackTagCompound = new NBTTagCompound();
 
 					stack.stackTagCompound.setInteger("x", x);
@@ -78,12 +81,17 @@ public class ItemWrench extends ItemSword {
 							case 4: player.addChatMessage(new ChatComponentText("Pipe error - Pipe anchor fluid types do not match")); break;
 						}
 
-						stack.stackTagCompound = null;
+						stack.stackTagCompound.removeTag("x");
+						stack.stackTagCompound.removeTag("y");
+						stack.stackTagCompound.removeTag("z");
 
 					} else {
 
+						stack.stackTagCompound.removeTag("x");
+						stack.stackTagCompound.removeTag("y");
+						stack.stackTagCompound.removeTag("z");
+
 						player.addChatMessage(new ChatComponentText("Pipe error"));
-						stack.stackTagCompound = null;
 					}
 				}
 

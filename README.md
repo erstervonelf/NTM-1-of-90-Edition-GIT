@@ -38,6 +38,26 @@ Fork-specific work is centered in `src/main/java/com/oneof90`:
 - Nightly prereleases: scheduled `ci.yml` runs publish nightly release assets automatically
 - CI artifacts: available from successful workflow runs for quick validation builds
 
+## Using in your project
+
+To include the mod as a dependency in a project of your own, you can adjust your Gradle buildscript according to the following example:
+
+```groovy
+repositories {
+		maven {
+				name "NTM Releases"
+				url "https://maven.ntmr.dev/releases"
+		}
+}
+
+dependencies {
+		def ntmBuildNumber = "5687" // Change this value according to the release you wish to use
+
+		implementation "com.hbm:HBM-NTM:1.0.27_X${ntmBuildNumber}:dev"
+		compileOnly "com.hbm:HBM-NTM:1.0.27_X${ntmBuildNumber}:src"
+}
+```
+
 ## Building from source
 
 Requirements:

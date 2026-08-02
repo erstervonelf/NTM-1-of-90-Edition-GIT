@@ -3,6 +3,7 @@ package com.hbm.itempool;
 import static com.hbm.lib.HbmChestContents.weighted;
 
 import com.hbm.inventory.material.Mats;
+import com.hbm.items.ItemEnums;
 import com.hbm.items.ModItems;
 import com.hbm.items.weapon.grenade.ItemGrenadeExtra.EnumGrenadeExtra;
 import com.hbm.items.weapon.grenade.ItemGrenadeFilling.EnumGrenadeFilling;
@@ -26,9 +27,14 @@ public class ItemPoolsPile {
 	public static final String POOL_PILE_MAKESHIFT_PLATES = "POOL_PILE_MAKESHIFT_PLATES";
 	public static final String POOL_PILE_MAKESHIFT_WIRE = "POOL_PILE_MAKESHIFT_WIRE";
 	public static final String POOL_PILE_NUKE_STORAGE = "POOL_PILE_NUKE_STORAGE";
-	
+	public static final String POOL_PILE_OF_GARBAGE = "POOL_PILE_OF_GARBAGE";
+	public static final String POOL_PILE_MECHANICAL = "POOL_PILE_MECHANICAL";
+	public static final String POOL_PILE_GEAR = "POOL_PILE_GEAR";
+	public static final String POOL_PILE_SUPPLIES = "POOL_PILE_SUPPLIES";
+
+
 	public static void init() {
-		
+
 		//items found in glyphid hives
 		new ItemPool(POOL_PILE_HIVE) {{
 			this.pool = new WeightedRandomChestContent[] {
@@ -62,7 +68,7 @@ public class ItemPoolsPile {
 					weighted(Items.experience_bottle, 0, 1, 3, 5),
 			};
 		}};
-		
+
 		//items found in glyphid bone piles
 		new ItemPool(POOL_PILE_BONES) {{
 			this.pool = new WeightedRandomChestContent[] {
@@ -71,7 +77,7 @@ public class ItemPoolsPile {
 					weighted(ModItems.biomass, 0, 1, 1, 2)
 			};
 		}};
-		
+
 		//bottlecap stashess
 		new ItemPool(POOL_PILE_CAPS) {{
 			this.pool = new WeightedRandomChestContent[] {
@@ -80,7 +86,7 @@ public class ItemPoolsPile {
 					weighted(ModItems.cap_sparkle, 0, 4, 4, 1),
 			};
 		}};
-		
+
 		//medicine stashes
 		new ItemPool(POOL_PILE_MED_SYRINGE) {{
 			this.pool = new WeightedRandomChestContent[] {
@@ -97,19 +103,59 @@ public class ItemPoolsPile {
 					weighted(ModItems.siox, 0, 1, 1, 5),
 			};
 		}};
-		
+
 		//makeshift gun
 		new ItemPool(POOL_PILE_MAKESHIFT_GUN) {{ this.pool = new WeightedRandomChestContent[] { weighted(ModItems.gun_maresleg, 0, 1, 1, 10) }; }};
 		new ItemPool(POOL_PILE_MAKESHIFT_WRENCH) {{ this.pool = new WeightedRandomChestContent[] { weighted(ModItems.wrench, 0, 1, 1, 10) }; }};
 		new ItemPool(POOL_PILE_MAKESHIFT_PLATES) {{ this.pool = new WeightedRandomChestContent[] { weighted(ModItems.plate_steel, 0, 1, 1, 10) }; }};
 		new ItemPool(POOL_PILE_MAKESHIFT_WIRE) {{ this.pool = new WeightedRandomChestContent[] { weighted(ModItems.wire_fine, Mats.MAT_ALUMINIUM.id, 1, 1, 10) }; }};
-		
+
 		new ItemPool(POOL_PILE_NUKE_STORAGE) {{
 			this.pool = new WeightedRandomChestContent[] {
 					weighted(ModItems.ammo_standard, EnumAmmo.NUKE_STANDARD.ordinal(), 1, 1, 50),
 					weighted(ModItems.ammo_standard, EnumAmmo.NUKE_HIGH.ordinal(), 1, 1, 10),
 					weighted(ModItems.ammo_standard, EnumAmmo.NUKE_TOTS.ordinal(), 1, 1, 10),
 
+			};
+		}};
+
+		new ItemPool(POOL_PILE_MECHANICAL) {{
+			this.pool = new WeightedRandomChestContent[] {
+				weighted(ModItems.defuser, 0, 1, 1, 30),
+				weighted(ModItems.screwdriver, 0, 1, 1, 30),
+				weighted(ModItems.wire_fine, Mats.MAT_COPPER.id, 8, 12, 120),
+				weighted(ModItems.plate_steel, 0, 3, 8, 40),
+				weighted(ModItems.plate_copper, 0, 2, 5, 40),
+				weighted(ModItems.coil_copper, 0, 2, 5, 40),
+				weighted(ModItems.coil_tungsten, 0, 2, 5, 40)
+			};
+		}};
+
+		new ItemPool(POOL_PILE_GEAR) {{
+			this.pool = new WeightedRandomChestContent[] {
+				weighted(ModItems.defuser, 0, 1, 1, 40),
+				weighted(ModItems.screwdriver, 0, 1, 1, 30),
+				weighted(ModItems.canteen_vodka,0, 1, 1, 40),
+				weighted(ModItems.casing, ItemEnums.EnumCasingType.SMALL_STEEL.ordinal(), 1, 4, 30),
+				weighted(ModItems.casing, ItemEnums.EnumCasingType.SMALL.ordinal(), 3, 8, 40),
+				weighted(ModItems.casing, ItemEnums.EnumCasingType.BUCKSHOT.ordinal(), 3, 8, 40),
+				weighted(ModItems.canned_conserve, 0, 2, 5, 40),
+				weighted(ModItems.taurun_helmet, 0, 1, 1, 20),
+				weighted(ModItems.taurun_plate, 0, 1, 1, 20),
+				weighted(ModItems.taurun_legs, 0, 1, 1, 20),
+				weighted(ModItems.taurun_boots, 0, 1, 1, 20)
+			};
+		}};
+
+		new ItemPool(POOL_PILE_SUPPLIES) {{
+			this.pool = new WeightedRandomChestContent[] {
+				weighted(ItemGrenadeUniversal.make(EnumGrenadeShell.FRAG, EnumGrenadeFilling.HE, EnumGrenadeFuze.S3, EnumGrenadeExtra.FRAG_SLEEVE), 3, 5, 10),
+				weighted(ItemGrenadeUniversal.make(EnumGrenadeShell.FRAG, EnumGrenadeFilling.HE, EnumGrenadeFuze.S3, EnumGrenadeExtra.FRAG_SLEEVE), 3, 5, 10),
+				weighted(ItemGrenadeUniversal.make(EnumGrenadeShell.FRAG, EnumGrenadeFilling.HE, EnumGrenadeFuze.S3, EnumGrenadeExtra.FRAG_SLEEVE), 3, 5, 10),
+				weighted(ModItems.syringe_metal_stimpak, 0, 3, 5, 30),
+				weighted(ModItems.syringe_metal_psycho, 0, 3, 5, 30),
+				weighted(ModItems.syringe_antidote, 0, 1, 2, 30),
+				weighted(ModItems.ammo_container, 0, 2, 3, 40)
 			};
 		}};
 	}

@@ -5,6 +5,7 @@ import com.google.common.collect.Multimap;
 import com.hbm.blocks.IStepTickReceiver;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockAshes;
+import com.hbm.blocks.generic.BlockPedestal;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.MobConfig;
 import com.hbm.config.RadiationConfig;
@@ -47,6 +48,8 @@ import com.hbm.packet.toclient.PlayerInformPacket;
 import com.hbm.packet.toclient.SerializableRecipePacket;
 import com.hbm.particle.helper.BlackPowderCreator;
 import com.hbm.potion.HbmPotion;
+import com.hbm.saveddata.satellites.SatelliteDetector;
+import com.hbm.saveddata.satellites.SatelliteRayScan;
 import com.hbm.tileentity.machine.TileEntityMachineRadarNT;
 import com.hbm.tileentity.machine.rbmk.RBMKDials;
 import com.hbm.tileentity.network.RTTYSystem;
@@ -398,10 +401,10 @@ public class ModEventHandler {
 				MobUtil.equipFullSet(entity, ModItems.hazmat_helmet, ModItems.hazmat_plate, ModItems.hazmat_legs, ModItems.hazmat_boots);
 				return;
 			}
-			slotPools = MobUtil.slotPoolCommon;
+			slotPools = MobUtil.slotPoolCommonS;
 
 		} else if(entity instanceof EntitySkeleton) {
-			slotPools = MobUtil.slotPoolRanged;
+			slotPools = MobUtil.slotPoolRangedS;
 			ItemStack bowReplacement = getSkelegun(soot, world.rand);
 			slotPools.put(0, createSlotPool(50, bowReplacement != null ? new Object[][]{{bowReplacement, 1}} : new Object[][]{}));
 		}
@@ -506,9 +509,9 @@ public class ModEventHandler {
 
 	@SubscribeEvent
 	public void onLivingUpdate(LivingUpdateEvent event) {
-		
+
 		if(event.entityLiving instanceof EntityCreeper && event.entityLiving.getEntityData().getBoolean("hfr_defused")) {
-			ItemModDefuser.defuse((EntityCreeper) event.entityLiving, null, false);
+			ItemModDefuser.castrateCreeper((EntityCreeper) event.entityLiving, null, false);
 		}
 
 		ItemStack[] prevArmor = event.entityLiving.previousEquipment;
@@ -516,7 +519,7 @@ public class ModEventHandler {
 		if(event.entityLiving instanceof EntityPlayerMP && prevArmor != null && event.entityLiving.getHeldItem() != null
 				&& (prevArmor[0] == null || prevArmor[0].getItem() != event.entityLiving.getHeldItem().getItem())
 				&& event.entityLiving.getHeldItem().getItem() instanceof IEquipReceiver) {
-			
+
 			((IEquipReceiver)event.entityLiving.getHeldItem().getItem()).onEquip((EntityPlayer) event.entityLiving, event.entityLiving.getHeldItem());
 		}
 
@@ -586,12 +589,15 @@ public class ModEventHandler {
 
 	@SubscribeEvent
 	public void worldTick(WorldTickEvent event) {
+		
+		World world = event.world;
+		long time = world.getTotalWorldTime();
 
-		if(event.world != null && !event.world.isRemote) {
+		if(world != null && !world.isRemote) {
 
 			if(reference != null) {
-				for(Object player : event.world.playerEntities) {
-					if(((EntityPlayer) player).ridingEntity != null && event.world.getTotalWorldTime() % (1 * 60 * 20) == 0) {
+				for(Object player : world.playerEntities) {
+					if(((EntityPlayer) player).ridingEntity != null && time % (1 * 60 * 20) == 0) {
 						((EntityPlayer) player).mountEntity(null);
 						didSit = true;
 					}
@@ -605,7 +611,7 @@ public class ModEventHandler {
 
 				int tickrate = Math.max(1, ServerConfig.ITEM_HAZARD_DROP_TICKRATE.get());
 
-				if(event.world.getTotalWorldTime() % tickrate == 0) {
+				if(time % tickrate == 0) {
 					List loadedEntityList = new ArrayList();
 					loadedEntityList.addAll(event.world.loadedEntityList); // ConcurrentModificationException my balls
 
@@ -618,13 +624,21 @@ public class ModEventHandler {
 					}
 				}
 
-				EntityRailCarBase.updateMotion(event.world);
+				EntityRailCarBase.updateMotion(world);
+			}
+			
+			if(time % 20 == 0) {
+				BlockPedestal.checkPedestalEntries(world.provider.dimensionId, time);
 			}
 		}
 
 		if(event.phase == Phase.START) {
-			BossSpawnHandler.rollTheDice(event.world);
-			TimedGenerator.automaton(event.world, 100);
+			BossSpawnHandler.rollTheDice(world);
+			TimedGenerator.automaton(world, 100);
+
+			SatelliteDetector.updateSystem(world);
+			if(world.getTotalWorldTime() % 20 == 10)
+				SatelliteRayScan.updateSystem(world);
 		}
 	}
 
@@ -1193,7 +1207,7 @@ public class ModEventHandler {
 		int y = event.y;
 		int z = event.z;
 		World world = event.world;
-		
+
 		if(GeneralConfig.enable528ExplosiveEnergistics && !world.isRemote && event.action == Action.RIGHT_CLICK_BLOCK) {
 			Block b = world.getBlock(x, y, z);
 			String name = Block.blockRegistry.getNameForObject(b);

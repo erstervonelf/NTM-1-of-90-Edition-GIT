@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.lwjgl.input.Keyboard;
+
 import com.hbm.config.GeneralConfig;
 import com.hbm.inventory.FluidStack;
 import com.hbm.inventory.RecipesCommon.AStack;
@@ -17,6 +19,8 @@ import com.hbm.util.BobMathUtil;
 import com.hbm.util.i18n.I18nUtil;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
@@ -132,11 +136,22 @@ public class GenericRecipe {
 		if(this.nameWrapper != null) name = I18nUtil.resolveKey(this.nameWrapper, name);
 		return name;
 	}
+	
+	public void printNEIExtras() {
+
+		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
+		String duration = BobMathUtil.getShortNumber(this.duration) + " ticks";
+		String consumption = BobMathUtil.getShortNumber(this.power) + "HE/t";
+		
+		int side = 164;
+		fontRenderer.drawString(duration, side - fontRenderer.getStringWidth(duration), 45, 0x404040);
+		fontRenderer.drawString(consumption, side - fontRenderer.getStringWidth(consumption), 57, 0x404040);
+	}
 
 	public List<String> print() {
 		List<String> list = new ArrayList();
-		list.add(EnumChatFormatting.YELLOW + this.getLocalizedName());
 
+		header(list);
 		autoSwitch(list);
 		duration(list);
 		power(list);
@@ -144,6 +159,11 @@ public class GenericRecipe {
 		output(list);
 
 		return list;
+	}
+	
+	protected void header(List<String> list) {
+		list.add(EnumChatFormatting.YELLOW + this.getLocalizedName());
+		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) list.add(EnumChatFormatting.DARK_GRAY + "Internal: " + this.getInternalName());
 	}
 	
 	protected void autoSwitch(List<String> list) {
@@ -185,7 +205,6 @@ public class GenericRecipe {
 			list.add("  " + EnumChatFormatting.BLUE + fluid.fill + "mB " + fluid.type.getLocalizedName() + pressurePart);
 		}
 	}
-
 
 	/** Default impl only matches localized name substring, can be extended to include ingredients as well */
 	public boolean matchesSearch(String substring) {

@@ -33,6 +33,7 @@ import com.hbm.items.weapon.sedna.BulletConfig;
 import com.hbm.items.weapon.sedna.ItemGunBaseNT;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.item.weapon.sedna.*;
+import com.hbm.tileentity.machine.pile.TileEntityPileCore;
 import com.hbm.tileentity.machine.storage.TileEntityBatterySocket;
 
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -252,6 +253,8 @@ public class GunFactoryClient {
 		} else {
 			System.err.println("[HBM] WARNING: ItemGrenadeFilling.laser is null, skipping laser renderer registration.");
 		}
+		
+		TileEntityPileCore.pile_debris.setRenderer(LegoClient.RENDER_GRAPHITE);
 		
 		//HUDS
 		((ItemGunBaseNT) ModItems.gun_debug)						.getConfig(null, 0).hud(LegoClient.HUD_COMPONENT_DURABILITY, LegoClient.HUD_COMPONENT_AMMO, LegoClient.HUD_COMPONENT_AMMO_SECOND);

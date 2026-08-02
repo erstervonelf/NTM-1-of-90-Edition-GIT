@@ -1,21 +1,14 @@
 package com.hbm.items.tool;
 
 import java.util.List;
-import java.util.Random;
 
-import com.hbm.blocks.ModBlocks;
-import com.hbm.config.GeneralConfig;
-import com.hbm.itempool.ItemPool;
-import com.hbm.itempool.ItemPoolsSingle;
 import com.hbm.lib.Library;
-import com.hbm.main.MainRegistry;
 
-import com.hbm.tileentity.machine.storage.TileEntitySafe;
+import com.hbm.main.StructureManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 
 public class ItemWandD extends Item {
@@ -32,9 +25,8 @@ public class ItemWandD extends Item {
 
 			int y = world.getHeightValue(pos.blockX, pos.blockZ);
 
-			Random rand = new Random();
-
-			if(world.getBlock(pos.blockX, y - 1, pos.blockZ).canPlaceTorchOnTop(world, pos.blockX, y - 1, pos.blockZ)) {
+			StructureManager.crane.build(world, pos.blockX, y, pos.blockZ);
+			/*if(world.getBlock(pos.blockX, y - 1, pos.blockZ).canPlaceTorchOnTop(world, pos.blockX, y - 1, pos.blockZ)) {
 				world.setBlock(pos.blockX, y, pos.blockZ, ModBlocks.safe, rand.nextInt(4) + 2, 2);
 				TileEntitySafe safe = (TileEntitySafe) world.getTileEntity(pos.blockX, y, pos.blockZ);
 
@@ -64,7 +56,7 @@ public class ItemWandD extends Item {
 
 				if(GeneralConfig.enableDebugMode)
 					MainRegistry.logger.info("[Debug] Successfully spawned safe at " + pos.blockX + " " + (y + 1) +" " + pos.blockZ);
-			}
+			}*/
 
 			/*ExplosionVNT vnt = new ExplosionVNT(world, pos.hitVec.xCoord, pos.hitVec.yCoord, pos.hitVec.zCoord, 7);
 			vnt.setBlockAllocator(new BlockAllocatorBulkie(60));

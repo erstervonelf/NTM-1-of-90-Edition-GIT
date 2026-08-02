@@ -57,9 +57,7 @@ import com.hbm.tileentity.machine.pile.*;
 import com.hbm.tileentity.machine.rbmk.*;
 import com.hbm.tileentity.machine.storage.*;
 import com.hbm.tileentity.network.*;
-import com.hbm.tileentity.network.pneumatic.TileEntityPneumoStorageAccess;
-import com.hbm.tileentity.network.pneumatic.TileEntityPneumoStorageClutter;
-import com.hbm.tileentity.network.pneumatic.TileEntityPneumoTube;
+import com.hbm.tileentity.network.pneumatic.*;
 import com.hbm.tileentity.turret.*;
 import com.hbm.util.Compat;
 
@@ -73,6 +71,7 @@ public class TileMappings {
 
 	public static void writeMappings() {
 		put(TileEntityDiFurnace.class, "tilentity_diFurnace");
+		put(TileEntityMachineBlastFurnace.class, "tilentity_blast_furnace");
 		put(TileEntityTestStorage.class, "tilentity_test_storage");
 		put(TileEntityObjTester.class, "tilentity_objtester");
 		put(TileEntityMachineCentrifuge.class, "tileentity_centrifuge");
@@ -134,6 +133,7 @@ public class TileMappings {
 		put(TileEntityMachineRadarScreen.class, "tileentity_radar_screen");
 		put(TileEntityBroadcaster.class, "tileentity_pink_cloud_broadcaster");
 		put(TileEntityMachineSatLinker.class, "tileentity_satlinker");
+		put(TileEntityMachineSatLink.class, "tileentity_satlink");
 		put(TileEntityReactorResearch.class, "tileentity_small_reactor");
 		put(TileEntityVaultDoorMigration.class, "tileentity_vault_door");
 		put(TileEntityRadiobox.class, "tileentity_radio_broadcaster");
@@ -178,7 +178,6 @@ public class TileMappings {
 		put(TileEntityMachineMiningLaser.class, "tileentity_mining_laser");
 		put(TileEntityNukeBalefire.class, "tileentity_nuke_fstbmb");
 		put(TileEntityMicrowave.class, "tileentity_microwave");
-		put(TileEntityMachineMiniRTG.class, "tileentity_mini_rtg");
 		put(TileEntityBlockICF.class, "tileentity_block_icf");
 		put(TileEntityICFPress.class, "tileentity_icf_press");
 		put(TileEntityICFController.class, "tileentity_icf_controller");
@@ -355,6 +354,7 @@ public class TileMappings {
 
 		put(TileEntityMachineCombustionEngine.class, "tileentity_combustion_engine");
 
+		put(TileEntityMachineRockMill.class, "tileentity_rock_mill");
 		put(TileEntityMachineAssemblyMachine.class, "tileentity_assemblymachine");
 		put(TileEntityMachineAssemblyFactory.class, "tileentity_assemblyfactory");
 		put(TileEntityMachinePrecAss.class, "tileentity_precass");
@@ -390,6 +390,12 @@ public class TileMappings {
 		put(TileEntityPileSource.class, "tileentity_pile_source");
 		put(TileEntityPileBreedingFuel.class, "tileentity_pile_breedingfuel");
 		put(TileEntityPileNeutronDetector.class, "tileentity_pile_neutrondetector");
+		
+		put(TileEntityPileCore.class, "tileentity_pile_core");
+		put(TileEntityPileBaseMK2.class, "tileentity_pile_block");
+		put(TileEntityPileLoader.class, "tileentity_pile_loader");
+		put(TileEntityPileVent.class, "tileentity_pile_vent");
+		put(TileEntityPileControl.class, "tileentity_pile_control");
 	}
 
 	private static void putRBMK() {
@@ -474,6 +480,9 @@ public class TileMappings {
 		put(TileEntityPneumoTubePaintable.class, "tileentity_pneumatic_tube_paintable");
 		put(TileEntityPneumoStorageAccess.class, "tileentity_pneumatic_storage_access");
 		put(TileEntityPneumoStorageClutter.class, "tileentity_pneumatic_storage_clutter");
+		put(TileEntityPneumoStorageMono.class, "tileentity_pneumatic_storage_mono");
+		put(TileEntityPneumoStorageImporter.class, "tileentity_pneumatic_storage_importer");
+		put(TileEntityPneumoStorageExporter.class, "tileentity_pneumatic_storage_exporter");
 
 		put(TileEntityRadioTorchSender.class, "tileentity_rtty_sender");
 		put(TileEntityRadioTorchReceiver.class, "tileentity_rtty_rec");
@@ -505,10 +514,6 @@ public class TileMappings {
 
 	private static void put(Class<? extends TileEntity> clazz, String... names) {
 		map.put(clazz, names);
-
-		/*if((IFluidSource.class.isAssignableFrom(clazz) || IFluidAcceptor.class.isAssignableFrom(clazz)) && !IFluidConnector.class.isAssignableFrom(clazz)) {
-			LoggingUtil.errorWithHighlight(clazz.getCanonicalName() + " implements the old interfaces but not IFluidConnector!");
-		}*/
 
 		if(IConfigurableMachine.class.isAssignableFrom(clazz)) {
 			configurables.add((Class<? extends IConfigurableMachine>) clazz);
