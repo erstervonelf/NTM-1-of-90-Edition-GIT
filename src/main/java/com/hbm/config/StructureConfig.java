@@ -16,21 +16,6 @@ public class StructureConfig {
 	public static double lootAmountFactor = 1D;
 
 	public static boolean debugStructures = false;
-	public static int vertibirdCrashedSpawnWeight = 1;
-	public static int beachedPatrolSpawnWeight = 1;
-	public static int dishSpawnWeight = 1;
-	public static int forestChemSpawnWeight = 1;
-	public static int laboratorySpawnWeight = 1;
-	public static int forestPostSpawnWeight = 1;
-	public static int radioSpawnWeight = 1;
-	public static int factorySpawnWeight = 1;
-	public static int craneSpawnWeight = 1;
-	public static int broadcastingTowerSpawnWeight = 1;
-	public static int plane1SpawnWeight = 1;
-	public static int plane2SpawnWeight = 1;
-	public static int desertShack1SpawnWeight = 1;
-	public static int desertShack2SpawnWeight = 1;
-	public static int desertShack3SpawnWeight = 1;
 	public static boolean enableRuins = true;
 	public static boolean enableOceanStructures = true;
 

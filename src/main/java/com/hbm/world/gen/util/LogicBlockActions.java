@@ -21,6 +21,7 @@ import com.hbm.world.WorldUtil;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -93,6 +94,42 @@ public class LogicBlockActions {
 
 		//from explosionChaos because i cannot be assed
 		int r = 4;
+		int r2 = r * r;
+		int r22 = r2 / 2;
+
+		for (int xx = -r; xx < r; xx++) {
+			int X = xx + x;
+			int XX = xx * xx;
+			for (int yy = -r; yy < r; yy++) {
+				int Y = yy + y;
+				int YY = XX + yy * yy;
+				for (int zz = -r; zz < r; zz++) {
+					int Z = zz + z;
+					int ZZ = YY + zz * zz;
+					if (ZZ < r22) {
+
+						if (world.getBlock(X, Y, Z).getExplosionResistance(null) <= 70) {
+							EntityFallingBlockNT entityfallingblock = new EntityFallingBlockNT(world, X + 0.5, Y + 0.5, Z + 0.5, world.getBlock(X, Y, Z), world.getBlockMetadata(X, Y, Z));
+							world.spawnEntityInWorld(entityfallingblock);
+						}
+					}
+				}
+			}
+		}
+		world.setBlock(x, y, z, ModBlocks.block_steel);
+
+	};
+
+	public static Consumer<LogicBlock.TileEntityLogicBlock> COLLAPSE_ROOF_RAD_10 = (tile) -> {
+		World world = tile.getWorldObj();
+		int x = tile.xCoord;
+		int y = tile.yCoord;
+		int z = tile.zCoord;
+
+		if(tile.phase == 0) return;
+
+		//same as the RAD_5 variant, just with a bigger radius
+		int r = 9;
 		int r2 = r * r;
 		int r22 = r2 / 2;
 

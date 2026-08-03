@@ -24,6 +24,12 @@ public class MobUtil {
 
 	public static Map<Integer, List<WeightedRandomObject>> slotPoolAdv = new HashMap<>();
 	public static Map<Integer, List<WeightedRandomObject>> slotPoolAdvRanged;
+
+	//for action block skeletons
+	public static Map<Integer, List<WeightedRandomObject>> slotPoolGunsTier1 = new HashMap<>();
+	public static Map<Integer, List<WeightedRandomObject>> slotPoolGunsTier2 = new HashMap<>();
+	public static Map<Integer, List<WeightedRandomObject>> slotPoolGunsTier3 = new HashMap<>();
+	public static Map<Integer, List<WeightedRandomObject>> slotPoolMasks = new HashMap<>();
 	/**Unlike the above two, the Double is interpreted as minimum soot level, instead of armor slot **/
 	public static HashMap<Double, List<WeightedRandomObject>> slotPoolGuns = new HashMap<>();
 
@@ -175,6 +181,12 @@ public class MobUtil {
 
 		slotPoolGunsTier3.put(0, createSlotPool(0, new Object[][]{
 			{ModItems.gun_g3, 25}, {ModItems.gun_spas12, 20}, {ModItems.gun_carbine, 15}, {ModItems.gun_star_f, 20}, {ModItems.gun_am180, 6}, {ModItems.gun_amat, 5}
+		}));
+
+		slotPoolMasks.put(4, createSlotPool(0, new Object[][]{
+			{ModItems.gas_mask_m65, 16}, {ModItems.gas_mask_olde, 12}, {ModItems.mask_of_infamy, 8},
+			{ModItems.gas_mask_mono, 8}, {ModItems.robes_helmet, 32}, {ModItems.no9, 16},
+			{ModItems.goggles, 4}
 		}));
 
 		slotPoolAdvRanged = new HashMap<>(slotPoolAdv);

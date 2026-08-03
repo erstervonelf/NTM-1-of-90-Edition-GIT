@@ -53,6 +53,22 @@ public class LogicBlockConditions {
 		return !world.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y - 2, z + 1).expand(5, 5, 5)).isEmpty();
 	};
 
+	public static Function<LogicBlock.TileEntityLogicBlock, Boolean> PLAYER_CUBE_3 = (tile) -> {
+		World world = tile.getWorldObj();
+		int x = tile.xCoord;
+		int y = tile.yCoord;
+		int z = tile.zCoord;
+		return !world.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y - 2, z + 1).expand(3, 3, 3)).isEmpty();
+	};
+
+	public static Function<LogicBlock.TileEntityLogicBlock, Boolean> PLAYER_CUBE_25 = (tile) -> {
+		World world = tile.getWorldObj();
+		int x = tile.xCoord;
+		int y = tile.yCoord;
+		int z = tile.zCoord;
+		return !world.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y - 2, z + 1).expand(25, 25, 25)).isEmpty();
+	};
+
 	public static Function<LogicBlock.TileEntityLogicBlock, Boolean> REDSTONE = (tile) -> {
 		World world = tile.getWorldObj();
 		int x = tile.xCoord;

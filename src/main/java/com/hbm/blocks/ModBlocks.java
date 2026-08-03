@@ -3192,7 +3192,6 @@ public class ModBlocks {
 		register(red_connector);
 		register(red_pylon);
 		register(red_connector_super);
-		register(red_pylon);
 		register(red_pylon_steel);
 		register(red_pylon_medium_wood);
 		register(red_pylon_medium_wood_transformer);
