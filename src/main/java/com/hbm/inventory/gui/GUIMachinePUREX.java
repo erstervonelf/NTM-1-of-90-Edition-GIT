@@ -6,6 +6,7 @@ import com.hbm.inventory.container.ContainerMachinePUREX;
 import com.hbm.inventory.gui.element.GUIElements;
 import com.hbm.inventory.recipes.PUREXRecipes;
 import com.hbm.inventory.recipes.loader.GenericRecipe;
+import com.hbm.items.machine.ItemBlueprints;
 import com.hbm.lib.RefStrings;
 import com.hbm.tileentity.machine.TileEntityMachinePUREX;
 

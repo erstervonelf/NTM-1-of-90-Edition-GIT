@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.interfaces.IControlReceiver;
 import com.hbm.inventory.container.ContainerMachineAssemblyMachine;
 import com.hbm.inventory.recipes.loader.GenericRecipe;
+import com.hbm.items.machine.ItemBlueprints;
 import com.hbm.lib.RefStrings;
 import com.hbm.module.machine.ModuleMachineBase;
 import com.hbm.tileentity.machine.TileEntityMachineAssemblyMachine;
