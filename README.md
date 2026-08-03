@@ -11,7 +11,7 @@ It keeps upstream gameplay intact while adding a dedicated `com.oneof90` extensi
 Fork-specific work is centered in `src/main/java/com/oneof90`:
 
 - Independent extension registry (`MainRegistry1of90`, `ModBlocks1of90`, `ModItems1of90`)
-- Additional blocks and machines (including steel beam variants, cage ladder variants, diesel generator scaffolding)
+- Additional blocks and machines
 - Dedicated tile entities and custom renderers for fork content
 - Internal architecture and extension documentation set for maintainers and contributors
 - Active fork changelog with gameplay/content changes managed separately from upstream history
