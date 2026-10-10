@@ -36,7 +36,7 @@ public class PacketDispatcher {
 		//Aux Particle Packet, New Technology: like the APP but with NBT
 		wrapper.registerMessage(AuxParticlePacketNT.Handler.class, AuxParticlePacketNT.class, i++, Side.CLIENT);
 		//Triggers gun animations of the client
-		wrapper.registerMessage(HbmAnimationPacket.Handler.class, HbmAnimationPacket.class, i++, Side.CLIENT);
+		wrapper.registerMessage(GunAnimationPacket.Handler.class, GunAnimationPacket.class, i++, Side.CLIENT);
 		//Sends a funi text to display like a music disc announcement
 		wrapper.registerMessage(PlayerInformPacket.Handler.class, PlayerInformPacket.class, i++, Side.CLIENT);
 		//Universal keybind packet

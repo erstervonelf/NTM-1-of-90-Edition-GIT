@@ -421,6 +421,8 @@ public class ModBlocks {
 	public static Block steel_corner;
 	public static Block steel_roof;
 	public static Block steel_beam;
+	public static Block ntm_steel_beam;
+	public static Block ntm_steel_beam_vertical;
 	public static Block steel_scaffold;
 	public static Block steel_grate;
 	public static Block steel_grate_wide;
@@ -1601,6 +1603,8 @@ public class ModBlocks {
 		steel_corner = new DecoBlock(Material.iron).setBlockName("steel_corner").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(15.0F).setBlockTextureName(RefStrings.MODID + ":steel_wall");
 		steel_roof = new DecoBlock(Material.iron).setBlockName("steel_roof").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(15.0F).setBlockTextureName(RefStrings.MODID + ":steel_roof");
 		steel_beam = new DecoBlock(Material.iron).setBlockName("steel_beam").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(15.0F).setBlockTextureName(RefStrings.MODID + ":steel_beam");
+		ntm_steel_beam = new NTMSteelBeam(Material.iron).setBlockName("ntm_steel_beam").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(200.0F).setBlockTextureName(RefStrings.MODID + ":ntm_steel_beam");
+		ntm_steel_beam_vertical = new NTMSteelBeamVertical(Material.iron).setBlockName("ntm_steel_beam_vertical").setCreativeTab(MainRegistry.blockTab).setHardness(200.0F).setResistance(15.0F).setBlockTextureName(RefStrings.MODID + ":ntm_steel_beam_vertical");
 		steel_scaffold = new BlockScaffold().setBlockName("steel_scaffold").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(15.0F).setBlockTextureName(RefStrings.MODID + ":deco_steel_orig");
 		steel_grate = new BlockGrate(Material.iron).setBlockName("steel_grate").setStepSound(ModSoundTypes.grate).setCreativeTab(MainRegistry.blockTab).setHardness(2.0F).setResistance(5.0F);
 		steel_grate_wide = new BlockGrate(Material.iron).setBlockName("steel_grate_wide").setStepSound(ModSoundTypes.grate).setCreativeTab(MainRegistry.blockTab).setHardness(2.0F).setResistance(5.0F);
@@ -1789,8 +1793,9 @@ public class ModBlocks {
 		machine_rotary_furnace = new MachineRotaryFurnace(Material.iron).setBlockName("machine_rotary_furnace").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":brick_fire");
 		machine_crystallizer = new MachineCrystallizer(Material.iron).setBlockName("machine_crystallizer").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":machine_crystallizer");
 
-		machine_uf6_tank = new MachineUF6Tank(Material.iron).setBlockName("machine_uf6_tank").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
-		machine_puf6_tank = new MachinePuF6Tank(Material.iron).setBlockName("machine_puf6_tank").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
+		machine_uf6_tank = new MachineUF6Tank(Material.iron).setBlockName("machine_uf6_tank").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+
+		machine_puf6_tank = new MachinePuF6Tank(Material.iron).setBlockName("machine_puf6_tank").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 
 		machine_reactor_breeding = new MachineReactorBreeding(Material.iron).setBlockName("machine_reactor").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":machine_reactor");
 
@@ -2778,6 +2783,8 @@ public class ModBlocks {
 		GameRegistry.registerBlock(steel_corner, steel_corner.getUnlocalizedName());
 		GameRegistry.registerBlock(steel_roof, steel_roof.getUnlocalizedName());
 		GameRegistry.registerBlock(steel_beam, steel_beam.getUnlocalizedName());
+		GameRegistry.registerBlock(ntm_steel_beam, ntm_steel_beam.getUnlocalizedName());
+		GameRegistry.registerBlock(ntm_steel_beam_vertical, ntm_steel_beam_vertical.getUnlocalizedName());
 		register(steel_scaffold);
 		GameRegistry.registerBlock(steel_grate, steel_grate.getUnlocalizedName());
 		register(steel_grate_wide);
@@ -3163,7 +3170,6 @@ public class ModBlocks {
 		register(cable_diode);
 		register(network_separator);
 		register(machine_detector);
-
 		register(fluid_duct_neo);
 		register(fluid_duct_box);
 		register(fluid_duct_exhaust);

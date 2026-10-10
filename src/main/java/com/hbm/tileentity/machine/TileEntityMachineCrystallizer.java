@@ -33,6 +33,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
@@ -53,7 +54,7 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 
 	public FluidTank tank;
 
-	public UpgradeManagerNT upgradeManager = new UpgradeManagerNT(this);
+	public UpgradeManagerNT upgradeManager = new UpgradeManagerNT();
 
 	public TileEntityMachineCrystallizer() {
 		super(8);
@@ -82,7 +83,7 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 			tank.setType(7, slots);
 			tank.loadTank(3, 4, slots);
 
-			upgradeManager.checkSlots(slots, 5, 6);
+			upgradeManager.checkSlots(this, slots, 5, 6);
 
 			for(int i = 0; i < getCycleCount(); i++) {
 
@@ -320,8 +321,14 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemStack) {
-		if(i == 0 && CrystallizerRecipes.getOutput(itemStack, tank.getTankType()) != null) return true;
-		if(i == 1 && itemStack.getItem() instanceof IBatteryItem) return true;
+
+		CrystallizerRecipe recipe = CrystallizerRecipes.getOutput(itemStack, tank.getTankType());
+		if(i == 0 && recipe != null) {
+			return true;
+		}
+
+		if(i == 1 && itemStack.getItem() instanceof IBatteryItem)
+			return true;
 
 		return false;
 	}
@@ -333,26 +340,13 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
-		return new int[] { 0, 2 };
-	}
 
-	AxisAlignedBB bb = null;
+		return side == 0 ? new int[] { 2 } : new int[] { 0, 2 };
+	}
 
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-
-		if(bb == null) {
-			bb = AxisAlignedBB.getBoundingBox(
-					xCoord - 1,
-					yCoord,
-					zCoord - 1,
-					xCoord + 2,
-					yCoord + 10,
-					zCoord + 2
-					);
-		}
-
-		return bb;
+		return TileEntity.INFINITE_EXTENT_AABB;
 	}
 
 	@Override

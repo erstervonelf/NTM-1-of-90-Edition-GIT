@@ -2,7 +2,7 @@
 
 [NTM on Modrinth](https://modrinth.com/mod/ntm)
 
-[NTM on CurseForge](https://www.curseforge.com/minecraft/mc-mods/hbms-nuclear-tech-mod)
+[NTM on CurseForge](https://minecraft.curseforge.com/projects/hbms-nuclear-tech-mod?gameCategorySlug=mc-mods&projectID=235439)
 
 [Official NTM Wiki](https://nucleartech.wiki/wiki/Main_Page)
 
@@ -10,46 +10,22 @@
 
 **This is for 1.7.10!** For 1.12, check out these projects:
 
-* NTM Community Edition (WarFactory): https://github.com/MisterNorwood/Hbm-s-Nuclear-Tech-CE/releases
-* NTM Extended Edition (Alcater): https://github.com/Alcatergit/Hbm-s-Nuclear-Tech-GIT/releases
 * NTM Reloaded: https://github.com/TheOriginalGolem/Hbm-s-Nuclear-Tech-GIT/releases
+* NTM Extended Edition (Alcater): https://github.com/Alcatergit/Hbm-s-Nuclear-Tech-GIT/releases
+* NTM Community Edition (WarFactory): https://github.com/MisterNorwood/Hbm-s-Nuclear-Tech-CE
 
-For further ports, try:
-
-* NTM Remake on 1.18.2: https://codeberg.org/MartinTheDragon/Nuclear-Tech-Mod-Remake/releases
-* HBM Modernized on 1.20.1: https://github.com/Raptor324/HBM-Modernized/releases
-* NTM Neo on 1.21.1: https://github.com/ohiomannnn/HBMsNTM-NEO-EDITION/releases
+For 1.18, try Martin's remake: https://codeberg.org/MartinTheDragon/Nuclear-Tech-Mod-Remake/releases
 
 ## Downloading pre-compiled versions from GitHub
 
 Simply navigate to "Releases" on the right side of the page, download links for the compiled JAR as well as the corresponding source code are under the "Assets" category below the changelog. Make sure to review all changelogs when updating!
-
-## Using in your project
-
-To include the mod as a dependency in a project of your own, you can adjust your Gradle buildscript according to the following example:
-
-```groovy
-repositories {
-		maven {
-				name "NTM Releases"
-				url "https://maven.ntmr.dev/releases"
-		}
-}
-
-dependencies {
-		def ntmBuildNumber = "5687" // Change this value according to the release you wish to use
-
-		implementation "com.hbm:HBM-NTM:1.0.27_X${ntmBuildNumber}:dev"
-		compileOnly "com.hbm:HBM-NTM:1.0.27_X${ntmBuildNumber}:src"
-}
-```
 
 ## Building from source
 
 Tired of waiting until the next version comes out? Here is a tutorial on how to compile the very newest version yourself:
 Please note that these installation instructions are assuming you're running Microsoft Windows operating system. Linux users should know what to do by looking at the same guide.
 
- 1. Make sure you have JDK8 installed. If not, download it from [adoptium.net](https://adoptium.net/temurin/releases?version=8)
+ 1. Make sure you have JDK8 installed. If not, download it from [adoptium.net](https://adoptium.net/?variant=openjdk8&jvmVariant=hotspot)
  2. If you don't have git installed, download&install it from [here](https://git-scm.com/downloads).
  3. Open up "Git Bash":
     * Press Windows Button, type "Git Bash" and press ENTER

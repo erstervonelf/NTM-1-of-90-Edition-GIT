@@ -40,6 +40,9 @@ public class ItemSchraranium extends ItemCustomLore {
 
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean bool) {
-		if(GeneralConfig.enableLBSM) list.add("pankæk");
+		if(GeneralConfig.enableLBSM)
+			list.add("pankæk");
+		else
+			super.addInformation(itemstack, player, list, bool);
 	}
 }
