@@ -2,11 +2,8 @@ package com.oneof90.main;
 
 import com.hbm.main.MainRegistry;
 import com.oneof90.blocks.InvBlock;
-import com.oneof90.blocks.generic.CageLadder;
-import com.oneof90.blocks.generic.CageLadderBase;
 import com.oneof90.blocks.generic.NTMSteelBeam;
 import com.oneof90.blocks.generic.NTMSteelBeamVertical;
-import com.oneof90.blocks.machine.DieselGen;
 import com.oneof90.tileentity.*;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -48,24 +45,6 @@ public class ModBlocks1of90 {
 			.setHardness(5.0F)
 			.setResistance(200.0F)
 			.setBlockTextureName("hbm:ntm_steel_beam_vertical");
-		cage_ladder = new CageLadder(Material.iron)
-			.setBlockName("cage_ladder")
-			.setCreativeTab(MainRegistry.blockTab)
-			.setHardness(2.0F)
-			.setResistance(10.0F)
-			.setBlockTextureName("hbm:cage_ladder");
-		cage_ladder_base = new CageLadderBase(Material.iron)
-			.setBlockName("cage_ladder_base")
-			.setCreativeTab(MainRegistry.blockTab)
-			.setHardness(2.0F)
-			.setResistance(10.0F)
-			.setBlockTextureName("hbm:cage_ladder_base");
-		dieselgen = new DieselGen(Material.iron)
-			.setBlockName("dieselgen")
-			.setCreativeTab(MainRegistry.blockTab)
-			.setHardness(2.0F)
-			.setResistance(10.0F)
-			.setBlockTextureName("hbm:dieselgen");
 		inv_block = new InvBlock(Material.air)
 			.setBlockName("inv_block")
 			.setBlockTextureName("hbm:inv_block");
@@ -80,10 +59,7 @@ public class ModBlocks1of90 {
 	private static void registerBlocks() {
 		GameRegistry.registerBlock(ntm_steel_beam, ntm_steel_beam.getUnlocalizedName());
 		GameRegistry.registerBlock(ntm_steel_beam_vertical, ntm_steel_beam_vertical.getUnlocalizedName());
-		GameRegistry.registerBlock(cage_ladder, cage_ladder.getUnlocalizedName());
-		GameRegistry.registerBlock(cage_ladder_base, cage_ladder_base.getUnlocalizedName());
 		GameRegistry.registerBlock(inv_block, inv_block.getUnlocalizedName());
-		GameRegistry.registerBlock(dieselgen, dieselgen.getUnlocalizedName());
 	}
 
 	/**
@@ -92,8 +68,5 @@ public class ModBlocks1of90 {
 	private static void registerTileEntities() {
 		GameRegistry.registerTileEntity(TileEntityNTMSteelBeam.class, "tileentity_ntmsteelbeam");
 		GameRegistry.registerTileEntity(TileEntityNTMSteelBeamVertical.class, "tileentity_ntmsteelbeamvertical");
-		GameRegistry.registerTileEntity(TileEntityCageLadder.class, "tileentity_cageladder");
-		GameRegistry.registerTileEntity(TileEntityCageLadderBase.class, "tileentity_cageladderbase");
-		GameRegistry.registerTileEntity(TileEntityDieselGen.class, "tileentity_dieselgen");
 	}
 }

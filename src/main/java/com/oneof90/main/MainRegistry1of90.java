@@ -38,10 +38,6 @@ public class MainRegistry1of90 {
 	private static void registerTileEntityRenderers() {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNTMSteelBeam.class, new RenderNTMSteelBeam());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNTMSteelBeamVertical.class, new RenderNTMSteelBeamVertical());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCageLadder.class, new RenderTileEntityCageLadder());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCageLadderBase.class, new RenderTileEntityCageLadderBase());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDieselGen.class, new RenderDieselGen());
-		// Marble Saw renderer removed (saw was deleted)
 	}
 
 	/**
