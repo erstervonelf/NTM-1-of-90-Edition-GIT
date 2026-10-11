@@ -16,23 +16,6 @@ import net.minecraftforge.client.model.IModelCustom;
 import java.util.HashMap;
 
 public class ResourceManager {
-	private static IModelCustom loadModelOrFallback(String primaryPath, String fallbackPath) {
-		try {
-			return AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, primaryPath));
-		} catch (Exception e) {
-			System.err.println("[HBM] Missing model '" + primaryPath + "', falling back to '" + fallbackPath + "'.");
-			return AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, fallbackPath));
-		}
-	}
-
-	private static IModelCustom loadVboModelOrFallback(String primaryPath, String fallbackPath) {
-		try {
-			return new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, primaryPath)).asVBO();
-		} catch (Exception e) {
-			System.err.println("[HBM] Missing VBO model '" + primaryPath + "', falling back to '" + fallbackPath + "'.");
-			return AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, fallbackPath));
-		}
-	}
 
 	////Obj TEs
 
@@ -1148,10 +1131,9 @@ public class ResourceManager {
 
 	public static final ResourceLocation lance_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/lance.png");
 
-	public static final ResourceLocation ff_gun_bright = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/coilgun.png");
-	public static final ResourceLocation ff_gun_dark = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/coilgun.png");
-	public static final ResourceLocation ff_gun_normal = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/coilgun.png");
-	public static final IModelCustom ff_nightmare = loadModelOrFallback("models/weapons/nightmare.obj", "models/weapons/coilgun.obj");
+	public static final ResourceLocation ff_gun_bright = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/ff/gun_bright.png");
+	public static final ResourceLocation ff_gun_dark = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/ff/gun_dark.png");
+	public static final ResourceLocation ff_gun_normal = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/ff/gun_normal.png");
 
 	public static final ResourceLocation grenade_frag_tex = new ResourceLocation(RefStrings.MODID, "textures/models/grenades/frag.png");
 	public static final ResourceLocation grenade_frag_body_tex = new ResourceLocation(RefStrings.MODID, "textures/models/grenades/frag_body.png");

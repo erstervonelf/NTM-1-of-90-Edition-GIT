@@ -33,21 +33,21 @@ public class SkeletonCreator implements IParticleCreator {
 	public static HashMap<String, Function<EntityLivingBase, BoneDefinition[]>> skullanizer = new HashMap();
 	
 	public static void composeEffect(World world, Entity toSkeletonize, float brightness) {
-		
 		NBTTagCompound data = new NBTTagCompound();
 		data.setString("type", "skeleton");
 		data.setInteger("entityID", toSkeletonize.getEntityId());
 		data.setFloat("brightness", brightness);
 		IParticleCreator.sendPacket(world, toSkeletonize.posX, toSkeletonize.posY, toSkeletonize.posZ, 100, data);
 	}
-
-	public static void composeEffectGib(World world, Entity toGib, float brightness) {
-
+	
+	public static void composeEffectGib(World world, Entity toSkeletonize, float force) {
 		NBTTagCompound data = new NBTTagCompound();
-		data.setString("type", "giblets");
-		data.setInteger("ent", toGib.getEntityId());
-		data.setFloat("brightness", brightness);
-		IParticleCreator.sendPacket(world, toGib.posX, toGib.posY, toGib.posZ, 150, data);
+		data.setString("type", "skeleton");
+		data.setInteger("entityID", toSkeletonize.getEntityId());
+		data.setFloat("brightness", 1F);
+		data.setFloat("force", force);
+		data.setBoolean("gib", true);
+		IParticleCreator.sendPacket(world, toSkeletonize.posX, toSkeletonize.posY, toSkeletonize.posZ, 100, data);
 	}
 
 	@Override
@@ -55,9 +55,12 @@ public class SkeletonCreator implements IParticleCreator {
 	public void makeParticle(World world, EntityPlayer player, TextureManager texman, Random rand, double x, double y, double z, NBTTagCompound data) {
 		
 		if(skullanizer.isEmpty()) init();
-		
+
+		boolean gib = data.getBoolean("gib");
+		float force = data.getFloat("force");
 		int entityID = data.getInteger("entityID");
 		Entity entity = world.getEntityByID(entityID);
+		boolean skel = entity instanceof EntitySkeleton;
 		if(!(entity instanceof EntityLivingBase)) return;
 		EntityLivingBase living = (EntityLivingBase) entity;
 		
@@ -70,9 +73,20 @@ public class SkeletonCreator implements IParticleCreator {
 		if(bonealizer != null) {
 			BoneDefinition[] bones = bonealizer.apply(living);
 			for(BoneDefinition bone : bones) {
+				if(gib && rand.nextBoolean() && !skel) continue;
 				ParticleSkeleton skeleton = new ParticleSkeleton(Minecraft.getMinecraft().getTextureManager(), world, bone.x, bone.y, bone.z, brightness, brightness, brightness, bone.type);
 				skeleton.prevRotationYaw = skeleton.rotationYaw = bone.yaw;
 				skeleton.prevRotationPitch = skeleton.rotationPitch = bone.pitch;
+				if(gib) {
+					skeleton.makeGib();
+					if(skel) {
+						skeleton.useTexture = skeleton.texture;
+						skeleton.useTextureExt = skeleton.texture_ext;
+					}
+					skeleton.motionX = rand.nextGaussian() * force;
+					skeleton.motionY = (rand.nextGaussian() + 1) * force;
+					skeleton.motionZ = rand.nextGaussian() * force;
+				}
 				Minecraft.getMinecraft().effectRenderer.addEffect(skeleton);
 			}
 		}
@@ -170,7 +184,7 @@ public class SkeletonCreator implements IParticleCreator {
 		skullanizer.put(EntityDummy.class.getSimpleName(), BONES_DUMMY);
 
 		//techguns compat, for some reason
-		//not alwayss accurate because of variable arm position, but better than nothing
+		//not always accurate because of variable arm position, but better than nothing
 		skullanizer.put("ArmySoldier", BONES_ZOMBIE);
 		skullanizer.put("PsychoSteve", BONES_ZOMBIE);
 		skullanizer.put("SkeletonSoldier", BONES_ZOMBIE);

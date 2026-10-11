@@ -186,6 +186,7 @@ public class XFactoryEnergy {
 		energy_emerald = energy_las.clone().setArmorPiercing(0.5F).setThresholdNegation(50F);
 		energy_emerald_overcharge = energy_las_overcharge.clone().setArmorPiercing(0.5F).setThresholdNegation(75F);
 		energy_emerald_ir = energy_las_ir.clone().setArmorPiercing(0.5F).setThresholdNegation(50F);
+
 		ModItems.gun_tesla_cannon = new ItemGunBaseNT(WeaponQuality.A_SIDE, new GunConfig()
 				.dura(1_000).draw(10).inspect(33).crosshair(Crosshair.CIRCLE)
 				.rec(new Receiver(0)

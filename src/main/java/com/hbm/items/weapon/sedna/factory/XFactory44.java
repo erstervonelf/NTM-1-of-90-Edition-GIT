@@ -40,13 +40,15 @@ import net.minecraft.util.ResourceLocation;
 public class XFactory44 {
 
 	public static final ResourceLocation scope_lilmac = new ResourceLocation(RefStrings.MODID, "textures/misc/scope_44.png");
-public static ConfigWrapper<Float> GUN_HENRY_DAMAGE =			new ConfigWrapper(10F);
+
+	public static ConfigWrapper<Float> GUN_HENRY_DAMAGE =			new ConfigWrapper(10F);
 	public static ConfigWrapper<Float> GUN_LINCOLN_DAMAGE =			new ConfigWrapper(20F);
 	public static ConfigWrapper<Float> GUN_HEAVY_REVOLVER_DAMAGE =	new ConfigWrapper(15F);
 	public static ConfigWrapper<Float> GUN_LILMAC_DAMAGE =			new ConfigWrapper(30F);
 	public static ConfigWrapper<Float> GUN_PROTEGE_DAMAGE =			new ConfigWrapper(30F);
 	public static ConfigWrapper<Float> GUN_HANGMAN_DAMAGE =			new ConfigWrapper(25F);
 	public static ConfigWrapper<Float> GUN_HANGMAN_SMACK_DAMAGE =	new ConfigWrapper(10F);
+
 	public static BulletConfig m44_bp;
 	public static BulletConfig m44_sp;
 	public static BulletConfig m44_fmj;
@@ -55,7 +57,8 @@ public static ConfigWrapper<Float> GUN_HENRY_DAMAGE =			new ConfigWrapper(10F);
 	public static BulletConfig m44_express;
 	public static BulletConfig m44_equestrian_pip;
 	public static BulletConfig m44_equestrian_mn7;
-public static void initConfig() {
+	
+	public static void initConfig() {
 		ServerConfig.configMap.put("GUN_HENRY_DAMAGE", GUN_HENRY_DAMAGE);
 		ServerConfig.configMap.put("GUN_LINCOLN_DAMAGE", GUN_LINCOLN_DAMAGE);
 		ServerConfig.configMap.put("GUN_HEAVY_REVOLVER_DAMAGE", GUN_HEAVY_REVOLVER_DAMAGE);
@@ -64,6 +67,7 @@ public static void initConfig() {
 		ServerConfig.configMap.put("GUN_HANGMAN_DAMAGE", GUN_HANGMAN_DAMAGE);
 		ServerConfig.configMap.put("GUN_HANGMAN_SMACK_DAMAGE", GUN_HANGMAN_SMACK_DAMAGE);
 	}
+
 	public static BiConsumer<EntityBulletBaseMK4, MovingObjectPosition> LAMBDA_BOXCAR = (bullet, mop) -> {
 		EntityBoxcar pippo = new EntityBoxcar(bullet.worldObj);
 		pippo.posX = mop.hitVec.xCoord;

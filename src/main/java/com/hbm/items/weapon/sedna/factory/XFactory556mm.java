@@ -55,11 +55,13 @@ public class XFactory556mm {
 	public static BulletConfig r556_inc_fmj;
 	public static BulletConfig r556_inc_jhp;
 	public static BulletConfig r556_inc_ap;
-public static void initConfig() {
+	
+	public static void initConfig() {
 		ServerConfig.configMap.put("GUN_ASSAULT_RIFLE_DAMAGE", GUN_ASSAULT_RIFLE_DAMAGE);
 		ServerConfig.configMap.put("GUN_ZEBRA_DAMAGE", GUN_ZEBRA_DAMAGE);
 		ServerConfig.configMap.put("GUN_STG77_DAMAGE", GUN_STG77_DAMAGE);
 	}
+
 	public static BiConsumer<EntityBulletBaseMK4, MovingObjectPosition> INCENDIARY = (bullet, mop) -> {
 		if(mop.entityHit != null && mop.entityHit instanceof EntityLivingBase) {
 			HbmLivingProps data = HbmLivingProps.getData((EntityLivingBase) mop.entityHit);

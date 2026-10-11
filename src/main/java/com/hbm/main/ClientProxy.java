@@ -54,7 +54,6 @@ import com.hbm.particle.psys.engine.EventHandlerParticleEngine;
 import com.hbm.qmaw.QMAWLoader;
 import com.hbm.render.block.*;
 import com.hbm.render.entity.RenderEmpty;
-import com.hbm.render.entity.RenderCoin;
 import com.hbm.render.entity.effect.*;
 import com.hbm.render.entity.item.*;
 import com.hbm.render.entity.mob.*;
@@ -166,9 +165,6 @@ public class ClientProxy extends ServerProxy {
 		registerItemRenderer();
 		registerEntityRenderer();
 		registerBlockRenderer();
-		
-		// Initialize 1of90 client-side content
-		com.oneof90.main.MainRegistry1of90.initClient();
 
 		Jars.initJars();
 
@@ -1696,28 +1692,6 @@ public class ClientProxy extends ServerProxy {
 				Minecraft.getMinecraft().effectRenderer.addEffect(flash);
 			}
 		}
-
-        // PREFLASH FOR WATZ: big white flash + shake
-        if("watz_preflash".equals(type)) {
-            // set global timestamps so overlay and shake renderers kick in
-            ModEventHandlerClient.flashTimestamp = System.currentTimeMillis();
-            ModEventHandlerClient.shakeTimestamp = System.currentTimeMillis();
-
-            // short local visual burst (few aura particles) for immediate effect
-            int count = 40;
-            for(int i = 0; i < count; i++) {
-                EntityAuraFX a = new EntityAuraFX(world,
-                        x + (rand.nextGaussian() * 6),
-                        y + (rand.nextFloat() * 3),
-                        z + (rand.nextGaussian() * 6),
-                        rand.nextGaussian() * 0.2, rand.nextFloat() * 0.2, rand.nextGaussian() * 0.2);
-                a.setRBGColorF(1F, 1F, 1F);
-                Minecraft.getMinecraft().effectRenderer.addEffect(a);
-            }
-
-            // play a loud but short explosion/thump locally
-            Minecraft.getMinecraft().thePlayer.playSound("random.explode", 4.0F, 1.0F + rand.nextFloat() * 0.2F);
-        }
 
 		if("schrabfog".equals(type)) {
 

@@ -1,14 +1,12 @@
 package com.hbm.world.gen;
 
-import java.util.Random;
+import net.minecraft.world.gen.MapGenBase;
 
-public abstract class MapGenBaseMeta {
+public class MapGenBaseMeta extends MapGenBase {
 
-	protected Random rand = new Random();
-	protected int range;
-	protected int[] metas;
-	
-	public void setMetas(int[] metas) {
+	protected byte[] metas;
+
+	public void setMetas(byte[] metas) {
 		this.metas = metas;
 	}
 

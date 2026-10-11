@@ -177,7 +177,7 @@ public class XFactory40mm {
 				.setupStandardConfiguration()
 				.anim(LAMBDA_FLAREGUN_ANIMS).orchestra(Orchestras.ORCHESTRA_FLAREGUN)
 				).setDefaultAmmo(EnumAmmo.G26_FLARE, 3).setUnlocalizedName("gun_flaregun");
-		
+
 		ModItems.gun_congolake = new ItemGunBaseNT(WeaponQuality.A_SIDE, new GunConfig()
 				.dura(400).draw(7).inspect(39).reloadSequential(true).reloadChangeType(true).crosshair(Crosshair.L_CIRCUMFLEX).smoke(LAMBDA_SMOKE)
 				.rec(new Receiver(0)
@@ -247,7 +247,8 @@ public class XFactory40mm {
 		case JAMMED: return ResourceManager.congolake_anim.get("Jammed");
 		case INSPECT: return ResourceManager.congolake_anim.get("Inspect");
 		}
-return null;
+
+		return null;
 	};
 
 	@SuppressWarnings("incomplete-switch") public static BiFunction<ItemStack, GunAnimation, BusAnimation> LAMBDA_MK108_ANIMS = (stack, type) -> {

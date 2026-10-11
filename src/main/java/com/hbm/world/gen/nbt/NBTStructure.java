@@ -82,7 +82,7 @@ public class NBTStructure {
 	private Map<String, List<JigsawConnection>> toTopConnections;
 	private Map<String, List<JigsawConnection>> toBottomConnections;
 	private Map<String, List<JigsawConnection>> toHorizontalConnections;
-	
+
 	// incredibly shitty system for translating legacy block definitions to new ones
 	@Untested // i can't find a god damn factory
 	private static Map<String, BlockMigration> substitutions = new HashMap() {{
@@ -348,7 +348,7 @@ public class NBTStructure {
 				String blockName = p.getString("Name");
 				int meta = 0;
 				NBTTagCompound prop = p.getCompoundTag("Properties");
-				
+
 				/// BOB PATCH ///
 				if(substitutions.containsKey(blockName)) {
 					BlockMigration mig = substitutions.get(blockName);

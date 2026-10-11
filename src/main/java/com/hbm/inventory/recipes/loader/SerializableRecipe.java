@@ -120,6 +120,8 @@ public abstract class SerializableRecipe {
 
 		MainRegistry.logger.info("Starting recipe init!");
 
+		GenericRecipes.clearPools();
+		
 		for(SerializableRecipe recipe : recipeHandlers) {
 
 			recipe.deleteRecipes();
@@ -375,11 +377,6 @@ public abstract class SerializableRecipe {
 	public static void writeItemStack(ItemStack stack, JsonWriter writer) throws IOException {
 		writer.beginArray();
 		writer.setIndent("");
-		if (stack == null || stack.getItem() == null) {
-			writer.endArray();
-			writer.setIndent("  ");
-			return;
-		}
 		writer.value(Item.itemRegistry.getNameForObject(stack.getItem()));													//item name
 		if(stack.stackSize != 1 || stack.getItemDamage() != 0 || stack.hasTagCompound()) writer.value(stack.stackSize);		//stack size
 		if(stack.getItemDamage() != 0 || stack.hasTagCompound()) writer.value(stack.getItemDamage());						//metadata
@@ -391,11 +388,6 @@ public abstract class SerializableRecipe {
 	public static void writeItemStackChance(Pair<ItemStack, Float> stack, JsonWriter writer) throws IOException {
 		writer.beginArray();
 		writer.setIndent("");
-		if (stack == null || stack.getKey() == null || stack.getKey().getItem() == null) {
-			writer.endArray();
-			writer.setIndent("  ");
-			return;
-		}
 		writer.value(Item.itemRegistry.getNameForObject(stack.getKey().getItem()));																			//item name
 		if(stack.getKey().stackSize != 1 || stack.getKey().getItemDamage() != 0 || stack.getKey().hasTagCompound()) writer.value(stack.getKey().stackSize);	//stack size
 		if(stack.getKey().getItemDamage() != 0 || stack.getKey().hasTagCompound()) writer.value(stack.getKey().getItemDamage());							//metadata

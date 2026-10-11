@@ -30,6 +30,7 @@ public class ItemSurveyScanner extends Item {
 			
 			boolean hasOil = false;
 			boolean hasColtan = false;
+			boolean hasBedrockOil = false;
 			boolean hasDepth = false;
 			boolean hasSchist = false;
 			boolean hasAussie = false;
@@ -88,6 +89,7 @@ public class ItemSurveyScanner extends Item {
 			}
 
 			if(hasOil) player.addChatComponentMessage(new ChatComponentText("Found OIL!").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.BLACK)));
+			if(hasBedrockOil) player.addChatComponentMessage(new ChatComponentText("Found BEDROCK OIL!").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.BLACK)));
 			if(hasColtan) player.addChatComponentMessage(new ChatComponentText("Found COLTAN!").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GOLD)));
 			if(hasDepth) player.addChatComponentMessage(new ChatComponentText("Found DEPTH ROCK!").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GRAY)));
 			if(hasSchist) player.addChatComponentMessage(new ChatComponentText("Found SCHIST!").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.DARK_AQUA)));

@@ -193,6 +193,7 @@ public class XFactory12ga {
 
 				List<Entity> blast = bullet.worldObj.getEntitiesWithinAABBExcludingEntity(bullet, AxisAlignedBB.getBoundingBox(bullet.posX, bullet.posY, bullet.posZ, bullet.posX, bullet.posY, bullet.posZ).expand(0.5, 0.5, 0.5));
 				DamageSource source = BulletConfig.getDamage(bullet, bullet.getThrower(), DamageClass.PLASMA);
+
 				for(Entity e : blast) {
 					if(!e.isEntityAlive()) continue;
 					if(e instanceof EntityLivingBase) {
@@ -257,7 +258,8 @@ public class XFactory12ga {
 		data.setFloat("scale", 0.75F);
 		PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, x, y, z), new TargetPoint(world.provider.dimensionId, x, y, z, 100));
 	}
-public static ConfigWrapper<Float> GUN_MARES_LEG_DAMAGE =				new ConfigWrapper(16F);
+	
+	public static ConfigWrapper<Float> GUN_MARES_LEG_DAMAGE =				new ConfigWrapper(16F);
 	public static ConfigWrapper<Float> GUN_MARES_LEG_AKIMBO_LEFT_DAMAGE =	new ConfigWrapper(16F);
 	public static ConfigWrapper<Float> GUN_MARES_LEG_AKIMBO_RIGHT_DAMAGE =	new ConfigWrapper(16F);
 	public static ConfigWrapper<Float> GUN_BROKEN_DAMAGE =					new ConfigWrapper(48F);
@@ -278,6 +280,7 @@ public static ConfigWrapper<Float> GUN_MARES_LEG_DAMAGE =				new ConfigWrapper(1
 		ServerConfig.configMap.put("GUN_SHREDDER_DAMAGE", GUN_SHREDDER_DAMAGE);
 		ServerConfig.configMap.put("GUN_SEXY_DAMAGE", GUN_SEXY_DAMAGE);
 	}
+
 	public static void init() {
 
 		float buckshotSpread = 0.035F;
@@ -352,7 +355,7 @@ public static ConfigWrapper<Float> GUN_MARES_LEG_DAMAGE =				new ConfigWrapper(1
 				.setupStandardConfiguration()
 				.anim(LAMBDA_MARESLEG_SHORT_ANIMS).orchestra(Orchestras.ORCHESTRA_MARESLEG_SHORT)
 				).setDefaultAmmo(EnumAmmo.G12_MAGNUM, 24).setUnlocalizedName("gun_maresleg_broken");
-		
+
 		ModItems.gun_liberator = new ItemGunBaseNT(WeaponQuality.A_SIDE, new GunConfig()
 				.dura(200).draw(20).inspect(21).reloadSequential(true).crosshair(Crosshair.L_CIRCLE).smoke(Lego.LAMBDA_STANDARD_SMOKE)
 				.rec(new Receiver(0)
@@ -395,7 +398,7 @@ public static ConfigWrapper<Float> GUN_MARES_LEG_DAMAGE =				new ConfigWrapper(1
 				.setupStandardConfiguration()
 				.anim(LAMBDA_SHREDDER_ANIMS).orchestra(Orchestras.ORCHESTRA_SHREDDER)
 				).setDefaultAmmo(EnumAmmo.G12, 20).setUnlocalizedName("gun_autoshotgun_shredder");
-		
+
 		ModItems.gun_autoshotgun_sexy = new ItemGunBaseNT(WeaponQuality.LEGENDARY, new GunConfig()
 				.dura(5_000).draw(20).inspect(65).reloadSequential(true).inspectCancel(false).crosshair(Crosshair.L_CIRCLE).hideCrosshair(false).smoke(Lego.LAMBDA_STANDARD_SMOKE)
 				.rec(new Receiver(0)

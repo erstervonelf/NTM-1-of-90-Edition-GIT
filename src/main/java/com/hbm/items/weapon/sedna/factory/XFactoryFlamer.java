@@ -132,6 +132,7 @@ public class XFactoryFlamer {
 				.setOnImpact(LAMBDA_IGNITE_FIRE).setOnUpdate(LAMBDA_FIRE).setOnRicochet(LAMBDA_LINGER_NAPALM);
 		flame_balefire = new BulletConfig().setItem(EnumAmmo.FLAME_BALEFIRE).setCasing(new ItemStack(ModItems.plate_steel, 2), 500).setupDamageClass(DamageClass.FIRE).setLife(200).setVel(1F).setGrav(0.02D).setReloadCount(500).setSelfDamageDelay(20).setKnockback(0F)
 				.setOnImpact(LAMBDA_IGNITE_BALEFIRE).setOnUpdate(LAMBDA_BALEFIRE).setOnRicochet(LAMBDA_LINGER_BALEFIRE);
+
 		flame_nograv = flame_diesel.clone().setGrav(0);
 		flame_nograv_bf = flame_balefire.clone().setGrav(0).setLife(100);
 
@@ -179,7 +180,7 @@ public class XFactoryFlamer {
 				.setupStandardConfiguration()
 				.anim(LAMBDA_FLAMER_ANIMS).orchestra(Orchestras.ORCHESTRA_FLAMER_DAYBREAKER)
 				).setDefaultAmmo(EnumAmmo.FLAME_DIESEL, 1).setUnlocalizedName("gun_flamer_daybreaker");
-		
+
 		ModItems.gun_chemthrower = new ItemGunChemthrower(WeaponQuality.A_SIDE, new GunConfig()
 				.dura(90_000).draw(10).inspect(17).crosshair(Crosshair.L_CIRCLE).smoke(Lego.LAMBDA_STANDARD_SMOKE)
 				.rec(new Receiver(0)

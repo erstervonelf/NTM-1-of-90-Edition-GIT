@@ -9,6 +9,7 @@ import com.hbm.inventory.recipes.loader.GenericRecipe;
 import com.hbm.items.machine.ItemBlueprints;
 import com.hbm.lib.RefStrings;
 import com.hbm.tileentity.machine.TileEntityMachineChemicalFactory;
+import com.hbm.util.i18n.I18nUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -50,7 +51,7 @@ public class GUIMachineChemicalFactory extends GuiInfoContainer {
 				GenericRecipe recipe = this.chemplant.chemplantModule[i].getRecipe();
 				GUIElements.drawHoveringTextRecipe(recipe.print(), mouseX, mouseY, this.fontRendererObj, itemRender, this.width, this.height);
 			} else {
-				this.drawCreativeTabHoveringText(EnumChatFormatting.YELLOW + "Click to set recipe", mouseX, mouseY);
+				this.drawCreativeTabHoveringText(EnumChatFormatting.YELLOW + I18nUtil.resolveKey("gui.recipe.setRecipe"), mouseX, mouseY);
 			}
 		}
 	}
@@ -59,7 +60,7 @@ public class GUIMachineChemicalFactory extends GuiInfoContainer {
 	protected void mouseClicked(int x, int y, int button) {
 		super.mouseClicked(x, y, button);
 		
-		for(int i = 0; i < 4; i++) if(this.checkClick(x, y, 74, 19 + i * 22, 18, 18)) GUIScreenRecipeSelector.openSelector(ChemicalPlantRecipes.INSTANCE, chemplant, chemplant.chemplantModule[i].getRecipeName(), i, this);
+		for(int i = 0; i < 4; i++) if(this.checkClick(x, y, 74, 19 + i * 22, 18, 18)) GUIScreenRecipeSelector.openSelector(ChemicalPlantRecipes.INSTANCE, chemplant, chemplant.chemplantModule[i].getRecipeName(), i, ItemBlueprints.grabPool(chemplant.slots[4 + i * 7]), this);
 	}
 
 	@Override

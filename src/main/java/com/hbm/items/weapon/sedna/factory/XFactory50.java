@@ -52,12 +52,14 @@ public class XFactory50 {
 	public static BulletConfig bmg50_sm;
 	public static BulletConfig bmg50_black;
 	public static BulletConfig bmg50_equestrian;
-public static void initConfig() {
+	
+	public static void initConfig() {
 		ServerConfig.configMap.put("GUN_ANTI_MATERIEL_DAMAGE", GUN_ANTI_MATERIEL_DAMAGE);
 		ServerConfig.configMap.put("GUN_SUBTLETY_DAMAGE", GUN_SUBTLETY_DAMAGE);
 		ServerConfig.configMap.put("GUN_PENANCE_DAMAGE", GUN_PENANCE_DAMAGE);
 		ServerConfig.configMap.put("GUN_M2_DAMAGE", GUN_M2_DAMAGE);
 	}
+
 	public static BiConsumer<EntityBulletBaseMK4, MovingObjectPosition> LAMBDA_BUILDING = (bullet, mop) -> {
 		EntityBuilding silver = new EntityBuilding(bullet.worldObj);
 		silver.posX = mop.hitVec.xCoord;
@@ -123,7 +125,7 @@ public static void initConfig() {
 				.setupStandardConfiguration()
 				.anim(LAMBDA_AMAT_ANIMS).orchestra(Orchestras.ORCHESTRA_AMAT)
 				).setDefaultAmmo(EnumAmmo.BMG50_JHP, 7).setUnlocalizedName("gun_amat_penance");
-		
+
 		ModItems.gun_m2 = new ItemGunBaseNT(WeaponQuality.A_SIDE, new GunConfig()
 				.dura(3_000).draw(10).inspect(31).crosshair(Crosshair.L_CIRCLE).smoke(LAMBDA_SMOKE)
 				.rec(new Receiver(0)

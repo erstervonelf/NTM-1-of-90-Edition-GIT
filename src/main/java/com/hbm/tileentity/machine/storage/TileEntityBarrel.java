@@ -1,13 +1,9 @@
 package com.hbm.tileentity.machine.storage;
 
 import api.hbm.energymk2.IEnergyReceiverMK2.ConnectionPriority;
-import api.hbm.fluidmk2.FluidNode;
 import api.hbm.fluidmk2.IFluidStandardTransceiverMK2;
-import api.ntm1of90.compat.fluid.adapter.ForgeFluidHandlerAdapter;
-import api.ntm1of90.compat.fluid.registry.FluidMappingRegistry;
-import net.minecraftforge.fluids.IFluidHandler;
-
-import java.util.HashSet;
+import api.hbm.redstoneoverradio.IRORInteractive;
+import api.hbm.redstoneoverradio.IRORValueProvider;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.CompatHandler;
@@ -16,18 +12,16 @@ import com.hbm.inventory.container.ContainerBarrel;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.tank.FluidTank;
-import com.hbm.inventory.fluid.trait.FT_Corrosive;
-import com.hbm.inventory.fluid.trait.FT_Polluting;
+import com.hbm.inventory.fluid.trait.FluidTrait;
 import com.hbm.inventory.fluid.trait.FluidTrait.FluidReleaseType;
 import com.hbm.inventory.gui.GUIBarrel;
-import com.hbm.lib.Library;
 import com.hbm.saveddata.TomSaveData;
 import com.hbm.tileentity.IFluidCopiable;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.IPersistentNBT;
 import com.hbm.tileentity.TileEntityMachineBase;
-import com.hbm.uninos.UniNodespace;
-import com.hbm.util.fauxpointtwelve.BlockPos;
+import com.hbm.tileentity.TilePort.PortDef;
+import com.hbm.tileentity.TilePortShapes;
 import com.hbm.util.fauxpointtwelve.DirPos;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
@@ -40,7 +34,6 @@ import li.cil.oc.api.network.SimpleComponent;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
@@ -49,10 +42,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "opencomputers")})
-public class TileEntityBarrel extends TileEntityMachineBase implements SimpleComponent, IFluidStandardTransceiverMK2, IPersistentNBT, IGUIProvider, CompatHandler.OCComponent, IFluidCopiable, IFluidHandler {
-
-	protected FluidNode node;
-	protected FluidType lastType;
+public class TileEntityBarrel extends TileEntityMachineBase implements SimpleComponent, IFluidStandardTransceiverMK2, IPersistentNBT, IGUIProvider, CompatHandler.OCComponent, IFluidCopiable, IRORValueProvider, IRORInteractive {
 
 	public FluidTank tank;
 	public short mode = 0;
@@ -69,6 +59,9 @@ public class TileEntityBarrel extends TileEntityMachineBase implements SimpleCom
 		super(6);
 		tank = new FluidTank(Fluids.NONE, capacity);
 	}
+	
+	protected PortDef[] cachedPorts;
+	public PortDef[] getPorts() { if(cachedPorts == null) cachedPorts = TilePortShapes.around(xCoord, yCoord, zCoord); return cachedPorts; }
 
 	@Override
 	public String getName() {
@@ -83,20 +76,32 @@ public class TileEntityBarrel extends TileEntityMachineBase implements SimpleCom
 
 	@Override
 	public long getDemand(FluidType type, int pressure) {
+		if(this.tilted) return 0;
 		if(this.mode == 2 || this.mode == 3) return 0;
 		if(tank.getPressure() != pressure) return 0;
 		return type == tank.getTankType() ? tank.getMaxFill() - tank.getFill() : 0;
 	}
 
 	@Override
+	public long getFluidAvailable(FluidType type, int pressure) {
+		if(this.tilted) return 0;
+		if(this.mode == 0 || this.mode == 3) return 0;
+		if(tank.getPressure() != pressure) return 0;
+		return type == tank.getTankType() ? tank.getFill() : 0;
+	}
+
+	@Override
 	public void updateEntity() {
 
 		if(!worldObj.isRemote) {
+			
+			this.setupFluidPorts(getPorts());
+			this.updatePortFIFO();
 
 			byte comp = this.getComparatorPower(); //do comparator shenanigans
 			if(comp != this.lastRedstone) {
 				this.markDirty();
-				for(DirPos pos : getConPos()) this.updateRedstoneConnection(pos);
+				for(PortDef port : getPorts()) for(DirPos pos : port.portConnections) this.triggerNeighborUpdate(pos);
 			}
 			this.lastRedstone = comp;
 
@@ -104,77 +109,16 @@ public class TileEntityBarrel extends TileEntityMachineBase implements SimpleCom
 			tank.loadTank(2, 3, slots);
 			tank.unloadTank(4, 5, slots);
 
-			// In buffer mode, acts like a pipe block, providing fluid to its own node
-			// otherwise, it is a regular providing/receiving machine, blocking further propagation
-			if(mode == 1) {
-				if(this.node == null || this.node.expired || tank.getTankType() != lastType) {
-
-					this.node = (FluidNode) UniNodespace.getNode(worldObj, xCoord, yCoord, zCoord, tank.getTankType().getNetworkProvider());
-
-					if(this.node == null || this.node.expired || tank.getTankType() != lastType) {
-						this.node = this.createNode(tank.getTankType());
-						UniNodespace.createNode(worldObj, this.node);
-						lastType = tank.getTankType();
-					}
-				}
-
-				if(node != null && node.hasValidNet()) {
-					node.net.addProvider(this);
-					node.net.addReceiver(this);
-				}
-			} else {
-				if(this.node != null) {
-					UniNodespace.destroyNode(worldObj, xCoord, yCoord, zCoord, tank.getTankType().getNetworkProvider());
-					this.node = null;
-				}
-
-				for(DirPos pos : getConPos()) {
-					FluidNode dirNode = (FluidNode) UniNodespace.getNode(worldObj, pos.getX(), pos.getY(), pos.getZ(), tank.getTankType().getNetworkProvider());
-
-					if(mode == 2) {
-						tryProvide(tank, worldObj, pos.getX(), pos.getY(), pos.getZ(), pos.getDir());
-					} else {
-						if(dirNode != null && dirNode.hasValidNet()) dirNode.net.removeProvider(this);
-					}
-
-					if(mode == 0) {
-						if(dirNode != null && dirNode.hasValidNet()) dirNode.net.addReceiver(this);
-					} else {
-						if(dirNode != null && dirNode.hasValidNet()) dirNode.net.removeReceiver(this);
-					}
-				}
-			}
-
 			if(tank.getFill() > 0) {
 				checkFluidInteraction();
 			}
 
-			this.networkPackNT(50);
+			this.networkPackNT(trackingRange());
 		}
 	}
-
-	protected FluidNode createNode(FluidType type) {
-		DirPos[] conPos = getConPos();
-
-		HashSet<BlockPos> posSet = new HashSet<>();
-		posSet.add(new BlockPos(this));
-		for(DirPos pos : conPos) {
-			ForgeDirection dir = pos.getDir();
-			posSet.add(new BlockPos(pos.getX() - dir.offsetX, pos.getY() - dir.offsetY, pos.getZ() - dir.offsetZ));
-		}
-
-		return new FluidNode(type.getNetworkProvider(), posSet.toArray(new BlockPos[posSet.size()])).setConnections(conPos);
-	}
-
-	@Override
-	public void invalidate() {
-		super.invalidate();
-
-		if(!worldObj.isRemote) {
-			if(this.node != null) {
-				UniNodespace.destroyNode(worldObj, xCoord, yCoord, zCoord, tank.getTankType().getNetworkProvider());
-			}
-		}
+	
+	public int trackingRange() {
+		return 50;
 	}
 
 	@Override
@@ -189,17 +133,6 @@ public class TileEntityBarrel extends TileEntityMachineBase implements SimpleCom
 		super.deserialize(buf);
 		mode = buf.readShort();
 		tank.deserialize(buf);
-	}
-
-	protected DirPos[] getConPos() {
-		return new DirPos[] {
-				new DirPos(xCoord + 1, yCoord, zCoord, Library.POS_X),
-				new DirPos(xCoord - 1, yCoord, zCoord, Library.NEG_X),
-				new DirPos(xCoord, yCoord + 1, zCoord, Library.POS_Y),
-				new DirPos(xCoord, yCoord - 1, zCoord, Library.NEG_Y),
-				new DirPos(xCoord, yCoord, zCoord + 1, Library.POS_Z),
-				new DirPos(xCoord, yCoord, zCoord - 1, Library.NEG_Z)
-		};
 	}
 
 	@Override
@@ -242,28 +175,19 @@ public class TileEntityBarrel extends TileEntityMachineBase implements SimpleCom
 			worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "random.fizz", 1.0F, 1.0F);
 		}
 
-		//for when you fill highly corrosive liquid into a steel tank
-		if(b == ModBlocks.barrel_steel && tank.getTankType().hasTrait(FT_Corrosive.class) && tank.getTankType().getTrait(FT_Corrosive.class).getRating() > 50) {
-			ItemStack[] copy = this.slots.clone();
-			this.slots = new ItemStack[6];
-			worldObj.setBlock(xCoord, yCoord, zCoord, ModBlocks.barrel_corroded);
-			TileEntityBarrel barrel = (TileEntityBarrel)worldObj.getTileEntity(xCoord, yCoord, zCoord);
-
-			if(barrel != null) {
-				barrel.tank.setTankType(tank.getTankType());
-				barrel.tank.setFill(Math.min(barrel.tank.getMaxFill(), tank.getFill()));
-				barrel.slots = copy;
-			}
-
-			worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "random.fizz", 1.0F, 1.0F);
-		}
-
-		if(b == ModBlocks.barrel_corroded ) {
+		if(b == ModBlocks.barrel_corroded) {
 			if(worldObj.rand.nextInt(3) == 0) {
 				tank.setFill(tank.getFill() - 1);
-				FT_Polluting.pollute(worldObj, xCoord, yCoord, zCoord, tank.getTankType(), FluidReleaseType.SPILL, 1F);
+				FluidTrait.onRelease(worldObj, xCoord, yCoord, zCoord, tank.getTankType(), tank, FluidReleaseType.SPILL, 1);
 			}
 			if(worldObj.rand.nextInt(3 * 60 * 20) == 0) worldObj.func_147480_a(xCoord, yCoord, zCoord, false);
+		}
+
+		if(b == ModBlocks.barrel_steel && tank.getTankType().isHighlyCorrosive()) {
+			worldObj.setBlock(xCoord, yCoord, zCoord, ModBlocks.barrel_corroded);
+			TileEntityBarrel barrel = (TileEntityBarrel) worldObj.getTileEntity(xCoord, yCoord, zCoord);
+			barrel.tank.setTankType(tank.getTankType());
+			barrel.tank.setFill(tank.getFill());
 		}
 
 		//For when Tom's firestorm hits a barrel full of water
@@ -292,21 +216,23 @@ public class TileEntityBarrel extends TileEntityMachineBase implements SimpleCom
 		tank.writeToNBT(nbt, "tank");
 	}
 
-	@Override public boolean canConnect(FluidType fluid, ForgeDirection dir) { return true; }
+	@Override
+	public boolean canConnect(FluidType fluid, ForgeDirection dir) {
+		return fluid == tank.getTankType();
+	}
+
+	@Override public FluidTank[] getSendingTanks() { return new FluidTank[] { tank }; }
+	@Override public FluidTank[] getReceivingTanks() { return new FluidTank[] { tank }; }
+	@Override public FluidTank[] getAllTanks() { return new FluidTank[] { tank }; }
 
 	@Override
-	public FluidTank[] getSendingTanks() {
-		return (mode == 1 || mode == 2) ? new FluidTank[] {tank} : new FluidTank[0];
+	public long getProviderSpeed(FluidType type, int pressure) {
+		return (mode == 1 || mode == 2) ? 1_000_000_000 : 0;
 	}
 
 	@Override
-	public FluidTank[] getReceivingTanks() {
-		return (mode == 0 || mode == 1) ? new FluidTank[] {tank} : new FluidTank[0];
-	}
-
-	@Override
-	public FluidTank[] getAllTanks() {
-		return new FluidTank[] { tank };
+	public long getReceiverSpeed(FluidType type, int pressure) {
+		return (mode == 0 || mode == 1) ? 1_000_000_000 : 0;
 	}
 
 	@Override
@@ -396,89 +322,51 @@ public class TileEntityBarrel extends TileEntityMachineBase implements SimpleCom
 	@Optional.Method(modid = "OpenComputers")
 	public Object[] invoke(String method, Context context, Arguments args) throws Exception {
 		switch (method) {
-			case "getFluidStored":
-				return getFluidStored(context, args);
-			case "getMaxStored":
-				return getMaxStored(context, args);
-			case "getTypeStored":
-				return getTypeStored(context, args);
-			case "getInfo":
-				return getInfo(context, args);
+			case "getFluidStored": return getFluidStored(context, args);
+			case "getMaxStored": return getMaxStored(context, args);
+			case "getTypeStored": return getTypeStored(context, args);
+			case "getInfo": return getInfo(context, args);
 		}
 		throw new NoSuchMethodException();
-
 	}
 
-	// Forge IFluidHandler implementation
+	@Override
+	public String[] getFunctionInfo() {
+		return new String[] {
+				PREFIX_VALUE + "type",
+				PREFIX_VALUE + "fill",
+				PREFIX_VALUE + "fillpercent",
+				PREFIX_FUNCTION + "setmode" + NAME_SEPARATOR + "mode (0-3)",
+				PREFIX_FUNCTION + "setmode" + NAME_SEPARATOR + "mode" + PARAM_SEPARATOR + "fallback (0-3)",
+		};
+	}
 
-	private ForgeFluidHandlerAdapter forgeAdapter = new ForgeFluidHandlerAdapter() {
-		@Override
-		protected FluidTank[] getHbmTanks() {
-			return new FluidTank[] { tank };
+	@Override
+	public String provideRORValue(String name) {
+		if((PREFIX_VALUE + "type").equals(name))		return tank.getTankType().getName();
+		if((PREFIX_VALUE + "fill").equals(name))		return "" + tank.getFill();
+		if((PREFIX_VALUE + "fillpercent").equals(name))	return "" + (tank.getFill() * 100 / tank.getMaxFill());
+		return null;
+	}
+
+	@Override
+	public String runRORFunction(String name, String[] params) {
+		
+		if((PREFIX_FUNCTION + "setmode").equals(name) && params.length > 0) {
+			int mode = IRORInteractive.parseInt(params[0], 0, 3);
+			
+			if(mode != this.mode) {
+				this.mode = (short) mode;
+				this.markChanged();
+				return null;
+			} else if(params.length > 1) {
+				int altmode = IRORInteractive.parseInt(params[1], 0, 3);
+				this.mode = (short) altmode;
+				this.markChanged();
+				return null;
+			}
+			return null;
 		}
-
-		@Override
-		protected TileEntity getTileEntity() {
-			return TileEntityBarrel.this;
-		}
-
-		@Override
-		protected boolean isFillAllowed(ForgeDirection from) {
-			// allow filling in input or buffer mode
-			return (mode == 0 || mode == 1);
-		}
-
-		@Override
-		protected boolean isDrainAllowed(ForgeDirection from) {
-			// allow draining in output or buffer mode
-			return (mode == 1 || mode == 2);
-		}
-	};
-
-	static {
-		// Initialize the fluid mapping registry
-		FluidMappingRegistry.initialize();
-	}
-
-	// Common compatibility helpers that some pipe mods reflectively probe for
-	public boolean canConnectFluid(ForgeDirection from) { return true; }
-	public boolean isConnectable(ForgeDirection from) { return true; }
-	public boolean canInterface(ForgeDirection from) { return true; }
-	public boolean canInputFluid(ForgeDirection from) { return (mode == 0 || mode == 1); }
-	public boolean canOutputFluid(ForgeDirection from) { return (mode == 1 || mode == 2); }
-	public boolean canReceiveFrom(ForgeDirection from) { return (mode == 0 || mode == 1); }
-	public boolean canSendTo(ForgeDirection from) { return (mode == 1 || mode == 2); }
-	public boolean canAcceptFluid(ForgeDirection from) { return (mode == 0 || mode == 1); }
-	public boolean canProvideFluid(ForgeDirection from) { return (mode == 1 || mode == 2); }
-	public boolean isFluidHandler(ForgeDirection from) { return true; }
-
-	@Override
-	public int fill(ForgeDirection from, net.minecraftforge.fluids.FluidStack resource, boolean doFill) {
-		return forgeAdapter.fill(from, resource, doFill);
-	}
-
-	@Override
-	public net.minecraftforge.fluids.FluidStack drain(ForgeDirection from, net.minecraftforge.fluids.FluidStack resource, boolean doDrain) {
-		return forgeAdapter.drain(from, resource, doDrain);
-	}
-
-	@Override
-	public net.minecraftforge.fluids.FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return forgeAdapter.drain(from, maxDrain, doDrain);
-	}
-
-	@Override
-	public boolean canFill(ForgeDirection from, net.minecraftforge.fluids.Fluid fluid) {
-		return forgeAdapter.canFill(from, fluid);
-	}
-
-	@Override
-	public boolean canDrain(ForgeDirection from, net.minecraftforge.fluids.Fluid fluid) {
-		return forgeAdapter.canDrain(from, fluid);
-	}
-
-	@Override
-	public net.minecraftforge.fluids.FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return forgeAdapter.getTankInfo(from);
+		return null;
 	}
 }

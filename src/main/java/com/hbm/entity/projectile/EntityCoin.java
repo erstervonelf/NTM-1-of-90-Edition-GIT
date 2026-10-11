@@ -1,31 +1,51 @@
 package com.hbm.entity.projectile;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
-public class EntityCoin extends Entity {
+public class EntityCoin extends EntityThrowableInterp {
 
-    public EntityCoin(World world) {
-        super(world);
-    }
+	public EntityCoin(World world) {
+		super(world);
+		this.setSize(1F, 1F);
+		this.yOffset = 0.5F;
+	}
+	
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+	}
 
-    @Override
-    protected void entityInit() { }
+	public void setPosition(double x, double y, double z) {
+		this.posX = x;
+		this.posY = y;
+		this.posZ = z;
+		float f = this.width / 2.0F;
+		this.boundingBox.setBounds(x - f, y - this.yOffset + this.ySize, z - f, x + f, y - this.yOffset + this.ySize + this.height, z + f);
+	}
 
-    @Override
-    protected void readEntityFromNBT(NBTTagCompound tag) { }
+	@Override
+	protected void onImpact(MovingObjectPosition mop) {
+		if(mop.typeOfHit == mop.typeOfHit.BLOCK) this.setDead();
+	}
 
-    @Override
-    protected void writeEntityToNBT(NBTTagCompound tag) { }
+	@Override
+	protected float getAirDrag() {
+		return 1F;
+	}
 
-    @Override
-    public void onUpdate() {
-        super.onUpdate();
-    }
+	@Override
+	public double getGravityVelocity() {
+		return 0.02D;
+	}
 
-    public void setThrower(EntityPlayer player) {
-        // Legacy compatibility: this lightweight placeholder entity ignores thrower metadata.
-    }
+	@Override
+	public boolean canBeCollidedWith() {
+		return true;
+	}
+
+	@Override
+	public boolean canAttackWithItem() {
+		return true;
+	}
 }

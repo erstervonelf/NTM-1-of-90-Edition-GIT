@@ -206,4 +206,3 @@ public class MachineFluidTank extends BlockDummyable implements IPersistentInfoP
 		IRepairable.addGenericOverlay(event, world, x, y, z, this);
 	}
 }
-

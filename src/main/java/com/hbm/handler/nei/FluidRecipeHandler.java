@@ -34,28 +34,31 @@ public class FluidRecipeHandler extends TemplateRecipeHandler implements ICompat
 		return "fluidcons";
 	}
 
-    public class SmeltingSet extends TemplateRecipeHandler.CachedRecipe
-    {
-    	PositionedStack input;
-        PositionedStack result;
-    	
-        public SmeltingSet(ItemStack input, ItemStack result) {
-        	input.stackSize = 1;
-            this.input = new PositionedStack(input, 83 - 27 - 18 + 1, 5 + 18 + 1);
-            this.result = new PositionedStack(result, 83 + 27 + 18 + 1 - 18, 5 + 18 + 1);
-        }
+	public class SmeltingSet extends TemplateRecipeHandler.CachedRecipe {
+		
+		PositionedStack[] input;
+		PositionedStack result;
 
-        @Override
+		public SmeltingSet(ItemStack fluid, ItemStack empty, ItemStack full) {
+			fluid.stackSize = 1;
+			
+			this.input = new PositionedStack[empty == null ? 1 : 2];
+			this.input[0] = new PositionedStack(fluid, 30, 24);
+			if(empty != null) this.input[1] = new PositionedStack(empty, 48, 24);
+			this.result = new PositionedStack(full, 120, 24);
+		}
+
+		@Override
 		public List<PositionedStack> getIngredients() {
-            return getCycledIngredients(cycleticks / 48, Arrays.asList(new PositionedStack[] {input}));
-        }
+			return getCycledIngredients(cycleticks / 48, Arrays.asList(input));
+		}
 
-        @Override
+		@Override
 		public PositionedStack getResult() {
-            return result;
-        }
-    }
-    
+			return result;
+		}
+	}
+
 	@Override
 	public String getRecipeName() {
 		return "Fluid Containers";
@@ -70,8 +73,8 @@ public class FluidRecipeHandler extends TemplateRecipeHandler implements ICompat
 	public void loadCraftingRecipes(String outputId, Object... results) {
 		if ((outputId.equals("fluidcons")) && getClass() == FluidRecipeHandler.class) {
 			List<Triplet<ItemStack, ItemStack, ItemStack>> recipes = MachineRecipes.instance().getFluidContainers();
-			for (Triplet<ItemStack, ItemStack, ItemStack> recipe : recipes) {
-				this.arecipes.add(new SmeltingSet(recipe.getY(), recipe.getZ()));
+			for(Triplet<ItemStack, ItemStack, ItemStack> recipe : recipes) {
+				this.arecipes.add(new SmeltingSet(recipe.getX(), recipe.getY(), recipe.getZ()));
 			}
 		} else {
 			super.loadCraftingRecipes(outputId, results);
@@ -81,9 +84,11 @@ public class FluidRecipeHandler extends TemplateRecipeHandler implements ICompat
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
 		List<Triplet<ItemStack, ItemStack, ItemStack>> recipes = MachineRecipes.instance().getFluidContainers();
-		for (Triplet<ItemStack, ItemStack, ItemStack> recipe : recipes) {
-			if (NEIServerUtils.areStacksSameType(recipe.getZ(), result) || compareFluidStacks(result, recipe.getY()))
-				this.arecipes.add(new SmeltingSet(recipe.getY(), recipe.getZ()));
+		for(Triplet<ItemStack, ItemStack, ItemStack> recipe : recipes) {
+			if(NEIServerUtils.areStacksSameType(recipe.getY(), result) ||
+					NEIServerUtils.areStacksSameType(recipe.getZ(), result) ||
+					compareFluidStacks(result, recipe.getX()))
+				this.arecipes.add(new SmeltingSet(recipe.getX(), recipe.getY(), recipe.getZ()));
 		}
 	}
 
@@ -99,29 +104,26 @@ public class FluidRecipeHandler extends TemplateRecipeHandler implements ICompat
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
 		List<Triplet<ItemStack, ItemStack, ItemStack>> recipes = MachineRecipes.instance().getFluidContainers();
-		for (Triplet<ItemStack, ItemStack, ItemStack> recipe : recipes) {
-			if (NEIServerUtils.areStacksSameType(recipe.getZ(), ingredient) || compareFluidStacks(ingredient, recipe.getY()))
-				this.arecipes.add(new SmeltingSet(recipe.getY(), recipe.getZ()));				
+		for(Triplet<ItemStack, ItemStack, ItemStack> recipe : recipes) {
+			if(NEIServerUtils.areStacksSameType(recipe.getY(), ingredient) ||
+					NEIServerUtils.areStacksSameType(recipe.getZ(), ingredient) ||
+					compareFluidStacks(ingredient, recipe.getX()))
+				this.arecipes.add(new SmeltingSet(recipe.getX(), recipe.getY(), recipe.getZ()));
 		}
 	}
 	
 	private boolean compareFluidStacks(ItemStack sta1, ItemStack sta2) {
-		if (sta1 == null || sta2 == null) {
-			return false;
-		}
 		return sta1.getItem() == sta2.getItem() && sta1.getItemDamage() == sta2.getItemDamage();
 	}
 
-    @Override
-    public Class<? extends GuiContainer> getGuiClass() {
-        //return GUIMachineShredder.class;
-    	return null;
-    }
-    
-    @Override
-    public void loadTransferRects() {
-        
-        transferRects.add(new RecipeTransferRect(new Rectangle(74 + 6 - 18, 23, 42, 18), "fluidcons"));
-        RecipeTransferRectHandler.registerRectsToGuis(getRecipeTransferRectGuis(), transferRects);
-    }
+	@Override
+	public Class<? extends GuiContainer> getGuiClass() {
+		return null;
+	}
+
+	@Override
+	public void loadTransferRects() {
+		transferRects.add(new RecipeTransferRect(new Rectangle(71, 23, 42, 18), "fluidcons"));
+		RecipeTransferRectHandler.registerRectsToGuis(getRecipeTransferRectGuis(), transferRects);
+	}
 }

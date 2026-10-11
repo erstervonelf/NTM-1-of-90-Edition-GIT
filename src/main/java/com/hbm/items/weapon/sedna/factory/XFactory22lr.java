@@ -159,7 +159,8 @@ public class XFactory22lr {
 			case INSPECT: return ResourceManager.am180_anim.get("Inspect");
 			}
 		}
-return null;
+
+		return null;
 	};
 
 	@SuppressWarnings("incomplete-switch") public static BiFunction<ItemStack, GunAnimation, BusAnimation> LAMBDA_STAR_F_ANIMS = (stack, type) -> {
@@ -196,6 +197,7 @@ return null;
 				.addBus("SLIDE", new BusAnimationSequence().addPos(0, 0, 0, 350).addPos(0, 0, -0.5, 100, IType.SIN_FULL).hold(1125).addPos(0, 0, 0, 100, IType.SIN_UP))
 				.addBus("BULLET", ammo <= 1 ? new BusAnimationSequence().setPos(100, 0, 0) : new BusAnimationSequence().setPos(0, 0.5, 2.25).hold(350).addPos(0, 0.5, 1.25, 100, IType.SIN_FULL).hold(1125).addPos(0, 0.5, 2.25, 100, IType.SIN_UP));
 		}
+
 		return null;
 	};
 }

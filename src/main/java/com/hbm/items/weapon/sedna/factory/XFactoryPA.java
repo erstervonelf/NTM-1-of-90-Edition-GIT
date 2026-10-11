@@ -48,6 +48,7 @@ public class XFactoryPA {
 	}
 
 	public static void init() {
+
 		ModItems.gun_pa_melee = new ItemGunPA(WeaponQuality.UTILITY, new GunConfig()
 				.draw(10).crosshair(Crosshair.NONE)
 				.rec(new Receiver(0))

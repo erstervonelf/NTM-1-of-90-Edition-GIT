@@ -37,6 +37,7 @@ public abstract class ItemRenderWeaponBase implements IItemRenderer {
 	public static HashMap<EntityLivingBase, Long> flashMap = new HashMap<EntityLivingBase, Long>();
 
 	public boolean isAkimbo(EntityLivingBase entity) { return false; }
+	public boolean isLeftHanded() { return false; }
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
@@ -55,7 +56,8 @@ public abstract class ItemRenderWeaponBase implements IItemRenderer {
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		switch(type) {
 		case EQUIPPED_FIRST_PERSON:	setupFirstPerson(item);	renderFirstPerson(item); break;
-		case EQUIPPED:				setupThirdPerson(item);	renderEquipped(item, data); break;
+		case EQUIPPED:
+		if(isLeftHanded()) break;	setupThirdPerson(item);	renderEquipped(item, data); break;
 		case INVENTORY:				setupInv(item);			renderInv(item); break;
 		case ENTITY:				setupEntity(item);		renderEntity(item); break;
 		}

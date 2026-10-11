@@ -42,11 +42,13 @@ public class XFactory10ga {
 	public static BulletConfig g10_du;
 	public static BulletConfig g10_slug;
 	public static BulletConfig g10_explosive;
-public static void initConfig() {
+	
+	public static void initConfig() {
 		ServerConfig.configMap.put("GUN_DOUBLE_BARREL_DAMAGE", GUN_DOUBLE_BARREL_DAMAGE);
 		ServerConfig.configMap.put("GUN_SACRED_DRAGON_DAMAGE", GUN_SACRED_DRAGON_DAMAGE);
 		ServerConfig.configMap.put("GUN_HERETIC_DAMAGE", GUN_HERETIC_DAMAGE);
 	}
+
 	public static BiConsumer<EntityBulletBaseMK4, MovingObjectPosition> LAMBDA_TINY_EXPLODE = (bullet, mop) -> {
 		if(mop.typeOfHit == mop.typeOfHit.ENTITY && bullet.ticksExisted < 3 && mop.entityHit == bullet.getThrower()) return;
 		Lego.tinyExplode(bullet, mop, 1.5F); bullet.setDead();

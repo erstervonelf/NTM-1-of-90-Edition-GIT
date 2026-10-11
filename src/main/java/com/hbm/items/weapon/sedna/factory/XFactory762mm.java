@@ -53,7 +53,8 @@ public class XFactory762mm {
 	public static BulletConfig energy_lacunae;
 	public static BulletConfig energy_lacunae_overcharge;
 	public static BulletConfig energy_lacunae_ir;
-public static void initConfig() {
+	
+	public static void initConfig() {
 		ServerConfig.configMap.put("GUN_CARBINE_DAMAGE", GUN_CARBINE_DAMAGE);
 		ServerConfig.configMap.put("GUN_CARBINE_BAYONET_DAMAGE", GUN_CARBINE_BAYONET_DAMAGE);
 		ServerConfig.configMap.put("GUN_MINIGUN_DAMAGE", GUN_MINIGUN_DAMAGE);
@@ -63,6 +64,7 @@ public static void initConfig() {
 		ServerConfig.configMap.put("GUN_SOUTH_STAR_DAMAGE", GUN_SOUTH_STAR_DAMAGE);
 		ServerConfig.configMap.put("GUN_SOUTH_STAR_BAYONET_DAMAGE", GUN_SOUTH_STAR_BAYONET_DAMAGE);
 	}
+
 	public static BiConsumer<EntityBulletBaseMK4, MovingObjectPosition> LAMBDA_TINY_EXPLODE = (bullet, mop) -> {
 		if(mop.typeOfHit == mop.typeOfHit.ENTITY && bullet.ticksExisted < 3 && mop.entityHit == bullet.getThrower()) return;
 		Lego.tinyExplode(bullet, mop, 1.5F); bullet.setDead();

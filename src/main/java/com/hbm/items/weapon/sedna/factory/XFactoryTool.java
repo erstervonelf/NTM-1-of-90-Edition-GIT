@@ -67,10 +67,12 @@ public class XFactoryTool {
 	public static BulletConfig ct_hook;
 	public static BulletConfig ct_mortar;
 	public static BulletConfig ct_mortar_charge;
-public static void initConfig() {
+	
+	public static void initConfig() {
 		ServerConfig.configMap.put("GUN_EXTINGUISHER_DAMAGE", GUN_EXTINGUISHER_DAMAGE);
 		ServerConfig.configMap.put("GUN_CHARGE_THROWER_DAMAGE", GUN_CHARGE_THROWER_DAMAGE);
 	}
+
 	public static BiConsumer<EntityBulletBaseMK4, MovingObjectPosition> LAMBDA_WATER_HIT = (bullet, mop) -> {
 		if(!bullet.worldObj.isRemote) {
 			int ix = mop.blockX;

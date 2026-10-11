@@ -107,8 +107,9 @@ public class GunFactoryClient {
 		MinecraftForgeClient.registerItemRenderer(ModItems.gun_double_barrel,				new ItemRenderDoubleBarrel(ResourceManager.double_barrel_tex));
 		MinecraftForgeClient.registerItemRenderer(ModItems.gun_double_barrel_sacred_dragon,	new ItemRenderDoubleBarrel(ResourceManager.double_barrel_sacred_dragon_tex));
 		MinecraftForgeClient.registerItemRenderer(ModItems.gun_charge_thrower,				new ItemRenderChargeThrower());
-		// DISABLED: ItemRenderDrill, ItemRenderNI4NI, ItemRenderPAMelee classes not found
-		// MinecraftForgeClient.registerItemRenderer(ModItems.gun_drill,						new ItemRenderDrill());\n		// MinecraftForgeClient.registerItemRenderer(ModItems.gun_n_i_4_n_i,					new ItemRenderNI4NI());\n		// MinecraftForgeClient.registerItemRenderer(ModItems.gun_pa_melee,					new ItemRenderPAMelee());
+		MinecraftForgeClient.registerItemRenderer(ModItems.gun_drill,						new ItemRenderDrill());
+		MinecraftForgeClient.registerItemRenderer(ModItems.gun_n_i_4_n_i,					new ItemRenderNI4NI());
+		MinecraftForgeClient.registerItemRenderer(ModItems.gun_pa_melee,					new ItemRenderPAMelee());
 		
 		//PROJECTILES
 		ammo_debug.setRenderer(LegoClient.RENDER_STANDARD_BULLET);
@@ -248,11 +249,7 @@ public class GunFactoryClient {
 		setRendererBulk(LegoClient.RENDER_GRENADE, shell_normal, shell_explosive, shell_ap, shell_du, shell_w9); //TODO: change the sabots
 
 		setRendererBulk(LegoClient.RENDER_FRAGMENTATION, ItemGrenadeFilling.fragmentation, ItemGrenadeFilling.pellets, ItemGrenadeFilling.pellets_heavy);
-		if(ItemGrenadeFilling.laser != null) {
-			ItemGrenadeFilling.laser.setRendererBeam(LegoClient.RENDER_LASER_RED);
-		} else {
-			System.err.println("[HBM] WARNING: ItemGrenadeFilling.laser is null, skipping laser renderer registration.");
-		}
+		ItemGrenadeFilling.laser.setRendererBeam(LegoClient.RENDER_LASER_RED);
 		
 		TileEntityPileCore.pile_debris.setRenderer(LegoClient.RENDER_GRAPHITE);
 		
@@ -333,22 +330,6 @@ public class GunFactoryClient {
 		((ItemGunBaseNT) ModItems.gun_aberrator_eott)		.getConfig(null, 1).hud(LegoClient.HUD_COMPONENT_AMMO);
 	}
 	
-	public static void setRendererBulk(BiConsumer<EntityBulletBaseMK4, Float> renderer, BulletConfig... configs) {
-		for(BulletConfig config : configs) {
-			if(config == null) {
-				System.err.println("[HBM] WARNING: skipped null BulletConfig in setRendererBulk");
-				continue;
-			}
-			config.setRenderer(renderer);
-		}
-	}
-	public static void setRendererBulkBeam(BiConsumer<EntityBulletBeamBase, Float> renderer, BulletConfig... configs) {
-		for(BulletConfig config : configs) {
-			if(config == null) {
-				System.err.println("[HBM] WARNING: skipped null BulletConfig in setRendererBulkBeam");
-				continue;
-			}
-			config.setRendererBeam(renderer);
-		}
-	}
+	public static void setRendererBulk(BiConsumer<EntityBulletBaseMK4, Float> renderer, BulletConfig... configs) { for(BulletConfig config : configs) config.setRenderer(renderer); }
+	public static void setRendererBulkBeam(BiConsumer<EntityBulletBeamBase, Float> renderer, BulletConfig... configs) { for(BulletConfig config : configs) config.setRendererBeam(renderer); }
 }

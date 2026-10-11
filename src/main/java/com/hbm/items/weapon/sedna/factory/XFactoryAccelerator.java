@@ -212,8 +212,7 @@ public class XFactoryAccelerator {
 			coin.motionY = vec.yCoord + 0.5;
 			coin.motionZ = vec.zCoord;
 			coin.rotationYaw = player.rotationYaw;
-			// DISABLED: setThrower method not found on EntityCoin
-			// coin.setThrower(player);
+			coin.setThrower(player);
 			player.worldObj.spawnEntityInWorld(coin);
 
 			player.worldObj.playSoundAtEntity(player, NTMSounds.VANILLA_ORB, 1.0F, 1F + player.getRNG().nextFloat() * 0.25F);

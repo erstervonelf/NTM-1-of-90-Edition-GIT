@@ -65,6 +65,7 @@ public class ItemGunBaseNT extends Item implements IKeybindReceiver, IItemHUD, I
 	
 	public ItemStack defaultAmmo;
 	public boolean isDefaultExpensive = false;
+
 	public static final DecimalFormatSymbols SYMBOLS_US = new DecimalFormatSymbols(Locale.US);
 	public static final DecimalFormat FORMAT_DMG = new DecimalFormat("#.##", SYMBOLS_US);
 
@@ -164,6 +165,7 @@ public class ItemGunBaseNT extends Item implements IKeybindReceiver, IItemHUD, I
 		this.isDefaultExpensive = true;
 		return setDefaultAmmo(ammo, amount);
 	}
+
 	public ItemGunBaseNT setNameMutator(Function<ItemStack, String> lambda) {
 		this.LAMBDA_NAME_MUTATOR = lambda;
 		return this;
@@ -457,7 +459,8 @@ public class ItemGunBaseNT extends Item implements IKeybindReceiver, IItemHUD, I
 
 		for(int i = 0; i < confNo; i++) {
 			IHUDComponent[] components = gun.getConfig(stack, i).getHUDComponents(stack);
-int bottomOffset = 0;
+			int bottomOffset = 0;
+
 			if(components != null) for(IHUDComponent component : components) {
 				component.renderHUDComponent(event, type, player, stack, bottomOffset, i);
 				bottomOffset += component.getComponentHeight(player, stack);

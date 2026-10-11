@@ -34,7 +34,7 @@ public class GUIScreenSlicePrinter extends GuiScreen {
 	private RenderBlocks renderer;
 
 	private String dirname;
-	private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
+    private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
 
 	public GUIScreenSlicePrinter(int x1, int y1, int z1, int x2, int y2, int z2, ForgeDirection dir) {
 		this.x1 = Math.min(x1, x2);
