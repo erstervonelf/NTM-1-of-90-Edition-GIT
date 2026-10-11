@@ -155,7 +155,10 @@ public class ClientProxy extends ServerProxy {
 	/** Runs right after item and block init */
 	@Override
 	public void registerRenderInfo() {
-
+		
+		/** Initialize 1of90 MainRegistry (Client) */
+		com.oneof90.main.MainRegistry1of90.initClient();
+		
 		registerClientEventHandler(new ModEventHandlerClient());
 		registerClientEventHandler(new ModEventHandlerRenderer());
 		registerClientEventHandler(new EventHandlerParticleEngine());
