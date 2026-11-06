@@ -120,6 +120,8 @@ public class RodRecipes {
 		addRBMKRod(ModItems.billet_zfb_am_mix, ModItems.rbmk_fuel_zfb_am_mix);
 		CraftingManager.addShapelessAuto(new ItemStack(ModItems.rbmk_fuel_drx, 1), new Object[] { ModItems.rbmk_fuel_balefire, ModItems.particle_digamma });
 
+		// Watz Pellet Recipes
+		// Standard Watz Pellets
 		addPellet(SA326,							EnumWatzType.SCHRABIDIUM);
 		addPellet(ModItems.ingot_hes,				EnumWatzType.HES);
 		addPellet(ModItems.ingot_schrabidium_fuel,	EnumWatzType.MES);
@@ -130,6 +132,165 @@ public class RodRecipes {
 		addPellet(PB,								EnumWatzType.LEAD);
 		addPellet(B,								EnumWatzType.BORON);
 		addPellet(U238,								EnumWatzType.DU);
+
+		// New Advanced Watz Pellets - Base Materials
+		addPellet(ModItems.billet_am241,				EnumWatzType.AM241);
+		addPellet(ModItems.billet_th232,				EnumWatzType.TH232);
+		addPellet(ModItems.billet_neptunium,			EnumWatzType.NP237);
+		addPellet(ModItems.ingot_osmiridium,			EnumWatzType.LEO);
+
+		// Special Watz Pellets
+		// Test Object FOE (111) - Experimental pellet with unique behavior
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.TESTOBJFOE.ordinal()), new Object[] {
+			ModItems.ingot_schrabidium_fuel,
+			ModItems.particle_amat,
+			ModItems.egg_balefire_shard,
+			BE.nugget(),
+			ModItems.powder_nitan_mix
+		});
+
+		// Non-Self-Igniting Advanced Pellets
+		addPellet(PU239,							EnumWatzType.PU239_NSI);  // Plutonium-239
+		addPellet(U235,							EnumWatzType.U235_NSI);   // Uranium-235
+		addPellet(U233,							EnumWatzType.U233_NSI);   // Uranium-233
+		addPellet(ModItems.ingot_am242,			EnumWatzType.AM243_NSI); // Americium-243 (using AM242 as base)
+		addPellet(ModItems.ingot_neptunium,		EnumWatzType.CM245_NSI); // Curium-245 (using neptunium as base)
+
+		// Non-Self-Igniting Research Pellets
+		addPellet(ModItems.ingot_schrabidium,	EnumWatzType.BK247_NSI); // Berkelium-247 (using schrabidium)
+		addPellet(ModItems.ingot_solinium,		EnumWatzType.ES253_NSI); // Einsteinium-253 (using solinium)
+		addPellet(ModItems.ingot_gh336,			EnumWatzType.FM257_NSI); // Fermium-257 (using gh336)
+
+		// Non-Self-Igniting Experimental Pellets
+		CraftingManager.addRecipeAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.TIBERIUM_NSI.ordinal()), new Object[] {
+			" T ", "TGT", " T ",
+			'T', ModItems.ingot_schrabidium_fuel,
+			'G', GRAPHITE.ingot()
+		});
+
+		CraftingManager.addRecipeAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.EUPHEMIUM_NSI.ordinal()), new Object[] {
+			" E ", "EGE", " E ",
+			'E', ModItems.nugget_euphemium,
+			'G', GRAPHITE.ingot()
+		});
+
+		CraftingManager.addRecipeAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.STARSTONE_NSI.ordinal()), new Object[] {
+			" S ", "SGS", " S ",
+			'S', ModItems.ingot_starmetal,
+			'G', GRAPHITE.ingot()
+		});
+
+		// Digamma - Extremely powerful with massive yield (2000D) and contamination
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.DIGAMMA.ordinal()), new Object[] {
+			new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.SCHRABIDIUM.ordinal()),
+			ModItems.particle_digamma,
+			ModItems.particle_digamma,
+			ModItems.ingot_starmetal,
+			ModItems.powder_power
+		});
+
+		// XFE - Experimental Fusion pellet for early-mid game
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.XFE.ordinal()), new Object[] {
+			ModItems.ingot_aluminium,
+			ModItems.powder_power,
+			BE.nugget(),
+			ModItems.powder_lithium,
+			ModItems.powder_boron
+		});
+
+		// Gold Series - Progressive power levels
+		// GLDONE - Basic gold pellet (10D, sqrt function)
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.GLDONE.ordinal()), new Object[] {
+			ModItems.ingot_au198,
+			ModItems.ingot_au198,
+			BE.nugget(),
+			ModItems.powder_lithium,
+			ModItems.powder_boron
+		});
+
+		// GLDTWO - Improved gold pellet (6.2D, linear function)
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.GLDTWO.ordinal()), new Object[] {
+			new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.GLDONE.ordinal()),
+			ModItems.ingot_au198,
+			ModItems.powder_power,
+			BE.nugget(),
+			ModItems.powder_lithium
+		});
+
+		// GLDSX - Enhanced gold pellet (3.1D, 3100 heat)
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.GLDSX.ordinal()), new Object[] {
+			new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.GLDTWO.ordinal()),
+			ModItems.ingot_au198,
+			ModItems.ingot_starmetal,
+			BE.nugget(),
+			ModItems.powder_lithium
+		});
+
+		// GLDSY - Maximum gold pellet (10D, 5000 heat)
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.GLDSY.ordinal()), new Object[] {
+			new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.GLDSX.ordinal()),
+			ModItems.ingot_au198,
+			ModItems.ingot_starmetal,
+			BE.nugget(),
+			ModItems.powder_power
+		});
+
+		// Antimatter - Ultimate absorption pellet (100D falling function)
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.ANTIMATTER.ordinal()), new Object[] {
+			ModItems.particle_amat,
+			ModItems.particle_amat,
+			ModItems.ingot_starmetal,
+			BE.nugget(),
+			ModItems.powder_power
+		});
+
+		// Advanced Pellet Special Recipes
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.CM244.ordinal()), new Object[] {
+			ModItems.billet_plutonium,
+			BE.nugget(),
+			BE.nugget(),
+			ModItems.powder_lithium,
+			ModItems.powder_boron
+		});
+
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.CF252.ordinal()), new Object[] {
+			ModItems.billet_plutonium_fuel,
+			BE.nugget(),
+			BE.nugget(),
+			ModItems.powder_lithium,
+			ModItems.powder_boron
+		});
+
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.MOX.ordinal()), new Object[] {
+			ModItems.billet_mox_fuel,
+			BE.nugget(),
+			BE.nugget(),
+			ModItems.powder_lithium,
+			ModItems.powder_boron
+		});
+
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.HEO.ordinal()), new Object[] {
+			new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.LEO.ordinal()),
+			ModItems.ingot_osmiridium,
+			BE.nugget(),
+			ModItems.powder_lithium
+		});
+
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.BER.ordinal()), new Object[] {
+			ModItems.billet_plutonium,
+			BE.nugget(),
+			BE.nugget(),
+			ModItems.powder_lithium,
+			ModItems.powder_boron
+		});
+
+		CraftingManager.addShapelessAuto(new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.TPO.ordinal()), new Object[] {
+			new ItemStack(ModItems.watz_pellet, 1, EnumWatzType.HEO.ordinal()),
+			ModItems.ingot_osmiridium,
+			BE.nugget(),
+			ModItems.powder_lithium,
+			ModItems.powder_boron
+		});
 		
 		//PWR fuel
 		CraftingManager.addRecipeAuto(DictFrame.fromOne(ModItems.pwr_fuel, EnumPWRFuel.MEU), new Object[] { "F", "I", "F", 'F', ModItems.billet_uranium_fuel, 'I', ModItems.plate_polymer });
