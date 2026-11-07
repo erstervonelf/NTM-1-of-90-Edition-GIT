@@ -5,6 +5,7 @@ import com.hbm.inventory.fluid.tank.FluidTank;
 import com.hbm.items.ModItems;
 import com.hbm.util.fauxpointtwelve.DirPos;
 
+import api.hbm.fluidmk2.FluidNode;
 import api.hbm.energymk2.IBatteryItem;
 import api.hbm.fluidmk2.IFillableItem;
 import net.minecraft.block.Block;
@@ -13,7 +14,9 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import com.hbm.uninos.UniNodespace;
 
 public abstract class TileEntityMachineBase extends TileEntityLoadedBase implements ISidedInventory {
 
@@ -202,6 +205,17 @@ public abstract class TileEntityMachineBase extends TileEntityLoadedBase impleme
 		}
 	}
 	
+	protected void tryProvide(FluidTank tank, World world, int x, int y, int z, ForgeDirection dir) {
+		FluidNode dirNode = (FluidNode) UniNodespace.getNode(world, x, y, z, tank.getTankType().getNetworkProvider());
+		if(dirNode != null && dirNode.hasValidNet() && this instanceof api.hbm.fluidmk2.IFluidProviderMK2) {
+			dirNode.net.addProvider((api.hbm.fluidmk2.IFluidProviderMK2) this);
+		}
+	}
+
+	protected void updateRedstoneConnection(DirPos pos) {
+		triggerNeighborUpdate(pos);
+	}
+
 	public boolean isBattery(ItemStack stack) {
 		if(stack == null) return false;
 		if(stack.getItem() == ModItems.battery_creative) return true;

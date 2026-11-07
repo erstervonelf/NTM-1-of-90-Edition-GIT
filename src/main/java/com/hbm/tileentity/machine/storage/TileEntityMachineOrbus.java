@@ -2,8 +2,7 @@ package com.hbm.tileentity.machine.storage;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.inventory.fluid.FluidType;
-import com.hbm.lib.Library;
-import com.hbm.tileentity.TilePort.PortDef;
+import com.hbm.util.fauxpointtwelve.DirPos;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -15,58 +14,62 @@ public class TileEntityMachineOrbus extends TileEntityBarrel {
 	public TileEntityMachineOrbus() {
 		super(512000);
 	}
-	
+
 	@Override
 	public String getName() {
 		return "container.orbus";
 	}
 
-	@Override public long getReceiverSpeed(FluidType type, int pressure) { return (mode == 0 || mode == 1) ? Math.max(1_000, (tank.getMaxFill() - tank.getFill()) / 100) : 0; }
-	@Override public long getProviderSpeed(FluidType type, int pressure) { return (mode == 1 || mode == 2) ? Math.max(1_000, tank.getFill() / 100) : 0; }
-	
+	@Override public long getReceiverSpeed(FluidType type, int pressure) { return Math.max(1_000, (tank.getMaxFill() - tank.getFill()) / 100); }
+	@Override public long getProviderSpeed(FluidType type, int pressure) { return Math.max(1_000, tank.getFill() / 100); }
+
 	@Override
 	public void checkFluidInteraction() { } //NO!
 
+	protected DirPos[] conPos;
+
 	@Override
-	public PortDef[] getPorts() {
-		if(cachedPorts == null) {
-			// cursed
-			ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset).getOpposite();
-			ForgeDirection rot = dir.getRotation(ForgeDirection.DOWN);
-			
-			cachedPorts = new PortDef[] {
-					PortDef.make(xCoord, yCoord, zCoord, Library.NEG_Y),
-					PortDef.make(xCoord + dir.offsetX, yCoord, zCoord + dir.offsetZ, Library.NEG_Y),
-					PortDef.make(xCoord + rot.offsetX, yCoord, zCoord + rot.offsetZ, Library.NEG_Y),
-					PortDef.make(xCoord + dir.offsetX + rot.offsetX, yCoord, zCoord + dir.offsetZ + rot.offsetZ, Library.NEG_Y),
-					PortDef.make(xCoord, yCoord + 3, zCoord, Library.POS_Y),
-					PortDef.make(xCoord + dir.offsetX, yCoord + 3, zCoord + dir.offsetZ, Library.POS_Y),
-					PortDef.make(xCoord + rot.offsetX, yCoord + 3, zCoord + rot.offsetZ, Library.POS_Y),
-					PortDef.make(xCoord + dir.offsetX + rot.offsetX, yCoord + 3, zCoord + dir.offsetZ + rot.offsetZ, Library.POS_Y),
-			};
+	protected DirPos[] getConPos() {
+
+		if(conPos != null)
+			return conPos;
+
+		conPos = new DirPos[8];
+
+		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset).getOpposite();
+		ForgeDirection rot = dir.getRotation(ForgeDirection.DOWN);
+
+		for(int i = -1; i < 6; i += 6) {
+			ForgeDirection out = i == -1 ? ForgeDirection.DOWN : ForgeDirection.UP;
+			int index = i == -1 ? 0 : 4;
+			conPos[index + 0] = new DirPos(xCoord,								yCoord + i,	zCoord,								out);
+			conPos[index + 1] = new DirPos(xCoord + dir.offsetX,				yCoord + i,	zCoord + dir.offsetZ,				out);
+			conPos[index + 2] = new DirPos(xCoord + rot.offsetX,				yCoord + i,	zCoord + rot.offsetZ,				out);
+			conPos[index + 3] = new DirPos(xCoord + dir.offsetX + rot.offsetX,	yCoord + i,	zCoord + dir.offsetZ + rot.offsetZ,	out);
 		}
-		return cachedPorts;
+
+		return conPos;
 	}
-	
+
 	AxisAlignedBB bb = null;
-	
+
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		
+
 		if(bb == null) {
 			bb = AxisAlignedBB.getBoundingBox(
-					xCoord - 2,
-					yCoord,
-					zCoord - 2,
-					xCoord + 3,
-					yCoord + 5,
-					zCoord + 3
-					);
+				xCoord - 2,
+				yCoord,
+				zCoord - 2,
+				xCoord + 3,
+				yCoord + 5,
+				zCoord + 3
+			);
 		}
-		
+
 		return bb;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public double getMaxRenderDistanceSquared() {

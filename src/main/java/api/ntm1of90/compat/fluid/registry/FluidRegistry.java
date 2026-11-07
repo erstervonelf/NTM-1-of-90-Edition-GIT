@@ -8,8 +8,10 @@ import api.ntm1of90.compat.fluid.render.ColoredForgeFluid;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fluids.Fluid;
 
@@ -62,7 +64,7 @@ public class FluidRegistry {
                 0xFFFFFF,
                 "fluid_still",
                 "fluid_flowing",
-                "forgefluid/default"
+                "blocks/acid_still"
             );
 
             // Load fluid properties from all HBM fluids
@@ -75,10 +77,11 @@ public class FluidRegistry {
                 int color = hbmFluid.getColor();
 
                 // Generate texture names based on fluid name
-                // Using the same pattern as the original HBM texture system
-                String stillTexture = "forgefluid/" + name;
-                String flowingTexture = "forgefluid/" + name;
-                String inventoryTexture = "forgefluid/" + name;
+                // Using the same pattern as the original HBM texture system:
+// assets/hbm/textures/blocks/<name>_still.png and _flowing.png
+                String stillTexture = "blocks/" + name + "_still";
+                String flowingTexture = "blocks/" + name + "_flowing";
+                String inventoryTexture = "blocks/" + name + "_still";
 
                 FluidProperties properties = new FluidProperties(name, color, stillTexture, flowingTexture, inventoryTexture);
                 fluidProperties.put(name, properties);
@@ -120,6 +123,19 @@ public class FluidRegistry {
     }
 
     /**
+     * Check if a texture resource exists in the resource manager.
+     */
+    @SideOnly(Side.CLIENT)
+    private static boolean textureExists(String domain, String path) {
+        try {
+            Minecraft.getMinecraft().getResourceManager().getResource(new ResourceLocation(domain, path + ".png"));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
      * Register textures for a specific fluid
      */
     @SideOnly(Side.CLIENT)
@@ -127,6 +143,14 @@ public class FluidRegistry {
         try {
             // Get the fluid properties
             FluidProperties properties = getFluidProperties(fluidName);
+
+            // Skip fluids whose texture files don't exist - they'll use colored quads instead
+            String domain = RefStrings.MODID;
+            if (!textureExists(domain, properties.stillTexture) || !textureExists(domain, properties.flowingTexture)) {
+                System.out.println("[NTM] Skipping missing texture for fluid: " + fluidName +
+                    " (still: " + properties.stillTexture + ", flowing: " + properties.flowingTexture + ")");
+                return;
+            }
 
             // Register the textures
             IIcon stillIcon = map.registerIcon(RefStrings.MODID + ":" + properties.stillTexture);

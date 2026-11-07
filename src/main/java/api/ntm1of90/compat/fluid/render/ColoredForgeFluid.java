@@ -90,7 +90,10 @@ public class ColoredForgeFluid extends Fluid {
     @SideOnly(Side.CLIENT)
     public IIcon getStillIcon() {
         IIcon icon = NTMFluidTextureMapper.getStillIcon(getName());
-        return icon != null ? icon : super.getStillIcon();
+        if (icon != null) {
+            return icon;
+        }
+        return super.getStillIcon();
     }
 
     /**
@@ -100,7 +103,10 @@ public class ColoredForgeFluid extends Fluid {
     @SideOnly(Side.CLIENT)
     public IIcon getFlowingIcon() {
         IIcon icon = NTMFluidTextureMapper.getFlowingIcon(getName());
-        return icon != null ? icon : super.getFlowingIcon();
+        if (icon != null) {
+            return icon;
+        }
+        return super.getFlowingIcon();
     }
 
     // Cache for inventory icons

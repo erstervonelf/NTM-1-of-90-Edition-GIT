@@ -47,7 +47,7 @@ public class NTMFluidCompatItem extends Item {
     private NTMFluidCompatItem() {
         super();
         this.setUnlocalizedName("ntm_fluid_compat");
-        this.setTextureName(RefStrings.MODID + ":forgefluid/water");
+        this.setTextureName(RefStrings.MODID + ":blocks/water_still");
         this.setCreativeTab(null); // Not shown in creative tab
     }
     
