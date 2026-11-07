@@ -15,7 +15,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: release-${{ github.ref_name || github.event.inputs.release_tag }}
+  group: release-${{ github.event.inputs.release_tag || github.ref_name }}
   cancel-in-progress: false
 
 jobs:
@@ -24,18 +24,24 @@ jobs:
     timeout-minutes: 45
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Resolve tag
         id: vars
+        env:
+          INPUT_TAG: ${{ github.event.inputs.release_tag }}
+          EVENT_NAME: ${{ github.event_name }}
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            TAG="${{ github.event.inputs.release_tag }}"
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            TAG="$INPUT_TAG"
           else
-            TAG="${GITHUB_REF_NAME}"
+            TAG="$GITHUB_REF_NAME"
           fi
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout tag
+        uses: actions/checkout@v4
+        with:
+          ref: refs/tags/${{ steps.vars.outputs.tag }}
+          fetch-depth: 0   # nur nötig, wenn Build Git-History/Tags nutzt
 
       - name: Set up JDK 8
         uses: actions/setup-java@v4
@@ -51,9 +57,10 @@ jobs:
 
       - name: Determine prerelease
         id: prerelease
+        env:
+          TAG: ${{ steps.vars.outputs.tag }}
         run: |
-          TAG="${{ steps.vars.outputs.tag }}"
-          if echo "$TAG" | grep -Eiq '(-alpha|-beta|-rc)'; then
+          if echo "$TAG" | grep -Eiq -- '-(alpha|beta|rc)([.-]|$)'; then
             echo "value=true" >> "$GITHUB_OUTPUT"
           else
             echo "value=false" >> "$GITHUB_OUTPUT"
