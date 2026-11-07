@@ -32,11 +32,11 @@ if(Files.exists(Paths.get("maven.properties"))) {
 
 def version_name = version = mod_version
 if(!mod_build_number.isEmpty()) {
-	version_name = mod_version + "_X" + mod_build_number + "_" + ntm_1of90_version
-	version = "[${version_name}]"
+	version_name = ntm_1of90_version_dev + Nightly // if releasing remove _dev
+	version = "${version_name}"
 }
 group = "com.hbm" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "HBM-NTM"
+archivesBaseName = "NTM-1-of-90-Edition"
 compileJava.options.encoding = 'UTF-8'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
