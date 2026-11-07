@@ -77,3 +77,12 @@ jobs:
             LICENSE.LESSER
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Reset Nightly build number in gradle.properties
+        run: |
+         sed -i "s/^Nightly=.*/Nightly=/" gradle.properties
+         git config user.name "github-actions[bot]"
+         git config user.email "github-actions[bot]@users.noreply.github.com"
+         git add gradle.properties
+         git commit -m "chore: set Nightly=0 in gradle.properties" || true
+         git push origin HEAD:${GITHUB_REF##*/} || true
+            
