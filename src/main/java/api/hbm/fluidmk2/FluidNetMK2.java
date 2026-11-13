@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.hbm.inventory.fluid.FluidType;
+import com.hbm.inventory.fluid.Fluids;
 import com.hbm.uninos.NodeNet;
 import com.hbm.util.Tuple.Pair;
 
@@ -13,31 +14,99 @@ import api.hbm.energymk2.IEnergyReceiverMK2.ConnectionPriority;
 public class FluidNetMK2 extends NodeNet<IFluidReceiverMK2, IFluidProviderMK2, FluidNode> {
 
 	public long fluidTracker = 0L;
-	
+
 	protected static int timeout = 3_000;
 	protected FluidType type;
-	
+
 	public FluidNetMK2(FluidType type) {
 		this.type = type;
 		for(int i = 0; i < IFluidUserMK2.HIGHEST_VALID_PRESSURE + 1; i++) providers[i] = new ArrayList();
 		for(int i = 0; i < IFluidUserMK2.HIGHEST_VALID_PRESSURE + 1; i++) for(int j = 0; j < ConnectionPriority.values().length; j++) receivers[i][j] = new ArrayList();
 	}
-	
+
 	@Override public void resetTrackers() { this.fluidTracker = 0; }
-	
+
+	public FluidType getType() { return this.type; }
+
+	/**
+	 * Pushes fluid coming in from outside the HBM network (a Forge fluid pipe filling one of our ducts)
+	 * straight into this network's receivers. Returns the amount that was accepted.
+	 */
+	public long inject(FluidType type, long amount) {
+		if(type == null || type == Fluids.NONE || type != this.type || amount <= 0) return 0;
+
+		long remaining = amount;
+
+		for(IFluidReceiverMK2 receiver : new ArrayList<IFluidReceiverMK2>(this.receiverEntries)) {
+			if(remaining <= 0) break;
+			if(receiver == null || isBadLink(receiver)) continue;
+
+			int[] range = receiver.getReceivingPressureRange(type);
+			if(range == null || range.length == 0) continue;
+			int pressure = range[0];
+			if(pressure < 0 || pressure > IFluidUserMK2.HIGHEST_VALID_PRESSURE) continue;
+
+			long demand = Math.min(receiver.getDemand(type, pressure), receiver.getReceiverSpeed(type, pressure));
+			if(demand <= 0) continue;
+
+			long toSend = Math.min(demand, remaining);
+			if(toSend <= 0) continue;
+
+			long leftover = receiver.transferFluid(type, pressure, toSend);
+			remaining -= (toSend - leftover);
+		}
+
+		return amount - remaining;
+	}
+
+	/** Drains up to maxAmount from this network's providers, actually consuming it. Returns the amount collected. */
+	public long extract(FluidType type, long maxAmount) {
+		return extract(type, maxAmount, true);
+	}
+
+	/** Same as {@link #extract(FluidType, long)} but only reports what could be taken without changing anything. */
+	public long simulateExtract(FluidType type, long maxAmount) {
+		return extract(type, maxAmount, false);
+	}
+
+	protected long extract(FluidType type, long maxAmount, boolean doExtract) {
+		if(type == null || type == Fluids.NONE || type != this.type || maxAmount <= 0) return 0;
+
+		long collected = 0;
+
+		for(IFluidProviderMK2 provider : new ArrayList<IFluidProviderMK2>(this.providerEntries)) {
+			if(collected >= maxAmount) break;
+			if(provider == null || isBadLink(provider)) continue;
+
+			int[] range = provider.getProvidingPressureRange(type);
+			if(range == null || range.length == 0) continue;
+			int pressure = range[0];
+			if(pressure < 0 || pressure > IFluidUserMK2.HIGHEST_VALID_PRESSURE) continue;
+
+			long available = Math.min(provider.getFluidAvailable(type, pressure), provider.getProviderSpeed(type, pressure));
+			long toTake = Math.min(available, maxAmount - collected);
+			if(toTake <= 0) continue;
+
+			if(doExtract) provider.useUpFluid(type, pressure, toTake);
+			collected += toTake;
+		}
+
+		return collected;
+	}
+
 	@Override
 	public void update() {
-		
+
 		if(providerEntries.isEmpty()) return;
 		if(receiverEntries.isEmpty()) return;
 
 		setupFluidProviders();
 		setupFluidReceivers();
 		transferFluid();
-		
+
 		cleanUp();
 	}
-	
+
 	//this sucks ass, but it makes the code just a smidge more structured
 	public long totalFluidInNetwork;
 	public long[] fluidAvailable = new long[IFluidUserMK2.HIGHEST_VALID_PRESSURE + 1];
@@ -45,7 +114,7 @@ public class FluidNetMK2 extends NodeNet<IFluidReceiverMK2, IFluidProviderMK2, F
 	public long[][] fluidDemand = new long[IFluidUserMK2.HIGHEST_VALID_PRESSURE + 1][ConnectionPriority.values().length];
 	public List<Pair<IFluidReceiverMK2, Long>>[][] receivers = new ArrayList[IFluidUserMK2.HIGHEST_VALID_PRESSURE + 1][ConnectionPriority.values().length];
 	public long[] transfered = new long[IFluidUserMK2.HIGHEST_VALID_PRESSURE + 1];
-	
+
 	public void setupFluidProviders() {
 		
 		totalFluidInNetwork = 0;
@@ -64,7 +133,7 @@ public class FluidNetMK2 extends NodeNet<IFluidReceiverMK2, IFluidProviderMK2, F
 			}
 		}
 	}
-	
+
 	public void setupFluidReceivers() {
 		Iterator<IFluidReceiverMK2> iterator = receiverEntries.iterator();
 		
@@ -80,36 +149,36 @@ public class FluidNetMK2 extends NodeNet<IFluidReceiverMK2, IFluidProviderMK2, F
 			}
 		}
 	}
-	
+
 	public void transferFluid() {
 
 		long[] received = new long[IFluidUserMK2.HIGHEST_VALID_PRESSURE + 1];
 		long[] notAccountedFor = new long[IFluidUserMK2.HIGHEST_VALID_PRESSURE + 1];
-		
+
 		for(int p = 0; p <= IFluidUserMK2.HIGHEST_VALID_PRESSURE; p++) { // if the pressure range were ever to increase, we might have to rethink this
-			
+
 			long totalAvailable = fluidAvailable[p];
-			
+
 			for(int i = ConnectionPriority.values().length - 1; i >= 0; i--) {
-				
+
 				long toTransfer = Math.min(fluidDemand[p][i], totalAvailable);
 				if(toTransfer <= 0) continue;
 
 				long priorityDemand = fluidDemand[p][i];
-				
+
 				for(Pair<IFluidReceiverMK2, Long> entry : receivers[p][i]) {
 					double weight = (double) entry.getValue() / (double) (priorityDemand);
 					long toSend = (long) Math.max(toTransfer * weight, 0D);
 					toSend -= entry.getKey().transferFluid(type, p, toSend);
 					received[p] += toSend;
 				}
-				
+
 				totalAvailable -= received[p];
 			}
-			
+
 			notAccountedFor[p] = received[p];
 		}
-		
+
 		for(int p = 0; p <= IFluidUserMK2.HIGHEST_VALID_PRESSURE; p++) {
 
 			for(Pair<IFluidProviderMK2, Long> entry : providers[p]) {
@@ -119,16 +188,16 @@ public class FluidNetMK2 extends NodeNet<IFluidReceiverMK2, IFluidProviderMK2, F
 				notAccountedFor[p] -= toUse;
 			}
 		}
-		
+
 		for(int p = 0; p <= IFluidUserMK2.HIGHEST_VALID_PRESSURE; p++) {
-			
+
 			int iterationsLeft = 100;
 			while(iterationsLeft > 0 && notAccountedFor[p] > 0 && providers[p].size() > 0) {
 				iterationsLeft--;
-				
+
 				Pair<IFluidProviderMK2, Long> selected = providers[p].get(rand.nextInt(providers[p].size()));
 				IFluidProviderMK2 scapegoat = selected.getKey();
-				
+
 				long toUse = Math.min(notAccountedFor[p], scapegoat.getFluidAvailable(type, p));
 				scapegoat.useUpFluid(type, p, toUse);
 				notAccountedFor[p] -= toUse;
@@ -147,13 +216,13 @@ public class FluidNetMK2 extends NodeNet<IFluidReceiverMK2, IFluidProviderMK2, F
 		
 		this.fluidTracker += this.totalFluidInNetwork - totalAfterTransfer;
 	}
-	
+
 	public void cleanUp() {
 		for(int i = 0; i < IFluidUserMK2.HIGHEST_VALID_PRESSURE + 1; i++) {
 			fluidAvailable[i] = 0;
 			providers[i].clear();
 			transfered[i] = 0;
-			
+
 			for(int j = 0; j < ConnectionPriority.values().length; j++) {
 				fluidDemand[i][j] = 0;
 				receivers[i][j].clear();

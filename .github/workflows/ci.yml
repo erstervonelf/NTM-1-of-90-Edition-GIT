@@ -1,0 +1,88 @@
+name: Nightly
+
+run-name: Nightly build #${{ github.run_number }}
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '8'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Set Nightly build number in gradle.properties
+        run: |
+          sed -i "s/^Nightly=.*/Nightly=-Nightly_${GITHUB_RUN_NUMBER}/" gradle.properties
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add gradle.properties
+          git commit -m "chore: set Nightly=${GITHUB_RUN_NUMBER} in gradle.properties" || true
+          git push origin HEAD:${GITHUB_REF##*/} || true
+
+      - name: Build with Gradle Wrapper
+        run: ./gradlew build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-build-libs-${{ github.run_number }}
+          path: build/libs/*.jar
+          retention-days: 14
+          if-no-files-found: error
+
+      - name: Generate nightly release metadata
+        id: nightly
+        run: |
+          DATE="$(date -u +%Y%m%d)"
+          TAG="nightly-${DATE}-${GITHUB_RUN_NUMBER}"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "name=Nightly Build ${DATE} #${GITHUB_RUN_NUMBER}" >> "$GITHUB_OUTPUT"
+
+      - name: Publish nightly prerelease
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.nightly.outputs.tag }}
+          name: ${{ steps.nightly.outputs.name }}
+          target_commitish: ${{ github.sha }}
+          prerelease: true
+          generate_release_notes: false
+          body: |
+            Automated nightly build from commit `${{ github.sha }}`.
+            Workflow run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          files: |
+            build/libs/*.jar
+            LICENSE
+            LICENSE.LESSER
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Reset Nightly build number in gradle.properties
+        run: |
+         sed -i "s/^Nightly=.*/Nightly=/" gradle.properties
+         git config user.name "github-actions[bot]"
+         git config user.email "github-actions[bot]@users.noreply.github.com"
+         git add gradle.properties
+         git commit -m "chore: set Nightly=0 in gradle.properties" || true
+         git push origin HEAD:${GITHUB_REF##*/} || true
+            

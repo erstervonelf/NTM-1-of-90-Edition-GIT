@@ -1,0 +1,48 @@
+name: Bug report
+description: Report a reproducible defect in the fork
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Fork version/tag
+      description: Which release tag or build are you using?
+      placeholder: v1.0.27-r.11-hotfix.3
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Minecraft, Forge, OS, Java version
+      placeholder: MC 1.7.10 / Forge 10.13.4.1614 / Java 8 / Windows 11
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Exact steps to trigger the problem
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / crash report
+      description: Paste or link full relevant logs
+    validations:
+      required: true

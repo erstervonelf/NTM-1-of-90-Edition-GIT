@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Support and issue guidance
+    url: https://github.com/erstervonelf/NTM-1-of-90-Edition-GIT/blob/master/SUPPORT.md
+    about: Read support guidance before opening issues.

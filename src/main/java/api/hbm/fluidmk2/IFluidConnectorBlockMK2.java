@@ -4,9 +4,19 @@ import com.hbm.inventory.fluid.FluidType;
 
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.IFluidHandler;
 
 public interface IFluidConnectorBlockMK2 {
 
 	/** dir is the face that is connected to, the direction going outwards from the block */
 	public boolean canConnect(FluidType type, IBlockAccess world, int x, int y, int z, ForgeDirection dir);
+
+	/**
+	 * API hook for synchronized Forge-fluid connection handling.
+	 * If a block returns a non-null handler here, the compat layer may treat that Forge handler
+	 * as a valid fluid connection target in the HBM connection map.
+	 */
+	public default IFluidHandler getForgeFluidHandler(IBlockAccess world, int x, int y, int z, ForgeDirection dir) {
+		return null;
+	}
 }

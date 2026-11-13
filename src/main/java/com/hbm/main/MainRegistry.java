@@ -93,6 +93,9 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import com.oneof90.main.MainRegistry1of90;
+import com.oneof90.main.ModItems1of90;
+
 @Mod(modid = RefStrings.MODID, name = RefStrings.NAME, version = RefStrings.VERSION)
 public class MainRegistry {
 
@@ -155,6 +158,7 @@ public class MainRegistry {
 	public static CreativeTabs missileTab = new MissileTab(CreativeTabs.getNextID(), "tabMissile");				// missiles, satellites
 	public static CreativeTabs weaponTab = new WeaponTab(CreativeTabs.getNextID(), "tabWeapon");				// turrets, weapons, ammo
 	public static CreativeTabs consumableTab = new ConsumableTab(CreativeTabs.getNextID(), "tabConsumable");	// drinks, kits, tools
+	public static CreativeTabs oneof90Tab = new com.oneof90.tabs.taboneof90(CreativeTabs.getNextID(), "tabOneof90");
 
 	// Statistics
 	public static StatBase statLegendary;
@@ -269,6 +273,8 @@ public class MainRegistry {
 		ModBlocks.mainRegistry();
 		ModItems.mainRegistry();
 		proxy.registerRenderInfo();
+		MainRegistry1of90.init();
+		MainRegistry1of90.mainRegistry();
 		HbmWorld.mainRegistry();
 		GameRegistry.registerFuelHandler(new FuelHandler());
 		BulletConfigSyncingUtil.loadConfigsForSync();

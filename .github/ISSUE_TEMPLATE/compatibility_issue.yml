@@ -1,0 +1,48 @@
+name: Compatibility issue
+description: Report conflicts/performance issues with other mods or environments
+title: "[Compatibility]: "
+labels:
+  - compatibility
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Fork version/tag
+      placeholder: v1.0.27-r.11-hotfix.3
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Minecraft, Forge, Java, OS, client/server
+      placeholder: MC 1.7.10 / Forge 10.13.4.1614 / Java 8 / Dedicated server
+    validations:
+      required: true
+  - type: textarea
+    id: modlist
+    attributes:
+      label: Full mod list
+      description: Include exact versions
+    validations:
+      required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: Compatibility problem
+      description: Describe the conflict, degradation, or crash
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / crash report
+      description: Paste or link full logs/crash reports
+    validations:
+      required: true

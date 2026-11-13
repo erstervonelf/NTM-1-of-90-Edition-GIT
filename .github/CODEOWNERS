@@ -1,0 +1,8 @@
+# Default owners for repository changes
+* @erstervonelf
+
+# Workflow and governance files
+.github/ @erstervonelf
+
+# Fork extension area
+src/main/java/com/oneof90/ @erstervonelf
